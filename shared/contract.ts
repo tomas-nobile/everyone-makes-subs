@@ -62,14 +62,171 @@ export interface Segment {
 
 // ── SSE events: one stream per stage carrying every language ──
 
-export type HelloEvent = { type: 'hello'; state: StageState; talk: Talk | null; next?: Talk | null; lastSeq: number };
+/** `recent` = the last 10 segments of the current talk (with translations) so the phone has text at once. */
+export type HelloEvent = { type: 'hello'; state: StageState; talk: Talk | null; next?: Talk | null; lastSeq: number; recent?: Segment[] };
 export type LiveEvent = { type: 'live'; text: string };
-export type SegmentEvent = { type: 'segment'; seq: number; src: string; text: string; t0: number; t1: number; kind: SegmentKind };
+/** `lag` = seconds from the end of the spoken audio (t1) to publication; the phone shows it as "~1.4 s". */
+export type SegmentEvent = { type: 'segment'; seq: number; src: string; text: string; t0: number; t1: number; kind: SegmentKind; lag?: number };
 export type TrEvent = { type: 'tr'; seq: number; tr: Record<string, string | null>; ms: number };
 export type StateEvent = { type: 'state'; state: StageState; talk?: Talk | null; next?: Talk | null };
 export type LevelEvent = { type: 'level'; v: number };
 
 export type StageEvent = HelloEvent | LiveEvent | SegmentEvent | TrEvent | StateEvent | LevelEvent;
+
+// ── HTTP API (docs/architecture.md → API). Errors: { error: 'SCREAMING_CODE', message } with 4xx/5xx. ──
+//
+// Public
+//   GET  /api/health?nonce=                → { ok: true, nonce? }
+//   GET  /api/event                        → EventInfo
+//   GET  /api/stages/:id/stream            → SSE StageEvent (unnamed messages; `id:` on replayable ones)
+//   GET  /api/stages/:id/history?before=seq → Segment[] (≤50, ascending by seq, current talk)
+//   GET  /api/stages/:id/summary?lang=     → Summary (cached; never generated per request)
+//   GET  /api/talks/:id/export.{srt,vtt,txt}?lang=  → file download (lang omitted = original)
+//   GET  /api/dev/state?stage=&state=      → fake mode only: forces a StageState (F07.5)
+//
+// Admin (cookie `ems_admin`; open from 127.0.0.1 while no password is set) → 401 { error: 'UNAUTHENTICATED' }
+//   GET  /api/admin/me                     → { authed: boolean; hasPassword: boolean }
+//   POST /api/admin/login   { password }   → { ok: true } + Set-Cookie
+//   POST /api/admin/logout                 → { ok: true }
+//   GET  /api/admin/metrics                → SSE, one AdminMetrics JSON `data:` message per second
+//   GET  /api/stages                       → AdminStage[]
+//   POST /api/stages        StageInput     → AdminStage (201)
+//   PATCH /api/stages/:id   Partial<StageInput> → AdminStage
+//   DELETE /api/stages/:id                 → { ok: true }
+//   POST /api/stages/:id/start | /stop | /next-talk → AdminStage
+//   POST /api/stages/:id/talk  TalkInput    → Talk (generates the glossary; becomes current unless `queue: true`)
+//   PUT  /api/talks/:id/glossary Glossary  → Talk (requests an ASR rotation)
+//   DELETE /api/talks/:id                  → { ok: true }
+//   POST /api/uploads?name=<filename>  (raw body, Content-Type: application/octet-stream) → { path }
+//   POST /api/agenda/parse  { text }       → AgendaProposal
+//   POST /api/agenda        AgendaProposal → { stages: AdminStage[]; talks: Talk[] }  (progress in AdminMetrics.agenda)
+//   POST /api/alerts/:id/snooze            → { ok: true }  ("Wait 5 min" on a talk-switch alert)
+//
+// Setup (open from 127.0.0.1 or while no password exists; otherwise admin)
+//   GET  /api/setup/state                  → SetupState
+//   POST /api/setup/key      { key }       → { ok: true } | 400 { error: 'INVALID_KEY' | 'NO_MODEL_ACCESS' | 'NO_QUOTA' | 'NETWORK', message }
+//   POST /api/setup/password { password }  → { ok: true }  (min 6 chars)
+//   GET  /api/setup/tailscale              → TailscaleStatus
+//   POST /api/setup/tailscale/up           → TailscaleStatus  (runs `tailscale up`; poll GET every 2 s)
+//   POST /api/setup/tailscale/funnel       → TailscaleStatus  (may carry consentUrl)
+//   POST /api/setup/public   { mode, url?, token? } → { ok: true; publicUrl }  (cloudflare: starts cloudflared)
+//   POST /api/setup/test     { url }       → { ok: boolean; message?: string }  (nonce round-trip)
+//   POST /api/setup/demo                   → { stages: AdminStage[] }  ("Try with sample data")
+//   POST /api/setup/done                   → { ok: true }
+//
+// Station
+//   WS   /api/stages/:id/ingest?key=<stationKey>  binary frames: PCM s16le mono 16 kHz, any length
+
+export type PublicMode = 'tailscale' | 'cloudflare' | 'lan' | 'url';
+
+export interface StageSummary extends Stage { talk: Talk | null; next: Talk | null }
+
+export interface EventInfo {
+  name: string;
+  publicUrl: string;                                      // base for every QR/link, no trailing slash
+  stages: StageSummary[];
+}
+
+/** Stage as the dashboard sees it: includes the station key and the talk queue. */
+export interface AdminStage extends StageSummary {
+  stationKey: string;
+  talks: Talk[];                                          // every talk of the stage, in order
+}
+
+export interface StageInput {
+  name: string;
+  source: SourceSpec;
+  targetLangs?: string[];
+}
+
+export interface TalkInput {
+  title: string;
+  speaker?: string;
+  abstract?: string;
+  lang?: string;
+  slidesText?: string;
+  startsAt?: string;
+  endsAt?: string;
+  queue?: boolean;                                        // true: add as upcoming instead of making it current
+}
+
+export interface Summary { lang: string; bullets: string[]; at: number | null }  // at = epoch ms of generation
+
+export interface AgendaTalk {
+  room: string; start?: string; end?: string;             // start/end: ISO or "HH:MM" (today)
+  title: string; speaker?: string; abstract?: string; lang?: string;
+}
+export interface AgendaProposal { rooms: string[]; talks: AgendaTalk[] }
+
+export type AlertKind = 'no_audio' | 'delay' | 'errors' | 'talk_switch' | 'public_down' | 'address_changed';
+export interface Alert {
+  id: string;                                             // stable while the condition lasts
+  kind: AlertKind;
+  stageId?: string;
+  message: string;                                        // plain language, ready to show
+  talk?: Talk;                                            // talk_switch: the talk to move to
+}
+
+export interface VocabCount { term: string; count: number }
+
+export interface StageMetrics {
+  id: string;
+  name: string;
+  state: StageState;
+  level: number;                                          // 0..1
+  lastLine: string;                                       // last confirmed segment (original)
+  liveLine: string;                                       // current interim
+  talk: Talk | null;
+  next: Talk | null;
+  viewers: number;
+  delay: { p50: number; p95: number; p50Tr: number; p95Tr: number } | null;  // seconds, last 50 segments
+  lag: number;                                            // seconds: wall clock − start − audioClock
+  noAudioSec: number;                                     // seconds without signal (0 when there is audio)
+  rotations: number;
+  maxGapMs: number;
+  reconnects: number;
+  errorsPerMin: number;
+  http429: number;
+  audioMin: number;                                       // minutes of audio sent to the ASR
+  costPerHour: number;                                    // estimated US$/h
+  model: { transcribe: string; translate: string };
+  vocab: VocabCount[];                                    // F10.4, current talk
+}
+
+export interface AdminMetrics {
+  at: number;
+  eventName: string;
+  publicUrl: string;
+  reachable: boolean | null;                              // null = not checked yet / lan
+  totalViewers: number;
+  stagesLive: number;
+  stages: StageMetrics[];
+  alerts: Alert[];
+  agenda: { done: number; total: number } | null;         // glossary batch progress (F10.2)
+}
+
+export interface SetupState {
+  hasKey: boolean;
+  keyFromEnv: boolean;
+  hasPassword: boolean;
+  publicMode: PublicMode;
+  publicUrl: string;
+  lanUrl: string;                                         // http://<local-ip>:<port>
+  docker: boolean;
+  port: number;
+  stages: number;
+  done: boolean;                                          // wizard finished at least once
+}
+
+export interface TailscaleStatus {
+  installed: boolean;
+  running: boolean;                                       // BackendState === 'Running'
+  funnel: boolean;
+  dnsName: string | null;
+  url: string | null;                                     // https://<dnsName>
+  consentUrl?: string;                                    // "Click Enable and come back"
+  message?: string;
+}
 
 export function emptyGlossary(): Glossary {
   return { asrVocabulary: [], doNotTranslate: [], preferred: {}, replacements: {} };
