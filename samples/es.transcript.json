@@ -1,0 +1,773 @@
+{
+ "lang": "es",
+ "title": "Observabilidad sin dolor",
+ "speaker": "Lucía Fernández",
+ "durationSec": 64.8,
+ "events": [
+  {
+   "t": 1.08,
+   "type": "interim",
+   "text": "Hola a"
+  },
+  {
+   "t": 1.41,
+   "type": "interim",
+   "text": "Hola a todos, gracias"
+  },
+  {
+   "t": 1.81,
+   "type": "interim",
+   "text": "Hola a todos, gracias por"
+  },
+  {
+   "t": 2.25,
+   "type": "interim",
+   "text": "Hola a todos, gracias por venir tan"
+  },
+  {
+   "t": 2.65,
+   "type": "interim",
+   "text": "Hola a todos, gracias por venir tan temprano"
+  },
+  {
+   "t": 2.95,
+   "type": "final",
+   "text": "Hola a todos, gracias por venir tan temprano.",
+   "t0": 0.6,
+   "t1": 2.65,
+   "kind": "speech",
+   "src": "es",
+   "tr": {
+    "es": "Hola a todos, gracias por venir tan temprano.",
+    "en": "Hi everyone, thanks for coming so early.",
+    "pt": "Olá a todos, obrigada por virem tão cedo."
+   },
+   "mtMs": 792
+  },
+  {
+   "t": 4,
+   "type": "interim",
+   "text": "Hoy"
+  },
+  {
+   "t": 4.44,
+   "type": "interim",
+   "text": "Hoy vamos"
+  },
+  {
+   "t": 4.73,
+   "type": "interim",
+   "text": "Hoy vamos a"
+  },
+  {
+   "t": 5.11,
+   "type": "interim",
+   "text": "Hoy vamos a hablar"
+  },
+  {
+   "t": 5.57,
+   "type": "interim",
+   "text": "Hoy vamos a hablar de"
+  },
+  {
+   "t": 5.96,
+   "type": "interim",
+   "text": "Hoy vamos a hablar de observabilidad sin"
+  },
+  {
+   "t": 6.39,
+   "type": "interim",
+   "text": "Hoy vamos a hablar de observabilidad sin dolor"
+  },
+  {
+   "t": 6.69,
+   "type": "final",
+   "text": "Hoy vamos a hablar de observabilidad sin dolor.",
+   "t0": 3.67,
+   "t1": 6.39,
+   "kind": "speech",
+   "src": "es",
+   "tr": {
+    "es": "Hoy vamos a hablar de observabilidad sin dolor.",
+    "en": "Today we're going to talk about painless observability.",
+    "pt": "Hoje vamos falar de observabilidade sem dor."
+   },
+   "mtMs": 772
+  },
+  {
+   "t": 7.86,
+   "type": "interim",
+   "text": "Empecemos"
+  },
+  {
+   "t": 8.22,
+   "type": "interim",
+   "text": "Empecemos con"
+  },
+  {
+   "t": 8.57,
+   "type": "interim",
+   "text": "Empecemos con una"
+  },
+  {
+   "t": 8.92,
+   "type": "interim",
+   "text": "Empecemos con una pregunta: ¿quién"
+  },
+  {
+   "t": 9.26,
+   "type": "interim",
+   "text": "Empecemos con una pregunta: ¿quién tuvo"
+  },
+  {
+   "t": 9.66,
+   "type": "interim",
+   "text": "Empecemos con una pregunta: ¿quién tuvo una"
+  },
+  {
+   "t": 10.14,
+   "type": "interim",
+   "text": "Empecemos con una pregunta: ¿quién tuvo una alerta"
+  },
+  {
+   "t": 10.48,
+   "type": "interim",
+   "text": "Empecemos con una pregunta: ¿quién tuvo una alerta a las"
+  },
+  {
+   "t": 10.87,
+   "type": "interim",
+   "text": "Empecemos con una pregunta: ¿quién tuvo una alerta a las tres"
+  },
+  {
+   "t": 11.19,
+   "type": "interim",
+   "text": "Empecemos con una pregunta: ¿quién tuvo una alerta a las tres de"
+  },
+  {
+   "t": 11.48,
+   "type": "interim",
+   "text": "Empecemos con una pregunta: ¿quién tuvo una alerta a las tres de la"
+  },
+  {
+   "t": 11.84,
+   "type": "interim",
+   "text": "Empecemos con una pregunta: ¿quién tuvo una alerta a las tres de la mañana"
+  },
+  {
+   "t": 12.32,
+   "type": "interim",
+   "text": "Empecemos con una pregunta: ¿quién tuvo una alerta a las tres de la mañana este"
+  },
+  {
+   "t": 12.64,
+   "type": "interim",
+   "text": "Empecemos con una pregunta: ¿quién tuvo una alerta a las tres de la mañana este mes"
+  },
+  {
+   "t": 12.94,
+   "type": "final",
+   "text": "Empecemos con una pregunta: ¿quién tuvo una alerta a las tres de la mañana este mes?",
+   "t0": 7.38,
+   "t1": 12.64,
+   "kind": "speech",
+   "src": "es",
+   "tr": {
+    "es": "Empecemos con una pregunta: ¿quién tuvo una alerta a las tres de la mañana este mes?",
+    "en": "Let's start with a question: who got an alert at three in the morning this month?",
+    "pt": "Vamos começar com uma pergunta: quem recebeu um alerta às três da manhã este mês?"
+   },
+   "mtMs": 653
+  },
+  {
+   "t": 16.28,
+   "type": "final",
+   "text": "[risas]",
+   "t0": 13.48,
+   "t1": 15.98,
+   "kind": "sound",
+   "src": "es",
+   "tr": {
+    "es": "[risas]",
+    "en": "[laughter]",
+    "pt": "[risos]"
+   },
+   "mtMs": 632
+  },
+  {
+   "t": 17.29,
+   "type": "interim",
+   "text": "Exacto, casi"
+  },
+  {
+   "t": 17.62,
+   "type": "interim",
+   "text": "Exacto, casi todos"
+  },
+  {
+   "t": 17.92,
+   "type": "final",
+   "text": "Exacto, casi todos.",
+   "t0": 16.89,
+   "t1": 17.62,
+   "kind": "speech",
+   "src": "es",
+   "tr": {
+    "es": "Exacto, casi todos.",
+    "en": "Exactly, almost everyone.",
+    "pt": "Exatamente, quase todos."
+   },
+   "mtMs": 903
+  },
+  {
+   "t": 18.97,
+   "type": "interim",
+   "text": "El"
+  },
+  {
+   "t": 19.36,
+   "type": "interim",
+   "text": "El problema"
+  },
+  {
+   "t": 19.79,
+   "type": "interim",
+   "text": "El problema no"
+  },
+  {
+   "t": 20.16,
+   "type": "interim",
+   "text": "El problema no es"
+  },
+  {
+   "t": 20.5,
+   "type": "interim",
+   "text": "El problema no es la"
+  },
+  {
+   "t": 20.85,
+   "type": "interim",
+   "text": "El problema no es la falta"
+  },
+  {
+   "t": 21.22,
+   "type": "interim",
+   "text": "El problema no es la falta de datos"
+  },
+  {
+   "t": 21.69,
+   "type": "interim",
+   "text": "El problema no es la falta de datos, sino"
+  },
+  {
+   "t": 22.15,
+   "type": "interim",
+   "text": "El problema no es la falta de datos, sino que tenemos"
+  },
+  {
+   "t": 22.52,
+   "type": "interim",
+   "text": "El problema no es la falta de datos, sino que tenemos demasiados y"
+  },
+  {
+   "t": 22.82,
+   "type": "interim",
+   "text": "El problema no es la falta de datos, sino que tenemos demasiados y ninguno responde"
+  },
+  {
+   "t": 23.15,
+   "type": "interim",
+   "text": "El problema no es la falta de datos, sino que tenemos demasiados y ninguno responde la"
+  },
+  {
+   "t": 23.46,
+   "type": "interim",
+   "text": "El problema no es la falta de datos, sino que tenemos demasiados y ninguno responde la pregunta"
+  },
+  {
+   "t": 23.87,
+   "type": "interim",
+   "text": "El problema no es la falta de datos, sino que tenemos demasiados y ninguno responde la pregunta correcta"
+  },
+  {
+   "t": 24.17,
+   "type": "final",
+   "text": "El problema no es la falta de datos, sino que tenemos demasiados y ninguno responde la pregunta correcta.",
+   "t0": 18.55,
+   "t1": 23.87,
+   "kind": "speech",
+   "src": "es",
+   "tr": {
+    "es": "El problema no es la falta de datos, sino que tenemos demasiados y ninguno responde la pregunta correcta.",
+    "en": "The problem is not a lack of data, but that we have too much and none of it answers the right question.",
+    "pt": "O problema não é a falta de dados, mas que temos dados demais e nenhum responde à pergunta certa."
+   },
+   "mtMs": 519
+  },
+  {
+   "t": 25.51,
+   "type": "interim",
+   "text": "Con"
+  },
+  {
+   "t": 25.99,
+   "type": "interim",
+   "text": "Con OpenTelemetry"
+  },
+  {
+   "t": 26.33,
+   "type": "interim",
+   "text": "Con OpenTelemetry podemos"
+  },
+  {
+   "t": 26.66,
+   "type": "interim",
+   "text": "Con OpenTelemetry podemos instrumentar una"
+  },
+  {
+   "t": 26.94,
+   "type": "interim",
+   "text": "Con OpenTelemetry podemos instrumentar una vez y"
+  },
+  {
+   "t": 27.27,
+   "type": "interim",
+   "text": "Con OpenTelemetry podemos instrumentar una vez y enviar"
+  },
+  {
+   "t": 27.66,
+   "type": "interim",
+   "text": "Con OpenTelemetry podemos instrumentar una vez y enviar las"
+  },
+  {
+   "t": 27.99,
+   "type": "interim",
+   "text": "Con OpenTelemetry podemos instrumentar una vez y enviar las trazas"
+  },
+  {
+   "t": 28.33,
+   "type": "interim",
+   "text": "Con OpenTelemetry podemos instrumentar una vez y enviar las trazas a"
+  },
+  {
+   "t": 28.8,
+   "type": "interim",
+   "text": "Con OpenTelemetry podemos instrumentar una vez y enviar las trazas a donde"
+  },
+  {
+   "t": 29.19,
+   "type": "interim",
+   "text": "Con OpenTelemetry podemos instrumentar una vez y enviar las trazas a donde queramos"
+  },
+  {
+   "t": 29.49,
+   "type": "final",
+   "text": "Con OpenTelemetry podemos instrumentar una vez y enviar las trazas a donde queramos.",
+   "t0": 25.03,
+   "t1": 29.19,
+   "kind": "speech",
+   "src": "es",
+   "tr": {
+    "es": "Con OpenTelemetry podemos instrumentar una vez y enviar las trazas a donde queramos.",
+    "en": "With OpenTelemetry we can instrument once and send the traces wherever we want.",
+    "pt": "Com OpenTelemetry podemos instrumentar uma vez e enviar os traces para onde quisermos."
+   },
+   "mtMs": 451
+  },
+  {
+   "t": 30.83,
+   "type": "interim",
+   "text": "La"
+  },
+  {
+   "t": 31.31,
+   "type": "interim",
+   "text": "La clave está"
+  },
+  {
+   "t": 31.8,
+   "type": "interim",
+   "text": "La clave está en definir"
+  },
+  {
+   "t": 32.23,
+   "type": "interim",
+   "text": "La clave está en definir pocos"
+  },
+  {
+   "t": 32.56,
+   "type": "interim",
+   "text": "La clave está en definir pocos indicadores de"
+  },
+  {
+   "t": 32.96,
+   "type": "interim",
+   "text": "La clave está en definir pocos indicadores de servicio que"
+  },
+  {
+   "t": 33.41,
+   "type": "interim",
+   "text": "La clave está en definir pocos indicadores de servicio que le importen"
+  },
+  {
+   "t": 33.85,
+   "type": "interim",
+   "text": "La clave está en definir pocos indicadores de servicio que le importen al"
+  },
+  {
+   "t": 34.14,
+   "type": "interim",
+   "text": "La clave está en definir pocos indicadores de servicio que le importen al usuario"
+  },
+  {
+   "t": 34.44,
+   "type": "final",
+   "text": "La clave está en definir pocos indicadores de servicio que le importen al usuario.",
+   "t0": 30.35,
+   "t1": 34.14,
+   "kind": "speech",
+   "src": "es",
+   "tr": {
+    "es": "La clave está en definir pocos indicadores de servicio que le importen al usuario.",
+    "en": "The key is to define a few service level indicators that matter to the user.",
+    "pt": "A chave está em definir poucos indicadores de serviço que importem ao usuário."
+   },
+   "mtMs": 505
+  },
+  {
+   "t": 35.73,
+   "type": "interim",
+   "text": "Por ejemplo"
+  },
+  {
+   "t": 36.02,
+   "type": "interim",
+   "text": "Por ejemplo, la"
+  },
+  {
+   "t": 36.48,
+   "type": "interim",
+   "text": "Por ejemplo, la latencia"
+  },
+  {
+   "t": 36.97,
+   "type": "interim",
+   "text": "Por ejemplo, la latencia del"
+  },
+  {
+   "t": 37.35,
+   "type": "interim",
+   "text": "Por ejemplo, la latencia del checkout"
+  },
+  {
+   "t": 37.79,
+   "type": "interim",
+   "text": "Por ejemplo, la latencia del checkout en el"
+  },
+  {
+   "t": 38.15,
+   "type": "interim",
+   "text": "Por ejemplo, la latencia del checkout en el percentil"
+  },
+  {
+   "t": 38.52,
+   "type": "interim",
+   "text": "Por ejemplo, la latencia del checkout en el percentil noventa y"
+  },
+  {
+   "t": 38.93,
+   "type": "interim",
+   "text": "Por ejemplo, la latencia del checkout en el percentil noventa y nueve"
+  },
+  {
+   "t": 39.23,
+   "type": "final",
+   "text": "Por ejemplo, la latencia del checkout en el percentil noventa y nueve.",
+   "t0": 35.3,
+   "t1": 38.93,
+   "kind": "speech",
+   "src": "es",
+   "tr": {
+    "es": "Por ejemplo, la latencia del checkout en el percentil noventa y nueve.",
+    "en": "For example, checkout latency at the ninety-ninth percentile.",
+    "pt": "Por exemplo, a latência do checkout no percentil noventa e nove."
+   },
+   "mtMs": 626
+  },
+  {
+   "t": 40.29,
+   "type": "interim",
+   "text": "Si"
+  },
+  {
+   "t": 40.66,
+   "type": "interim",
+   "text": "Si ese"
+  },
+  {
+   "t": 41.01,
+   "type": "interim",
+   "text": "Si ese número está"
+  },
+  {
+   "t": 41.51,
+   "type": "interim",
+   "text": "Si ese número está bien"
+  },
+  {
+   "t": 41.98,
+   "type": "interim",
+   "text": "Si ese número está bien, el"
+  },
+  {
+   "t": 42.31,
+   "type": "interim",
+   "text": "Si ese número está bien, el resto"
+  },
+  {
+   "t": 42.62,
+   "type": "interim",
+   "text": "Si ese número está bien, el resto puede"
+  },
+  {
+   "t": 43.02,
+   "type": "interim",
+   "text": "Si ese número está bien, el resto puede esperar"
+  },
+  {
+   "t": 43.51,
+   "type": "interim",
+   "text": "Si ese número está bien, el resto puede esperar hasta"
+  },
+  {
+   "t": 43.83,
+   "type": "interim",
+   "text": "Si ese número está bien, el resto puede esperar hasta el"
+  },
+  {
+   "t": 44.15,
+   "type": "interim",
+   "text": "Si ese número está bien, el resto puede esperar hasta el lunes"
+  },
+  {
+   "t": 44.45,
+   "type": "final",
+   "text": "Si ese número está bien, el resto puede esperar hasta el lunes.",
+   "t0": 39.94,
+   "t1": 44.15,
+   "kind": "speech",
+   "src": "es",
+   "tr": {
+    "es": "Si ese número está bien, el resto puede esperar hasta el lunes.",
+    "en": "If that number is fine, the rest can wait until Monday.",
+    "pt": "Se esse número estiver bem, o resto pode esperar até segunda-feira."
+   },
+   "mtMs": 781
+  },
+  {
+   "t": 45.5,
+   "type": "interim",
+   "text": "Vamos"
+  },
+  {
+   "t": 45.86,
+   "type": "interim",
+   "text": "Vamos a"
+  },
+  {
+   "t": 46.14,
+   "type": "interim",
+   "text": "Vamos a ver"
+  },
+  {
+   "t": 46.54,
+   "type": "interim",
+   "text": "Vamos a ver una demo"
+  },
+  {
+   "t": 46.98,
+   "type": "interim",
+   "text": "Vamos a ver una demo en Kubernetes"
+  },
+  {
+   "t": 47.31,
+   "type": "interim",
+   "text": "Vamos a ver una demo en Kubernetes con tres"
+  },
+  {
+   "t": 47.69,
+   "type": "interim",
+   "text": "Vamos a ver una demo en Kubernetes con tres servicios"
+  },
+  {
+   "t": 48.14,
+   "type": "interim",
+   "text": "Vamos a ver una demo en Kubernetes con tres servicios y un"
+  },
+  {
+   "t": 48.62,
+   "type": "interim",
+   "text": "Vamos a ver una demo en Kubernetes con tres servicios y un colector"
+  },
+  {
+   "t": 48.92,
+   "type": "final",
+   "text": "Vamos a ver una demo en Kubernetes con tres servicios y un colector.",
+   "t0": 45.11,
+   "t1": 48.62,
+   "kind": "speech",
+   "src": "es",
+   "tr": {
+    "es": "Vamos a ver una demo en Kubernetes con tres servicios y un colector.",
+    "en": "Let's see a demo on Kubernetes with three services and a collector.",
+    "pt": "Vamos ver uma demo no Kubernetes com três serviços e um coletor."
+   },
+   "mtMs": 905
+  },
+  {
+   "t": 49.95,
+   "type": "interim",
+   "text": "Acá"
+  },
+  {
+   "t": 50.36,
+   "type": "interim",
+   "text": "Acá pueden"
+  },
+  {
+   "t": 50.84,
+   "type": "interim",
+   "text": "Acá pueden ver"
+  },
+  {
+   "t": 51.14,
+   "type": "interim",
+   "text": "Acá pueden ver cómo una"
+  },
+  {
+   "t": 51.45,
+   "type": "interim",
+   "text": "Acá pueden ver cómo una sola traza"
+  },
+  {
+   "t": 51.73,
+   "type": "interim",
+   "text": "Acá pueden ver cómo una sola traza cruza los"
+  },
+  {
+   "t": 52.22,
+   "type": "interim",
+   "text": "Acá pueden ver cómo una sola traza cruza los tres"
+  },
+  {
+   "t": 52.53,
+   "type": "interim",
+   "text": "Acá pueden ver cómo una sola traza cruza los tres servicios en"
+  },
+  {
+   "t": 52.96,
+   "type": "interim",
+   "text": "Acá pueden ver cómo una sola traza cruza los tres servicios en menos de"
+  },
+  {
+   "t": 53.34,
+   "type": "interim",
+   "text": "Acá pueden ver cómo una sola traza cruza los tres servicios en menos de doscientos milisegundos"
+  },
+  {
+   "t": 53.64,
+   "type": "final",
+   "text": "Acá pueden ver cómo una sola traza cruza los tres servicios en menos de doscientos milisegundos.",
+   "t0": 49.66,
+   "t1": 53.34,
+   "kind": "speech",
+   "src": "es",
+   "tr": {
+    "es": "Acá pueden ver cómo una sola traza cruza los tres servicios en menos de doscientos milisegundos.",
+    "en": "Here you can see how a single trace crosses the three services in under two hundred milliseconds.",
+    "pt": "Aqui vocês podem ver como um único trace atravessa os três serviços em menos de duzentos milissegundos."
+   },
+   "mtMs": 947
+  },
+  {
+   "t": 54.7,
+   "type": "interim",
+   "text": "Y"
+  },
+  {
+   "t": 55.07,
+   "type": "interim",
+   "text": "Y cuando"
+  },
+  {
+   "t": 55.4,
+   "type": "interim",
+   "text": "Y cuando algo falla"
+  },
+  {
+   "t": 55.9,
+   "type": "interim",
+   "text": "Y cuando algo falla, el"
+  },
+  {
+   "t": 56.38,
+   "type": "interim",
+   "text": "Y cuando algo falla, el error queda"
+  },
+  {
+   "t": 56.69,
+   "type": "interim",
+   "text": "Y cuando algo falla, el error queda pegado"
+  },
+  {
+   "t": 57.1,
+   "type": "interim",
+   "text": "Y cuando algo falla, el error queda pegado a la"
+  },
+  {
+   "t": 57.4,
+   "type": "interim",
+   "text": "Y cuando algo falla, el error queda pegado a la traza con"
+  },
+  {
+   "t": 57.82,
+   "type": "interim",
+   "text": "Y cuando algo falla, el error queda pegado a la traza con todo su"
+  },
+  {
+   "t": 58.2,
+   "type": "interim",
+   "text": "Y cuando algo falla, el error queda pegado a la traza con todo su contexto"
+  },
+  {
+   "t": 58.5,
+   "type": "final",
+   "text": "Y cuando algo falla, el error queda pegado a la traza con todo su contexto.",
+   "t0": 54.25,
+   "t1": 58.2,
+   "kind": "speech",
+   "src": "es",
+   "tr": {
+    "es": "Y cuando algo falla, el error queda pegado a la traza con todo su contexto.",
+    "en": "And when something fails, the error sticks to the trace with all its context.",
+    "pt": "E quando algo falha, o erro fica grudado no trace com todo o seu contexto."
+   },
+   "mtMs": 947
+  },
+  {
+   "t": 61.74,
+   "type": "final",
+   "text": "[aplausos]",
+   "t0": 58.94,
+   "t1": 61.44,
+   "kind": "sound",
+   "src": "es",
+   "tr": {
+    "es": "[aplausos]",
+    "en": "[applause]",
+    "pt": "[aplausos]"
+   },
+   "mtMs": 657
+  }
+ ]
+}

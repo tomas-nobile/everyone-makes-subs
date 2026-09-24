@@ -1,0 +1,708 @@
+{
+ "lang": "en",
+ "title": "Shipping LLM features on a budget",
+ "speaker": "Sam Rivera",
+ "durationSec": 54.6,
+ "events": [
+  {
+   "t": 0.88,
+   "type": "interim",
+   "text": "Good morning"
+  },
+  {
+   "t": 1.18,
+   "type": "interim",
+   "text": "Good morning, and"
+  },
+  {
+   "t": 1.66,
+   "type": "interim",
+   "text": "Good morning, and welcome to"
+  },
+  {
+   "t": 2.11,
+   "type": "interim",
+   "text": "Good morning, and welcome to room"
+  },
+  {
+   "t": 2.58,
+   "type": "interim",
+   "text": "Good morning, and welcome to room two"
+  },
+  {
+   "t": 2.88,
+   "type": "final",
+   "text": "Good morning, and welcome to room two.",
+   "t0": 0.6,
+   "t1": 2.58,
+   "kind": "speech",
+   "src": "en",
+   "tr": {
+    "es": "Buenos días, y bienvenidos a la sala dos.",
+    "en": "Good morning, and welcome to room two.",
+    "pt": "Bom dia, e bem-vindos à sala dois."
+   },
+   "mtMs": 931
+  },
+  {
+   "t": 4.09,
+   "type": "interim",
+   "text": "I'm"
+  },
+  {
+   "t": 4.46,
+   "type": "interim",
+   "text": "I'm going to"
+  },
+  {
+   "t": 4.85,
+   "type": "interim",
+   "text": "I'm going to show"
+  },
+  {
+   "t": 5.28,
+   "type": "interim",
+   "text": "I'm going to show you"
+  },
+  {
+   "t": 5.7,
+   "type": "interim",
+   "text": "I'm going to show you how"
+  },
+  {
+   "t": 6.18,
+   "type": "interim",
+   "text": "I'm going to show you how we"
+  },
+  {
+   "t": 6.68,
+   "type": "interim",
+   "text": "I'm going to show you how we cut"
+  },
+  {
+   "t": 7.06,
+   "type": "interim",
+   "text": "I'm going to show you how we cut our"
+  },
+  {
+   "t": 7.56,
+   "type": "interim",
+   "text": "I'm going to show you how we cut our model"
+  },
+  {
+   "t": 7.85,
+   "type": "interim",
+   "text": "I'm going to show you how we cut our model bill"
+  },
+  {
+   "t": 8.33,
+   "type": "interim",
+   "text": "I'm going to show you how we cut our model bill by eighty"
+  },
+  {
+   "t": 8.77,
+   "type": "interim",
+   "text": "I'm going to show you how we cut our model bill by eighty percent"
+  },
+  {
+   "t": 9.07,
+   "type": "final",
+   "text": "I'm going to show you how we cut our model bill by eighty percent.",
+   "t0": 3.68,
+   "t1": 8.77,
+   "kind": "speech",
+   "src": "en",
+   "tr": {
+    "es": "Les voy a mostrar cómo recortamos nuestra factura de modelos en un ochenta por ciento.",
+    "en": "I'm going to show you how we cut our model bill by eighty percent.",
+    "pt": "Vou mostrar como cortamos nossa conta de modelos em oitenta por cento."
+   },
+   "mtMs": 928
+  },
+  {
+   "t": 10.2,
+   "type": "interim",
+   "text": "The first"
+  },
+  {
+   "t": 10.5,
+   "type": "interim",
+   "text": "The first trick"
+  },
+  {
+   "t": 10.96,
+   "type": "interim",
+   "text": "The first trick is"
+  },
+  {
+   "t": 11.39,
+   "type": "interim",
+   "text": "The first trick is embarrassingly"
+  },
+  {
+   "t": 11.77,
+   "type": "interim",
+   "text": "The first trick is embarrassingly simple:"
+  },
+  {
+   "t": 12.17,
+   "type": "interim",
+   "text": "The first trick is embarrassingly simple: cache"
+  },
+  {
+   "t": 12.51,
+   "type": "interim",
+   "text": "The first trick is embarrassingly simple: cache everything"
+  },
+  {
+   "t": 12.89,
+   "type": "interim",
+   "text": "The first trick is embarrassingly simple: cache everything you"
+  },
+  {
+   "t": 13.21,
+   "type": "interim",
+   "text": "The first trick is embarrassingly simple: cache everything you can"
+  },
+  {
+   "t": 13.51,
+   "type": "final",
+   "text": "The first trick is embarrassingly simple: cache everything you can.",
+   "t0": 9.86,
+   "t1": 13.21,
+   "kind": "speech",
+   "src": "en",
+   "tr": {
+    "es": "El primer truco es vergonzosamente simple: cacheen todo lo que puedan.",
+    "en": "The first trick is embarrassingly simple: cache everything you can.",
+    "pt": "O primeiro truque é vergonhosamente simples: façam cache de tudo o que puderem."
+   },
+   "mtMs": 745
+  },
+  {
+   "t": 14.49,
+   "type": "interim",
+   "text": "Most"
+  },
+  {
+   "t": 14.92,
+   "type": "interim",
+   "text": "Most prompts share"
+  },
+  {
+   "t": 15.22,
+   "type": "interim",
+   "text": "Most prompts share a"
+  },
+  {
+   "t": 15.71,
+   "type": "interim",
+   "text": "Most prompts share a long prefix"
+  },
+  {
+   "t": 16.01,
+   "type": "interim",
+   "text": "Most prompts share a long prefix, and prompt"
+  },
+  {
+   "t": 16.3,
+   "type": "interim",
+   "text": "Most prompts share a long prefix, and prompt caching"
+  },
+  {
+   "t": 16.78,
+   "type": "interim",
+   "text": "Most prompts share a long prefix, and prompt caching makes"
+  },
+  {
+   "t": 17.1,
+   "type": "interim",
+   "text": "Most prompts share a long prefix, and prompt caching makes that prefix"
+  },
+  {
+   "t": 17.54,
+   "type": "interim",
+   "text": "Most prompts share a long prefix, and prompt caching makes that prefix almost"
+  },
+  {
+   "t": 17.84,
+   "type": "interim",
+   "text": "Most prompts share a long prefix, and prompt caching makes that prefix almost free"
+  },
+  {
+   "t": 18.14,
+   "type": "final",
+   "text": "Most prompts share a long prefix, and prompt caching makes that prefix almost free.",
+   "t0": 14.03,
+   "t1": 17.84,
+   "kind": "speech",
+   "src": "en",
+   "tr": {
+    "es": "La mayoría de los prompts comparten un prefijo largo, y el prompt caching hace que ese prefijo sea casi gratis.",
+    "en": "Most prompts share a long prefix, and prompt caching makes that prefix almost free.",
+    "pt": "A maioria dos prompts compartilha um prefixo longo, e o prompt caching torna esse prefixo quase de graça."
+   },
+   "mtMs": 763
+  },
+  {
+   "t": 18.96,
+   "type": "interim",
+   "text": "The"
+  },
+  {
+   "t": 19.27,
+   "type": "interim",
+   "text": "The second"
+  },
+  {
+   "t": 19.71,
+   "type": "interim",
+   "text": "The second trick is"
+  },
+  {
+   "t": 20.11,
+   "type": "interim",
+   "text": "The second trick is routing"
+  },
+  {
+   "t": 20.56,
+   "type": "interim",
+   "text": "The second trick is routing, so"
+  },
+  {
+   "t": 21,
+   "type": "interim",
+   "text": "The second trick is routing, so small"
+  },
+  {
+   "t": 21.3,
+   "type": "interim",
+   "text": "The second trick is routing, so small questions"
+  },
+  {
+   "t": 21.72,
+   "type": "interim",
+   "text": "The second trick is routing, so small questions go to"
+  },
+  {
+   "t": 22.12,
+   "type": "interim",
+   "text": "The second trick is routing, so small questions go to small models"
+  },
+  {
+   "t": 22.42,
+   "type": "final",
+   "text": "The second trick is routing, so small questions go to small models.",
+   "t0": 18.55,
+   "t1": 22.12,
+   "kind": "speech",
+   "src": "en",
+   "tr": {
+    "es": "El segundo truco es el ruteo, para que las preguntas chicas vayan a modelos chicos.",
+    "en": "The second trick is routing, so small questions go to small models.",
+    "pt": "O segundo truque é o roteamento, para que perguntas pequenas vão para modelos pequenos."
+   },
+   "mtMs": 575
+  },
+  {
+   "t": 23.35,
+   "type": "interim",
+   "text": "We"
+  },
+  {
+   "t": 23.69,
+   "type": "interim",
+   "text": "We measured"
+  },
+  {
+   "t": 23.98,
+   "type": "interim",
+   "text": "We measured it"
+  },
+  {
+   "t": 24.35,
+   "type": "interim",
+   "text": "We measured it, and"
+  },
+  {
+   "t": 24.77,
+   "type": "interim",
+   "text": "We measured it, and ninety"
+  },
+  {
+   "t": 25.08,
+   "type": "interim",
+   "text": "We measured it, and ninety percent"
+  },
+  {
+   "t": 25.47,
+   "type": "interim",
+   "text": "We measured it, and ninety percent of"
+  },
+  {
+   "t": 25.84,
+   "type": "interim",
+   "text": "We measured it, and ninety percent of our"
+  },
+  {
+   "t": 26.29,
+   "type": "interim",
+   "text": "We measured it, and ninety percent of our traffic"
+  },
+  {
+   "t": 26.77,
+   "type": "interim",
+   "text": "We measured it, and ninety percent of our traffic never"
+  },
+  {
+   "t": 27.1,
+   "type": "interim",
+   "text": "We measured it, and ninety percent of our traffic never needed"
+  },
+  {
+   "t": 27.41,
+   "type": "interim",
+   "text": "We measured it, and ninety percent of our traffic never needed the"
+  },
+  {
+   "t": 27.9,
+   "type": "interim",
+   "text": "We measured it, and ninety percent of our traffic never needed the big model"
+  },
+  {
+   "t": 28.2,
+   "type": "final",
+   "text": "We measured it, and ninety percent of our traffic never needed the big model.",
+   "t0": 22.94,
+   "t1": 27.9,
+   "kind": "speech",
+   "src": "en",
+   "tr": {
+    "es": "Lo medimos, y el noventa por ciento de nuestro tráfico nunca necesitó el modelo grande.",
+    "en": "We measured it, and ninety percent of our traffic never needed the big model.",
+    "pt": "Nós medimos, e noventa por cento do nosso tráfego nunca precisou do modelo grande."
+   },
+   "mtMs": 927
+  },
+  {
+   "t": 28.96,
+   "type": "interim",
+   "text": "(audience question)"
+  },
+  {
+   "t": 29.44,
+   "type": "interim",
+   "text": "(audience question) What"
+  },
+  {
+   "t": 29.78,
+   "type": "interim",
+   "text": "(audience question) What about"
+  },
+  {
+   "t": 30.06,
+   "type": "interim",
+   "text": "(audience question) What about quality, did"
+  },
+  {
+   "t": 30.47,
+   "type": "interim",
+   "text": "(audience question) What about quality, did it"
+  },
+  {
+   "t": 30.82,
+   "type": "interim",
+   "text": "(audience question) What about quality, did it drop"
+  },
+  {
+   "t": 31.12,
+   "type": "final",
+   "text": "(audience question) What about quality, did it drop?",
+   "t0": 28.63,
+   "t1": 30.82,
+   "kind": "audience",
+   "src": "en",
+   "tr": {
+    "es": "(pregunta del público) ¿Y la calidad, bajó?",
+    "en": "(audience question) What about quality, did it drop?",
+    "pt": "(pergunta da plateia) E a qualidade, caiu?"
+   },
+   "mtMs": 690
+  },
+  {
+   "t": 31.92,
+   "type": "interim",
+   "text": "Great question"
+  },
+  {
+   "t": 32.34,
+   "type": "interim",
+   "text": "Great question, and no"
+  },
+  {
+   "t": 32.8,
+   "type": "interim",
+   "text": "Great question, and no, not"
+  },
+  {
+   "t": 33.19,
+   "type": "interim",
+   "text": "Great question, and no, not in"
+  },
+  {
+   "t": 33.55,
+   "type": "interim",
+   "text": "Great question, and no, not in our"
+  },
+  {
+   "t": 34.05,
+   "type": "interim",
+   "text": "Great question, and no, not in our evals"
+  },
+  {
+   "t": 34.35,
+   "type": "final",
+   "text": "Great question, and no, not in our evals.",
+   "t0": 31.63,
+   "t1": 34.05,
+   "kind": "speech",
+   "src": "en",
+   "tr": {
+    "es": "Excelente pregunta, y no, no en nuestras evaluaciones.",
+    "en": "Great question, and no, not in our evals.",
+    "pt": "Ótima pergunta, e não, não nas nossas avaliações."
+   },
+   "mtMs": 835
+  },
+  {
+   "t": 35.64,
+   "type": "interim",
+   "text": "The"
+  },
+  {
+   "t": 35.96,
+   "type": "interim",
+   "text": "The third"
+  },
+  {
+   "t": 36.4,
+   "type": "interim",
+   "text": "The third trick is"
+  },
+  {
+   "t": 36.77,
+   "type": "interim",
+   "text": "The third trick is batching"
+  },
+  {
+   "t": 37.14,
+   "type": "interim",
+   "text": "The third trick is batching everything"
+  },
+  {
+   "t": 37.44,
+   "type": "interim",
+   "text": "The third trick is batching everything that"
+  },
+  {
+   "t": 37.74,
+   "type": "interim",
+   "text": "The third trick is batching everything that is not"
+  },
+  {
+   "t": 38.1,
+   "type": "interim",
+   "text": "The third trick is batching everything that is not user"
+  },
+  {
+   "t": 38.52,
+   "type": "interim",
+   "text": "The third trick is batching everything that is not user facing"
+  },
+  {
+   "t": 38.82,
+   "type": "final",
+   "text": "The third trick is batching everything that is not user facing.",
+   "t0": 35.23,
+   "t1": 38.52,
+   "kind": "speech",
+   "src": "en",
+   "tr": {
+    "es": "El tercer truco es procesar en lote todo lo que no está de cara al usuario.",
+    "en": "The third trick is batching everything that is not user facing.",
+    "pt": "O terceiro truque é processar em lote tudo o que não é voltado ao usuário."
+   },
+   "mtMs": 513
+  },
+  {
+   "t": 39.71,
+   "type": "interim",
+   "text": "Nightly summaries"
+  },
+  {
+   "t": 40,
+   "type": "interim",
+   "text": "Nightly summaries, tagging"
+  },
+  {
+   "t": 40.35,
+   "type": "interim",
+   "text": "Nightly summaries, tagging and"
+  },
+  {
+   "t": 40.83,
+   "type": "interim",
+   "text": "Nightly summaries, tagging and evals"
+  },
+  {
+   "t": 41.11,
+   "type": "interim",
+   "text": "Nightly summaries, tagging and evals all"
+  },
+  {
+   "t": 41.44,
+   "type": "interim",
+   "text": "Nightly summaries, tagging and evals all run"
+  },
+  {
+   "t": 41.81,
+   "type": "interim",
+   "text": "Nightly summaries, tagging and evals all run in"
+  },
+  {
+   "t": 42.13,
+   "type": "interim",
+   "text": "Nightly summaries, tagging and evals all run in batch at"
+  },
+  {
+   "t": 42.57,
+   "type": "interim",
+   "text": "Nightly summaries, tagging and evals all run in batch at half"
+  },
+  {
+   "t": 43.04,
+   "type": "interim",
+   "text": "Nightly summaries, tagging and evals all run in batch at half the price"
+  },
+  {
+   "t": 43.34,
+   "type": "final",
+   "text": "Nightly summaries, tagging and evals all run in batch at half the price.",
+   "t0": 39.24,
+   "t1": 43.04,
+   "kind": "speech",
+   "src": "en",
+   "tr": {
+    "es": "Los resúmenes nocturnos, el etiquetado y las evaluaciones corren en lote a mitad de precio.",
+    "en": "Nightly summaries, tagging and evals all run in batch at half the price.",
+    "pt": "Os resumos noturnos, a marcação e as avaliações rodam em lote pela metade do preço."
+   },
+   "mtMs": 857
+  },
+  {
+   "t": 44.25,
+   "type": "interim",
+   "text": "Finally"
+  },
+  {
+   "t": 44.72,
+   "type": "interim",
+   "text": "Finally, set a"
+  },
+  {
+   "t": 45.15,
+   "type": "interim",
+   "text": "Finally, set a budget"
+  },
+  {
+   "t": 45.62,
+   "type": "interim",
+   "text": "Finally, set a budget alert"
+  },
+  {
+   "t": 46.08,
+   "type": "interim",
+   "text": "Finally, set a budget alert before"
+  },
+  {
+   "t": 46.57,
+   "type": "interim",
+   "text": "Finally, set a budget alert before you"
+  },
+  {
+   "t": 46.92,
+   "type": "interim",
+   "text": "Finally, set a budget alert before you need"
+  },
+  {
+   "t": 47.27,
+   "type": "interim",
+   "text": "Finally, set a budget alert before you need it"
+  },
+  {
+   "t": 47.58,
+   "type": "interim",
+   "text": "Finally, set a budget alert before you need it, not"
+  },
+  {
+   "t": 48.01,
+   "type": "interim",
+   "text": "Finally, set a budget alert before you need it, not after"
+  },
+  {
+   "t": 48.31,
+   "type": "final",
+   "text": "Finally, set a budget alert before you need it, not after.",
+   "t0": 43.9,
+   "t1": 48.01,
+   "kind": "speech",
+   "src": "en",
+   "tr": {
+    "es": "Por último, configuren una alerta de presupuesto antes de necesitarla, no después.",
+    "en": "Finally, set a budget alert before you need it, not after.",
+    "pt": "Por fim, configurem um alerta de orçamento antes de precisar, não depois."
+   },
+   "mtMs": 858
+  },
+  {
+   "t": 49.4,
+   "type": "interim",
+   "text": "Thank"
+  },
+  {
+   "t": 49.73,
+   "type": "interim",
+   "text": "Thank you, I'll"
+  },
+  {
+   "t": 50.02,
+   "type": "interim",
+   "text": "Thank you, I'll be around"
+  },
+  {
+   "t": 50.48,
+   "type": "interim",
+   "text": "Thank you, I'll be around for"
+  },
+  {
+   "t": 50.95,
+   "type": "interim",
+   "text": "Thank you, I'll be around for questions"
+  },
+  {
+   "t": 51.25,
+   "type": "final",
+   "text": "Thank you, I'll be around for questions.",
+   "t0": 48.94,
+   "t1": 50.95,
+   "kind": "speech",
+   "src": "en",
+   "tr": {
+    "es": "Gracias, voy a estar por acá para preguntas.",
+    "en": "Thank you, I'll be around for questions.",
+    "pt": "Obrigado, vou estar por aqui para perguntas."
+   },
+   "mtMs": 883
+  }
+ ]
+}

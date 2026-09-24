@@ -16,7 +16,7 @@ As a developer, I want `npm run dev` to start server and web with hot reload, so
 
 **Verify:** `npm run dev` and open `http://localhost:5173` (a page that says "Everyone Makes Subs").
 
-### [ ] F01.2 · Replayable fake backend
+### [x] F01.2 · Replayable fake backend
 As a frontend developer, I want `FAKE_BACKEND=1` so I can see moving captions without a key or audio.
 
 - `FakeBackend` reads `samples/*.transcript.json` and emits, with the file's timing, the same events as the real pipeline: `live`, `segment`, `tr`, `state` and `level`.

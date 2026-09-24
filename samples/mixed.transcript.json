@@ -1,0 +1,368 @@
+{
+ "lang": "es",
+ "title": "Panel: comunidades open source",
+ "speaker": "Varios",
+ "durationSec": 31.8,
+ "events": [
+  {
+   "t": 1,
+   "type": "interim",
+   "text": "Bienvenidos al"
+  },
+  {
+   "t": 1.37,
+   "type": "interim",
+   "text": "Bienvenidos al panel"
+  },
+  {
+   "t": 1.81,
+   "type": "interim",
+   "text": "Bienvenidos al panel de"
+  },
+  {
+   "t": 2.18,
+   "type": "interim",
+   "text": "Bienvenidos al panel de comunidades"
+  },
+  {
+   "t": 2.51,
+   "type": "interim",
+   "text": "Bienvenidos al panel de comunidades open"
+  },
+  {
+   "t": 2.96,
+   "type": "interim",
+   "text": "Bienvenidos al panel de comunidades open source"
+  },
+  {
+   "t": 3.26,
+   "type": "final",
+   "text": "Bienvenidos al panel de comunidades open source.",
+   "t0": 0.6,
+   "t1": 2.96,
+   "kind": "speech",
+   "src": "es",
+   "tr": {
+    "es": "Bienvenidos al panel de comunidades open source.",
+    "en": "Welcome to the open source communities panel.",
+    "pt": "Bem-vindos ao painel de comunidades open source."
+   },
+   "mtMs": 599
+  },
+  {
+   "t": 4.19,
+   "type": "interim",
+   "text": "Tenemos"
+  },
+  {
+   "t": 4.6,
+   "type": "interim",
+   "text": "Tenemos invitados"
+  },
+  {
+   "t": 5.01,
+   "type": "interim",
+   "text": "Tenemos invitados de tres"
+  },
+  {
+   "t": 5.43,
+   "type": "interim",
+   "text": "Tenemos invitados de tres países"
+  },
+  {
+   "t": 5.74,
+   "type": "interim",
+   "text": "Tenemos invitados de tres países, así"
+  },
+  {
+   "t": 6.05,
+   "type": "interim",
+   "text": "Tenemos invitados de tres países, así que vamos"
+  },
+  {
+   "t": 6.47,
+   "type": "interim",
+   "text": "Tenemos invitados de tres países, así que vamos a mezclar"
+  },
+  {
+   "t": 6.89,
+   "type": "interim",
+   "text": "Tenemos invitados de tres países, así que vamos a mezclar idiomas"
+  },
+  {
+   "t": 7.19,
+   "type": "final",
+   "text": "Tenemos invitados de tres países, así que vamos a mezclar idiomas.",
+   "t0": 3.79,
+   "t1": 6.89,
+   "kind": "speech",
+   "src": "es",
+   "tr": {
+    "es": "Tenemos invitados de tres países, así que vamos a mezclar idiomas.",
+    "en": "We have guests from three countries, so we're going to mix languages.",
+    "pt": "Temos convidados de três países, então vamos misturar idiomas."
+   },
+   "mtMs": 645
+  },
+  {
+   "t": 8.07,
+   "type": "interim",
+   "text": "Thanks"
+  },
+  {
+   "t": 8.36,
+   "type": "interim",
+   "text": "Thanks for having"
+  },
+  {
+   "t": 8.73,
+   "type": "interim",
+   "text": "Thanks for having me"
+  },
+  {
+   "t": 9.15,
+   "type": "interim",
+   "text": "Thanks for having me, my Spanish"
+  },
+  {
+   "t": 9.53,
+   "type": "interim",
+   "text": "Thanks for having me, my Spanish is"
+  },
+  {
+   "t": 9.99,
+   "type": "interim",
+   "text": "Thanks for having me, my Spanish is not great"
+  },
+  {
+   "t": 10.34,
+   "type": "interim",
+   "text": "Thanks for having me, my Spanish is not great, so I"
+  },
+  {
+   "t": 10.66,
+   "type": "interim",
+   "text": "Thanks for having me, my Spanish is not great, so I will stick"
+  },
+  {
+   "t": 10.99,
+   "type": "interim",
+   "text": "Thanks for having me, my Spanish is not great, so I will stick to"
+  },
+  {
+   "t": 11.39,
+   "type": "interim",
+   "text": "Thanks for having me, my Spanish is not great, so I will stick to English"
+  },
+  {
+   "t": 11.69,
+   "type": "final",
+   "text": "Thanks for having me, my Spanish is not great, so I will stick to English.",
+   "t0": 7.76,
+   "t1": 11.39,
+   "kind": "speech",
+   "src": "en",
+   "tr": {
+    "es": "Gracias por invitarme, mi español no es muy bueno, así que voy a seguir en inglés.",
+    "en": "Thanks for having me, my Spanish is not great, so I will stick to English.",
+    "pt": "Obrigado pelo convite, meu espanhol não é muito bom, então vou ficar no inglês."
+   },
+   "mtMs": 827
+  },
+  {
+   "t": 12.96,
+   "type": "interim",
+   "text": "Our"
+  },
+  {
+   "t": 13.26,
+   "type": "interim",
+   "text": "Our project"
+  },
+  {
+   "t": 13.71,
+   "type": "interim",
+   "text": "Our project started"
+  },
+  {
+   "t": 14.11,
+   "type": "interim",
+   "text": "Our project started as"
+  },
+  {
+   "t": 14.46,
+   "type": "interim",
+   "text": "Our project started as a"
+  },
+  {
+   "t": 14.74,
+   "type": "interim",
+   "text": "Our project started as a weekend"
+  },
+  {
+   "t": 15.09,
+   "type": "interim",
+   "text": "Our project started as a weekend hack and"
+  },
+  {
+   "t": 15.57,
+   "type": "interim",
+   "text": "Our project started as a weekend hack and now"
+  },
+  {
+   "t": 15.97,
+   "type": "interim",
+   "text": "Our project started as a weekend hack and now has"
+  },
+  {
+   "t": 16.37,
+   "type": "interim",
+   "text": "Our project started as a weekend hack and now has two hundred"
+  },
+  {
+   "t": 16.69,
+   "type": "interim",
+   "text": "Our project started as a weekend hack and now has two hundred contributors"
+  },
+  {
+   "t": 16.99,
+   "type": "final",
+   "text": "Our project started as a weekend hack and now has two hundred contributors.",
+   "t0": 12.49,
+   "t1": 16.69,
+   "kind": "speech",
+   "src": "en",
+   "tr": {
+    "es": "Nuestro proyecto empezó como un hack de fin de semana y ahora tiene doscientos contribuidores.",
+    "en": "Our project started as a weekend hack and now has two hundred contributors.",
+    "pt": "Nosso projeto começou como um hack de fim de semana e agora tem duzentos contribuidores."
+   },
+   "mtMs": 856
+  },
+  {
+   "t": 18.22,
+   "type": "interim",
+   "text": "No"
+  },
+  {
+   "t": 18.51,
+   "type": "interim",
+   "text": "No Brasil a"
+  },
+  {
+   "t": 18.9,
+   "type": "interim",
+   "text": "No Brasil a comunidade"
+  },
+  {
+   "t": 19.33,
+   "type": "interim",
+   "text": "No Brasil a comunidade cresceu"
+  },
+  {
+   "t": 19.62,
+   "type": "interim",
+   "text": "No Brasil a comunidade cresceu muito"
+  },
+  {
+   "t": 20.12,
+   "type": "interim",
+   "text": "No Brasil a comunidade cresceu muito com"
+  },
+  {
+   "t": 20.55,
+   "type": "interim",
+   "text": "No Brasil a comunidade cresceu muito com os"
+  },
+  {
+   "t": 20.87,
+   "type": "interim",
+   "text": "No Brasil a comunidade cresceu muito com os meetups"
+  },
+  {
+   "t": 21.28,
+   "type": "interim",
+   "text": "No Brasil a comunidade cresceu muito com os meetups presenciais"
+  },
+  {
+   "t": 21.58,
+   "type": "final",
+   "text": "No Brasil a comunidade cresceu muito com os meetups presenciais.",
+   "t0": 17.73,
+   "t1": 21.28,
+   "kind": "speech",
+   "src": "pt",
+   "tr": {
+    "es": "En Brasil la comunidad creció mucho con los meetups presenciales.",
+    "en": "In Brazil the community grew a lot with in-person meetups.",
+    "pt": "No Brasil a comunidade cresceu muito com os meetups presenciais."
+   },
+   "mtMs": 670
+  },
+  {
+   "t": 22.41,
+   "type": "interim",
+   "text": "Y"
+  },
+  {
+   "t": 22.76,
+   "type": "interim",
+   "text": "Y acá"
+  },
+  {
+   "t": 23.25,
+   "type": "interim",
+   "text": "Y acá en"
+  },
+  {
+   "t": 23.67,
+   "type": "interim",
+   "text": "Y acá en Argentina"
+  },
+  {
+   "t": 24,
+   "type": "interim",
+   "text": "Y acá en Argentina pasó algo"
+  },
+  {
+   "t": 24.37,
+   "type": "interim",
+   "text": "Y acá en Argentina pasó algo parecido"
+  },
+  {
+   "t": 24.78,
+   "type": "interim",
+   "text": "Y acá en Argentina pasó algo parecido con Nerdearla"
+  },
+  {
+   "t": 25.08,
+   "type": "final",
+   "text": "Y acá en Argentina pasó algo parecido con Nerdearla.",
+   "t0": 21.99,
+   "t1": 24.78,
+   "kind": "speech",
+   "src": "es",
+   "tr": {
+    "es": "Y acá en Argentina pasó algo parecido con Nerdearla.",
+    "en": "And here in Argentina something similar happened with Nerdearla.",
+    "pt": "E aqui na Argentina aconteceu algo parecido com a Nerdearla."
+   },
+   "mtMs": 840
+  },
+  {
+   "t": 28.7,
+   "type": "final",
+   "text": "[aplausos]",
+   "t0": 25.9,
+   "t1": 28.4,
+   "kind": "sound",
+   "src": "es",
+   "tr": {
+    "es": "[aplausos]",
+    "en": "[applause]",
+    "pt": "[aplausos]"
+   },
+   "mtMs": 493
+  }
+ ]
+}
