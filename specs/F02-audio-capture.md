@@ -34,7 +34,7 @@ As the system, I need to know when there's speech to rotate sessions, save audio
 
 **Verify:** vitest test with a zero buffer and a sine wave: silence and speech detected.
 
-### [ ] F02.4 · Source goes down
+### [x] F02.4 · Source goes down
 As an operator, I want the system to retry on its own and tell me when the source drops.
 
 - If ffmpeg exits or sends no data for 5 s: state `no_signal` and restart with backoff (1, 2, 4… up to 30 s).

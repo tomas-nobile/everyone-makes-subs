@@ -18,6 +18,8 @@ src.on('end', () => {
   process.exit(0);
 });
 
+src.on('state', (s: string) => console.log(`state ${s} · ffmpeg pid ${src.pid ?? '-'}`));
+
 const t0 = Date.now();
 src.start();
 setInterval(() => {
