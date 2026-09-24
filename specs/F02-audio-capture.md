@@ -16,7 +16,7 @@ As an operator, I want to use an audio file as a source, to test or caption a re
 
 **Verify:** a script that plays `samples/es.mp3` and prints the clock every second: it advances about 1 s per second.
 
-### [ ] F02.2 · YouTube link or URL
+### [x] F02.2 · YouTube link or URL
 As an operator, I want to paste a stream link to caption it without cables.
 
 - `kind: 'url'`: for YouTube, `yt-dlp -f bestaudio -g <url>` resolves the direct URL. Anything else goes straight to ffmpeg.

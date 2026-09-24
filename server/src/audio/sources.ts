@@ -3,8 +3,11 @@ import { EventEmitter } from 'node:events';
 import ffmpegPath from 'ffmpeg-static';
 import type { SourceSpec } from '../../../shared/contract.js';
 import { BYTES_PER_SEC, Chunker } from './chunker.js';
+import { isYouTube, resolveYouTube } from './ytdlp.js';
 
 const PCM_OUT = ['-vn', '-f', 's16le', '-ac', '1', '-ar', '16000', 'pipe:1'];
+const RECONNECT = ['-reconnect', '1', '-reconnect_streamed', '1', '-reconnect_delay_max', '5'];
+const MEDIA_FILE = /\.(mp3|mp4|m4a|wav|ogg|oga|opus|webm|flac|aac|mkv|mov)$/i;
 const NO_DATA_MS = 5_000;
 const MAX_BACKOFF_MS = 30_000;
 
@@ -27,7 +30,7 @@ export class AudioSource extends EventEmitter {
   private watchdog?: NodeJS.Timeout;
   private restartTimer?: NodeJS.Timeout;
 
-  constructor(private spec: SourceSpec, private label: string) {
+  constructor(private spec: SourceSpec, private label: string, private dataDir = './data') {
     super();
   }
 
@@ -67,19 +70,46 @@ export class AudioSource extends EventEmitter {
     if (proc && proc.exitCode === null) proc.kill('SIGKILL');
   }
 
-  private ffmpegArgs(): string[] {
-    switch (this.spec.kind) {
+  /** Input part of the ffmpeg command. Resolved on every (re)start: YouTube URLs expire. */
+  private async inputArgs(): Promise<string[]> {
+    const spec = this.spec;
+    switch (spec.kind) {
       case 'file':
-        return ['-hide_banner', '-loglevel', 'error', '-re', '-i', this.spec.path, ...PCM_OUT];
-      default:
-        throw new Error(`source kind not supported yet: ${this.spec.kind}`);
+        return ['-re', '-i', spec.path];
+      case 'url': {
+        if (isYouTube(spec.url)) {
+          const { input, isLive } = await resolveYouTube(spec.url, this.dataDir);
+          console.log(`[${this.label}] youtube resolved (${isLive ? 'live' : 'VOD'})`);
+          return [...(isLive ? [] : ['-re']), ...RECONNECT, '-i', input];
+        }
+        // Not YouTube: straight to ffmpeg. -re only when it looks like a finite file.
+        const vod = MEDIA_FILE.test(new URL(spec.url).pathname);
+        return [...(vod ? ['-re'] : []), ...(spec.url.startsWith('http') ? RECONNECT : []), '-i', spec.url];
+      }
+      case 'mediamtx':
+        return ['-i', `rtmp://127.0.0.1:1935/${spec.path}`];
+      case 'station':
+        throw new Error('station audio arrives over WS (F08), not ffmpeg');
     }
   }
 
-  private spawnFfmpeg(): void {
+  private async spawnFfmpeg(): Promise<void> {
     if (!this.running) return;
-    if (!ffmpegPath) throw new Error('ffmpeg-static has no binary for this platform');
-    const proc = spawn(ffmpegPath, this.ffmpegArgs(), { stdio: ['ignore', 'pipe', 'pipe'] });
+    if (!ffmpegPath) {
+      console.log(`[${this.label}] ffmpeg-static has no binary for this platform`);
+      return this.scheduleRestart();
+    }
+    let input: string[];
+    try {
+      input = await this.inputArgs();
+    } catch (err) {
+      console.log(`[${this.label}] could not open source: ${(err as Error).message}`);
+      this.scheduleRestart();
+      return;
+    }
+    if (!this.running) return;
+    const proc = spawn(ffmpegPath, ['-hide_banner', '-loglevel', 'error', ...input, ...PCM_OUT],
+      { stdio: ['ignore', 'pipe', 'pipe'] });
     this.proc = proc;
     this.chunker.reset();
     this.lastDataAt = Date.now();
