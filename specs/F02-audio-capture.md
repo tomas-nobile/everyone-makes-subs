@@ -6,7 +6,7 @@
 
 ## Stories
 
-### [ ] F02.1 · Real-time file
+### [x] F02.1 · Real-time file
 As an operator, I want to use an audio file as a source, to test or caption a recorded talk.
 
 - `AudioSource` with `kind: 'file'` spawns `ffmpeg -re -i <file> -f s16le -ac 1 -ar 16000 pipe:1` (ffmpeg from `ffmpeg-static`).
