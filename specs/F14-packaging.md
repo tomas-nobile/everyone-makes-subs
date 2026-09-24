@@ -21,9 +21,9 @@ As an operator who isn't a developer, I want to install and open an app.
 
 **Verify:** the installer for your OS opens the app and reaches the setup wizard.
 
-### [ ] F14.3 · Installers on every tag — CUT (no GitHub Actions, see `docs/decisions.md`)
+### [ ] F14.3 · Installers on every tag
 As the team, we want installers published without building them by hand.
 
-- A `release.yml` workflow with the real app. The README links to the latest Release assets and explains the "unsigned app" warning (Mac: right-click > Open; Windows: More info > Run anyway).
+- F01.4's `release.yml`, now with the real app. The README links to the latest Release assets and explains the "unsigned app" warning (Mac: right-click > Open; Windows: More info > Run anyway).
 
 **Verify:** tag `v1.0.0` publishes the 3 installers.

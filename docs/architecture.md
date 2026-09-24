@@ -146,6 +146,7 @@ everyoneMakesSubs/
 ├─ web/src/pages/              # Home, Viewer, TV, Overlay, Station, Admin, Setup
 ├─ app/                        # Electron: main.ts, preload.ts, electron-builder.yml, icons/
 ├─ samples/                    # es.mp3, en.mp3, mixed.mp3 + *.transcript.json
+├─ .github/workflows/release.yml  # installers on every v* tag
 ├─ Dockerfile · docker-compose.yml · .dockerignore · LICENSE · README.md · AGENTS.md
 ```
 
@@ -419,7 +420,7 @@ The visual details are in the prototype (`ui-prototype.html`). Summary:
 
 - `app/main.ts`: `startServer({ dataDir: app.getPath('userData') })`, `BrowserWindow` to `/setup` or `/admin`, `powerSaveBlocker.start('prevent-app-suspension')`, tray icon with status and confirmation on close.
 - `electron-builder.yml`: `ffmpeg-static` in `extraResources`; on Mac, `extendInfo.NSMicrophoneUsageDescription`; targets `dmg` (arm64 and x64), `nsis` and `AppImage`.
-- No CI: installers are built by hand with `npm run app:dist` on each OS.
+- `.github/workflows/release.yml`: matrix `macos-latest`, `windows-latest` and `ubuntu-latest`; on every `v*` tag, it uploads the installers to GitHub Releases.
 - **Unsigned:** the README explains, with screenshots, "right-click > Open" on Mac and "More info > Run anyway" on Windows.
 
 ### Docker

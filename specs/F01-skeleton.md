@@ -34,10 +34,11 @@ As a judge without a key, I want sample audio to try the system right away.
 
 **Verify:** `ls -lh samples/`, and fake mode uses these files.
 
-### [x] F01.4 · "Hello world" installer
-As the team, we want to find out early whether electron-builder can build the installers, because that's where F14's risk is.
+### [ ] F01.4 · "Hello world" release pipeline
+As the team, we want to find out early whether GitHub Actions can build the installers, because that's where F14's risk is.
 
-- Minimal `app/main.ts`: an Electron window that shows "Everyone Makes Subs". `npm run app:dist` runs electron-builder (`dmg`, `nsis`, `AppImage` targets) locally.
-- No GitHub Actions: installers are built by hand on each OS (see `docs/decisions.md`).
+- `.github/workflows/release.yml` with a `macos-latest`, `windows-latest` and `ubuntu-latest` matrix, triggered on every `v*` tag.
+- Minimal `app/main.ts`: an Electron window that shows "Everyone Makes Subs". electron-builder produces `dmg`, `nsis` and `AppImage` and uploads them to a Release.
+- Tested with tag `v0.0.1`.
 
-**Verify:** `npm run app:dist` produces the installer for your OS.
+**Verify:** Release `v0.0.1` has the 3 files. If it fails, log the error as `TODO:` in `docs/decisions.md` and move on (it doesn't block the MVP).
