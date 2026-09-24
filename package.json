@@ -1,0 +1,43 @@
+{
+  "name": "everyone-makes-subs",
+  "version": "0.0.1",
+  "description": "Live captions and translation for every stage of a conference, with a single Gemini API key.",
+  "author": "Everyone Makes Subs",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k -n server,web -c blue,magenta \"tsx watch server/src/index.ts\" \"vite\"",
+    "dev:fake": "cross-env FAKE_BACKEND=1 npm run dev",
+    "check": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "smoke": "tsx scripts/smoke.ts",
+    "build": "vite build && esbuild server/src/index.ts --bundle --platform=node --format=esm --packages=external --outfile=server/dist/index.js",
+    "start": "node server/dist/index.js",
+    "app:build": "esbuild app/main.ts --bundle --platform=node --format=cjs --external:electron --outfile=app/dist/main.cjs",
+    "app:dev": "npm run app:build && electron app/dist/main.cjs",
+    "app:dist": "npm run app:build && electron-builder --config app/electron-builder.yml --publish never"
+  },
+  "dependencies": {
+    "@fastify/static": "^10.1.4",
+    "@google/genai": "^2.24.0",
+    "fastify": "^5.12.5",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "concurrently": "^10.0.5",
+    "cross-env": "^10.1.0",
+    "electron": "^44.4.5",
+    "electron-builder": "^26.15.3",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.1",
+    "vitest": "^4.1.11"
+  }
+}

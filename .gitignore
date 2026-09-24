@@ -1,0 +1,8 @@
+node_modules
+dist
+data/
+.env
+server/dist
+app/dist
+app/release
+*.log

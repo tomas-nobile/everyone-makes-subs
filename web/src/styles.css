@@ -1,0 +1,15 @@
+/* Tokens copied from docs/ui-prototype.html */
+:root{
+  --bg:#0B0C0E; --panel:#14161A; --panel2:#1B1E23; --line:#2A2E35; --line2:#353A42;
+  --text:#F2F2F2; --muted:#A3A9B1; --dim:#6B717A;
+  --accent:#FFD24A; --accent-ink:#1A1400;
+  --ok:#3DDC84; --warn:#FFB020; --bad:#FF5A5F; --info:#6EA8FE;
+  --ok-bg:rgba(61,220,132,.12); --warn-bg:rgba(255,176,32,.12); --bad-bg:rgba(255,90,95,.12); --info-bg:rgba(110,168,254,.12);
+  --radius:14px;
+  --font:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased}
+.muted{color:var(--muted)}
+.home{max-width:720px;margin:0 auto;padding:48px 16px}
+.home h1{margin:0 0 8px;font-size:32px}
