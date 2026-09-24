@@ -1,0 +1,1172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Everyone Makes Subs · UI prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0C0E; --panel:#14161A; --panel2:#1B1E23; --line:#2A2E35; --line2:#353A42;
+  --text:#F2F2F2; --muted:#A3A9B1; --dim:#6B717A;
+  --accent:#FFD24A; --accent-ink:#1A1400;
+  --ok:#3DDC84; --warn:#FFB020; --bad:#FF5A5F; --info:#6EA8FE;
+  --ok-bg:rgba(61,220,132,.12); --warn-bg:rgba(255,176,32,.12); --bad-bg:rgba(255,90,95,.12); --info-bg:rgba(110,168,254,.12);
+  --radius:14px;
+  --font:"Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--info)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- prototype bar ---------- */
+.proto-nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:16px;padding:10px 16px;background:#08090B;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700;white-space:nowrap}
+.brand .logo{width:26px;height:26px;border-radius:7px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:15px}
+.brand small{color:var(--dim);font-weight:400}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1}
+.tabs::-webkit-scrollbar{display:none}
+.tab{border:1px solid transparent;background:none;color:var(--muted);padding:7px 12px;border-radius:999px;white-space:nowrap;font-size:14px}
+.tab:hover{color:var(--text)}
+.tab[aria-selected="true"]{background:var(--panel2);border-color:var(--line2);color:var(--text)}
+.view{display:none;padding:24px 16px 48px}
+.view.on{display:block}
+
+/* ---------- stage layout + notes ---------- */
+.stage{display:grid;grid-template-columns:auto minmax(260px,420px);gap:32px;justify-content:center;align-items:start}
+.notes{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px 18px 8px;font-size:14.5px;line-height:1.5;color:var(--muted)}
+.notes h2{margin:0 0 4px;font-size:17px;color:var(--text)}
+.notes h3{margin:18px 0 6px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+.notes ul{margin:0;padding-left:18px}
+.notes li{margin:0 0 7px}
+.notes b{color:var(--text)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 12px}
+.chip{border:1px solid var(--line2);background:var(--panel2);color:var(--muted);padding:6px 10px;border-radius:999px;font-size:13px}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+
+/* ---------- phone ---------- */
+.phone{width:390px;height:800px;border-radius:46px;border:11px solid #1C1E23;background:#000;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.ph-top{padding:14px 16px 10px;border-bottom:1px solid #16181c;display:flex;flex-direction:column;gap:8px;background:#000;z-index:3}
+.ph-row{display:flex;align-items:center;gap:8px}
+.ph-room{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:6px;flex:1;min-width:0}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--bad);flex:none;box-shadow:0 0 0 0 rgba(255,90,95,.6);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,90,95,.55)}70%{box-shadow:0 0 0 7px rgba(255,90,95,0)}100%{box-shadow:0 0 0 0 rgba(255,90,95,0)}}
+.ph-talk{font-size:15px;font-weight:700;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ph-speaker{font-size:13px;color:var(--muted)}
+.lat{font-size:12px;color:var(--dim);white-space:nowrap}
+.pill-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);background:#111317;border-radius:999px;padding:7px 12px;font-size:14px;color:var(--text);white-space:nowrap}
+.pill-btn .sub{color:var(--muted);font-size:12px}
+.icon-btn{border:1px solid var(--line2);background:#111317;border-radius:999px;width:36px;height:36px;display:grid;place-items:center;font-weight:700;font-size:14px}
+.ph-body{flex:1;overflow-y:auto;padding:16px 18px 24px;scroll-behavior:smooth;position:relative;overscroll-behavior:contain}
+.ph-body::-webkit-scrollbar{width:0}
+.cap{margin:0 0 14px;line-height:1.36;color:#8E949C;transition:color .4s}
+.cap.recent{color:#F4F4F4}
+.cap .orig{display:block;font-size:.62em;color:#7D838B;margin-top:4px;line-height:1.35}
+.cap.pending{color:#5d6269;font-style:italic}
+.sound{display:inline-block;font-size:13px;color:var(--muted);border:1px solid #2a2d33;border-radius:999px;padding:3px 10px;margin:0 0 14px}
+.live-line{color:#8a9098;line-height:1.36;min-height:1.4em}
+.live-line .mask{color:#4a4f56}
+.speaking{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:14px;margin-top:4px}
+.bars{display:flex;gap:3px;align-items:flex-end;height:16px}
+.bars i{display:block;width:4px;border-radius:2px;background:var(--accent);height:3px;transition:height .12s}
+.live-orig{font-size:14px;color:#6f757d;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;direction:rtl;text-align:left}
+.live-orig span{direction:ltr;unicode-bidi:plaintext}
+.ph-bottom{padding:10px 14px 18px;border-top:1px solid #16181c;display:flex;gap:8px;background:#000;z-index:3}
+.ph-bottom .pill-btn{flex:1;justify-content:center;padding:11px}
+.jump{position:absolute;left:50%;transform:translateX(-50%);bottom:84px;z-index:4;background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:9px 16px;font-weight:700;font-size:14px;box-shadow:0 6px 20px rgba(0,0,0,.5);display:none}
+.jump.show{display:block}
+.banner{position:absolute;left:12px;right:12px;top:118px;z-index:5;background:#1d1f24;border:1px solid var(--line2);border-radius:12px;padding:10px 12px;font-size:14px;color:var(--text);display:none;align-items:center;gap:10px}
+.banner.show{display:flex}
+.spinner{width:14px;height:14px;border-radius:50%;border:2px solid var(--line2);border-top-color:var(--accent);animation:spin 1s linear infinite;flex:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.state-card{background:#0f1114;border:1px solid #23262c;border-radius:16px;padding:18px;margin:6px 0 18px;font-size:16px;line-height:1.45}
+.state-card h4{margin:0 0 6px;font-size:18px}
+.state-card p{margin:0 0 10px;color:var(--muted)}
+.state-card .row{display:flex;gap:8px;flex-wrap:wrap}
+.toast{position:absolute;left:12px;right:12px;bottom:84px;z-index:6;background:#1d1f24;border:1px solid var(--line2);border-radius:12px;padding:10px 12px;font-size:14px;display:flex;gap:10px;align-items:center;transition:opacity .4s}
+.toast button{margin-left:auto;background:none;border:0;color:var(--accent);font-weight:700;padding:4px}
+/* bottom sheets */
+.scrim{position:absolute;inset:0;background:rgba(0,0,0,.55);z-index:8;display:none}
+.scrim.show{display:block}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:9;background:#121418;border-top:1px solid var(--line2);border-radius:20px 20px 0 0;padding:10px 18px 22px;transform:translateY(105%);transition:transform .25s ease;max-height:78%;overflow:auto}
+.sheet.show{transform:none}
+.sheet .grab{width:40px;height:4px;border-radius:2px;background:#3a3f47;margin:0 auto 12px}
+.sheet h3{margin:0 0 12px;font-size:18px}
+.opt{display:flex;width:100%;align-items:center;gap:12px;background:none;border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin:0 0 8px;text-align:left}
+.opt[aria-checked="true"]{border-color:var(--accent);background:rgba(255,210,74,.08)}
+.opt .t{font-size:17px}
+.opt .s{font-size:13px;color:var(--muted)}
+.opt .check{margin-left:auto;color:var(--accent);font-weight:700;visibility:hidden}
+.opt[aria-checked="true"] .check{visibility:visible}
+.set-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #1f2227}
+.set-row:last-child{border-bottom:0}
+.set-row .lbl{flex:1}
+.set-row .lbl small{display:block;color:var(--muted);font-size:13px}
+.switch{appearance:none;width:46px;height:28px;border-radius:999px;background:#2b2f36;position:relative;flex:none;transition:background .2s;cursor:pointer}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:left .2s}
+.switch:checked{background:var(--accent)}
+.switch:checked::after{left:21px}
+input[type=range]{accent-color:var(--accent);width:100%}
+.summary li{margin:0 0 10px;line-height:1.45}
+.summary small{color:var(--dim)}
+
+/* ---------- TV ---------- */
+.tv{width:min(1100px,100%);aspect-ratio:16/9;background:#000;border:1px solid var(--line);border-radius:10px;position:relative;overflow:hidden;container-type:inline-size}
+.tv-head{position:absolute;top:4.5%;left:5%;right:5%;display:flex;align-items:center;gap:1.2cqw;color:#9aa0a8;font-size:1.7cqw}
+.tv-head b{color:#e8e8e8}
+.tv-caps{position:absolute;left:6%;right:22%;bottom:9%;font-size:4.1cqw;line-height:1.28;font-weight:700;height:2.56em;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
+.tv-caps .l1{color:#9aa0a8}
+.tv-caps .l2{color:#fff}
+.tv-caps .lv{color:#8a9098;font-weight:400}
+.tv-qr{position:absolute;right:4.5%;bottom:8%;width:13%;text-align:center;color:#cfd3d8;font-size:1.25cqw;line-height:1.3}
+.tv-qr .qr{background:#fff;border-radius:.8cqw;padding:.6cqw;margin-bottom:.7cqw}
+.tv-interval{position:absolute;inset:0;display:none;flex-direction:column;justify-content:center;padding:0 8%;gap:1.4cqw}
+.tv-interval.show{display:flex}
+.tv-interval .k{font-size:1.9cqw;color:var(--accent);letter-spacing:.08em;text-transform:uppercase}
+.tv-interval .t{font-size:4.6cqw;font-weight:700;line-height:1.15;max-width:75%}
+.tv-interval .s{font-size:2.2cqw;color:#a3a9b1}
+
+/* ---------- overlay ---------- */
+.ov-wrap{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;max-width:1280px;margin:0 auto}
+.ov-screen{aspect-ratio:16/9;border-radius:10px;overflow:hidden;position:relative;border:1px solid var(--line);
+  background:
+   linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(0,0,0,.35)),
+   radial-gradient(ellipse at 30% 35%,#3b4a63 0%,#1d2533 45%,#0c1017 100%);container-type:inline-size}
+.ov-fake{position:absolute;left:8%;top:12%;width:34%;height:52%;border-radius:1cqw;background:linear-gradient(160deg,#556 0%,#334 100%);opacity:.5}
+.ov-fake2{position:absolute;right:8%;top:14%;width:40%;height:44%;border-radius:1cqw;background:repeating-linear-gradient(0deg,#e8ecf2 0 1.2cqw,#d5dbe4 1.2cqw 2.4cqw);opacity:.22}
+.ov-tag{position:absolute;top:3%;left:3%;font-size:1.3cqw;color:#fff;background:rgba(0,0,0,.5);padding:.3cqw .8cqw;border-radius:.5cqw}
+.ov-caps{position:absolute;left:50%;transform:translateX(-50%);width:84%;text-align:center;font-weight:700;color:#fff;line-height:1.25;text-shadow:0 0 .35cqw #000,0 0 .35cqw #000,0 .15cqw .5cqw #000}
+.ov-caps span{padding:.15em .45em;border-radius:.2em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.ov-caps.box span{background:rgba(0,0,0,.72);text-shadow:none}
+.form{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+.form h3{margin:0 0 12px;font-size:16px}
+.field{margin:0 0 14px}
+.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+.seg{display:flex;border:1px solid var(--line2);border-radius:10px;overflow:hidden}
+.seg button{flex:1;background:none;border:0;padding:8px 6px;font-size:14px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--panel2);color:var(--text);box-shadow:inset 0 -2px 0 var(--accent)}
+.url{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;background:#0c0d10;border:1px solid var(--line);border-radius:8px;padding:10px;word-break:break-all;color:#cfd3d8}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid var(--line2);background:var(--panel2);border-radius:10px;padding:9px 14px;font-size:14px;color:var(--text)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
+.btn.ghost{background:none}
+.btn.danger{border-color:rgba(255,90,95,.5);color:#ffb3b5;background:none}
+.btn.sm{padding:6px 10px;font-size:13px;border-radius:8px}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.help{font-size:13px;color:var(--dim);line-height:1.45;margin-top:8px}
+
+/* ---------- station ---------- */
+.station{max-width:680px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px}
+.station h2{margin:0;font-size:24px}
+.st-status{display:flex;align-items:center;gap:12px;border-radius:14px;padding:16px;margin:18px 0;font-size:18px;font-weight:700}
+.st-status.ok{background:var(--ok-bg);color:var(--ok)}
+.st-status.warn{background:var(--warn-bg);color:var(--warn)}
+.st-status small{display:block;font-weight:400;color:var(--muted);font-size:14px}
+.big-meter{display:flex;gap:4px;height:56px;align-items:flex-end;background:#0c0d10;border:1px solid var(--line);border-radius:12px;padding:10px}
+.big-meter i{flex:1;border-radius:3px;background:#262a31;height:100%;transition:background .08s}
+.big-meter i.on{background:var(--ok)}
+.big-meter i.on.hot{background:var(--warn)}
+.big-meter i.on.clip{background:var(--bad)}
+.meter-legend{display:flex;justify-content:space-between;font-size:12px;color:var(--dim);margin-top:6px}
+select{width:100%;background:#0c0d10;border:1px solid var(--line2);border-radius:10px;padding:11px 12px;font-size:15px}
+.preview{background:#0c0d10;border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-height:52px;color:#cfd3d8;font-size:16px;line-height:1.4}
+.preview small{display:block;color:var(--dim);font-size:12px;margin-bottom:4px}
+.warnlist{margin:16px 0 0;padding:0;list-style:none;font-size:14px;color:var(--muted)}
+.warnlist li{padding:6px 0 6px 22px;position:relative}
+.warnlist li::before{content:"!";position:absolute;left:0;top:6px;width:16px;height:16px;border-radius:50%;background:var(--warn-bg);color:var(--warn);font-size:11px;font-weight:700;display:grid;place-items:center}
+
+/* ---------- dashboard ---------- */
+.admin{max-width:1320px;margin:0 auto}
+.ad-head{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;margin-bottom:16px}
+.ad-head h1{margin:0;font-size:22px}
+.ad-head .meta{color:var(--muted);font-size:14px}
+.ad-head .spacer{flex:1}
+.pub{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:6px 6px 6px 12px;font-size:13px;min-width:0}
+.pub code{color:#cfd3d8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.alerts{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.alert{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-radius:12px;padding:11px 14px;font-size:15px}
+.alert.bad{background:var(--bad-bg);border:1px solid rgba(255,90,95,.35)}
+.alert.info{background:var(--info-bg);border:1px solid rgba(110,168,254,.35)}
+.alert .grow{flex:1;min-width:200px}
+.alert b{font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:10px;text-align:left;width:100%;color:var(--text);transition:border-color .15s}
+.card:hover{border-color:var(--line2)}
+.card.sel{border-color:var(--accent)}
+.card-top{display:flex;align-items:center;gap:8px}
+.card-top h3{margin:0;font-size:17px;flex:1}
+.badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 10px;font-size:13px;font-weight:700;white-space:nowrap}
+.badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.badge.ok{background:var(--ok-bg);color:var(--ok)}
+.badge.warn{background:var(--warn-bg);color:var(--warn)}
+.badge.bad{background:var(--bad-bg);color:var(--bad)}
+.badge.info{background:var(--info-bg);color:var(--info)}
+.badge.off{background:#1f2227;color:var(--muted)}
+.mini-meter{display:flex;gap:2px;height:10px;align-items:stretch}
+.mini-meter i{flex:1;border-radius:1px;background:#262a31}
+.mini-meter i.on{background:var(--ok)}
+.lastline{background:#0c0d10;border:1px solid #1f2227;border-radius:10px;padding:9px 11px;font-size:14.5px;line-height:1.4;color:#d8dbe0;height:calc(2.8em + 18px);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.lastline.empty{color:var(--dim);font-style:italic}
+.lastline .g{color:#7c828a}
+.talkline{font-size:14px;line-height:1.4}
+.talkline .k{color:var(--dim);font-size:12px;text-transform:uppercase;letter-spacing:.05em;margin-right:6px}
+.talkline .n{color:var(--muted)}
+.card-foot{display:flex;align-items:center;gap:14px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+.card-foot b{color:var(--text)}
+.tech{display:none;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--dim);border-top:1px dashed var(--line);padding-top:8px}
+.show-tech .tech{display:block}
+.problem{font-size:14px;color:#ffc9ca;line-height:1.4}
+.problem.w{color:#ffd79a}
+/* drawer */
+.drawer-scrim{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:60;display:none}
+.drawer-scrim.show{display:block}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);background:#111317;border-left:1px solid var(--line2);z-index:61;transform:translateX(102%);transition:transform .22s ease;display:flex;flex-direction:column}
+.drawer.show{transform:none}
+.dr-head{padding:16px 18px 0;display:flex;align-items:center;gap:10px}
+.dr-head h2{margin:0;font-size:20px;flex:1}
+.dr-tabs{display:flex;gap:2px;padding:12px 12px 0;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.dr-tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:9px 10px;color:var(--muted);font-size:14px;white-space:nowrap}
+.dr-tabs button[aria-selected="true"]{color:var(--text);border-bottom-color:var(--accent)}
+.dr-body{padding:16px 18px 30px;overflow:auto;flex:1}
+.dr-sec{margin:0 0 20px}
+.dr-sec h4{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim)}
+.gchip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);background:var(--panel2);border-radius:999px;padding:5px 10px;font-size:13.5px;margin:0 6px 6px 0}
+.gchip .c{color:var(--ok);font-weight:700}
+.gchip.zero .c{color:var(--dim)}
+.src{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:12px;margin:0 0 8px;width:100%;background:none;text-align:left}
+.src[aria-checked="true"]{border-color:var(--accent);background:rgba(255,210,74,.06)}
+.src .t{font-weight:700;font-size:15px}
+.src .s{font-size:13px;color:var(--muted);margin-top:2px}
+.src .r{width:18px;height:18px;border-radius:50%;border:2px solid var(--line2);flex:none;margin-top:2px}
+.src[aria-checked="true"] .r{border-color:var(--accent);box-shadow:inset 0 0 0 4px #111317;background:var(--accent)}
+.kv{display:grid;grid-template-columns:1fr auto;gap:6px 12px;font-size:14px}
+.kv span:nth-child(odd){color:var(--muted)}
+.kv span:nth-child(even){font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.share-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.share-row .qr{width:64px;background:#fff;border-radius:6px;padding:4px;flex:none}
+.share-row .t{flex:1;font-size:14px}
+.share-row .t small{display:block;color:var(--dim)}
+.dl{display:grid;grid-template-columns:1fr auto auto auto;gap:8px;align-items:center;font-size:14px;margin-bottom:8px}
+
+/* ---------- setup ---------- */
+.setup{max-width:600px;margin:0 auto}
+.steps{display:flex;gap:6px;margin:0 0 18px}
+.steps div{flex:1;height:4px;border-radius:2px;background:var(--line)}
+.steps div.on{background:var(--accent)}
+.su-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px}
+.su-card h2{margin:0 0 6px;font-size:23px}
+.su-card p.lead{margin:0 0 18px;color:var(--muted);line-height:1.5}
+.su-card ol{padding-left:20px;color:var(--muted);line-height:1.6;margin:0 0 16px}
+.inp{width:100%;background:#0c0d10;border:1px solid var(--line2);border-radius:10px;padding:12px;font-size:15px}
+.inp.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.su-actions{display:flex;gap:10px;justify-content:space-between;margin-top:20px}
+.okmsg{display:flex;gap:8px;align-items:center;margin-top:10px;color:var(--ok);font-size:14px}
+.errmsg{margin-top:10px;color:#ffb3b5;font-size:14px}
+textarea.inp{min-height:150px;resize:vertical;line-height:1.45}
+table.agenda{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:12px}
+table.agenda th{text-align:left;color:var(--dim);font-weight:400;border-bottom:1px solid var(--line);padding:6px 6px}
+table.agenda td{border-bottom:1px solid #1d2025;padding:7px 6px;vertical-align:top}
+
+
+.acc-panel{margin:8px 0 0}
+.acc-list{list-style:none;margin:6px 0 0;padding:0;counter-reset:none}
+.acc-item{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.acc-item.locked{opacity:.45}
+.acc-n{width:26px;height:26px;border-radius:50%;border:1px solid var(--line2);display:grid;place-items:center;font-size:13px;font-weight:700;flex:none;color:var(--muted)}
+.acc-item.done .acc-n{background:var(--ok);border-color:var(--ok);color:#04220f}
+.acc-body{flex:1;min-width:0}
+.acc-t{font-weight:700;font-size:15px}
+.acc-item.done .acc-t{color:var(--muted)}
+.acc-s{font-size:14px;color:var(--muted);margin-top:4px;line-height:1.45}
+.acc-s .btn{margin:2px 6px 2px 0}
+.acc-s code, .su-card code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px;color:#cfd3d8}
+.acc-wait{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:var(--info-bg);border:1px solid rgba(110,168,254,.3);border-radius:10px;padding:10px 12px;margin:0 0 8px;color:var(--text);font-size:14px;line-height:1.45}
+.acc-result{display:flex;gap:14px;align-items:center;margin-top:14px;background:var(--ok-bg);border:1px solid rgba(61,220,132,.3);border-radius:12px;padding:12px}
+.qr-mini{width:72px;flex:none;background:#fff;border-radius:6px;padding:4px}
+.mono-url{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;word-break:break-all}
+
+/* ---------- responsive ---------- */
+@media (max-width:980px){
+  .stage{grid-template-columns:1fr;justify-items:center}
+  .notes{max-width:560px;width:100%}
+  .ov-wrap{grid-template-columns:1fr}
+}
+@media (max-width:520px){
+  .view{padding:0 0 32px}
+  #v-celular .phone{width:100%;height:calc(100dvh - 53px);border:0;border-radius:0;box-shadow:none}
+  #v-celular .notes, #v-tv .notes{border-radius:0;border-left:0;border-right:0}
+  .view:not(#v-celular){padding:16px 16px 40px}
+  .brand small{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+
+<nav class="proto-nav" aria-label="Prototype views">
+  <div class="brand"><span class="logo" aria-hidden="true">E</span>Everyone Makes Subs <small>· UI prototype</small></div>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" data-view="celular" aria-selected="true">Phone</button>
+    <button class="tab" role="tab" data-view="tv">Room screen</button>
+    <button class="tab" role="tab" data-view="overlay">OBS overlay</button>
+    <button class="tab" role="tab" data-view="estacion">Room station</button>
+    <button class="tab" role="tab" data-view="panel">Dashboard</button>
+    <button class="tab" role="tab" data-view="setup">First-run setup</button>
+  </div>
+</nav>
+
+<!-- ================= PHONE ================= -->
+<section class="view on" id="v-celular">
+  <div class="stage">
+    <div class="phone" id="phone">
+      <div class="ph-top">
+        <div class="ph-row">
+          <div class="ph-room"><span class="dot" id="phDot"></span><span id="phRoom">Auditorium · live</span></div>
+          <span class="lat" id="phLat" title="Delay measured from when the speaker finishes the sentence">~2.7 s</span>
+        </div>
+        <div>
+          <div class="ph-talk">Observabilidad sin humo con OpenTelemetry</div>
+          <div class="ph-speaker">Lucía Fernández</div>
+        </div>
+        <div class="ph-row">
+          <button class="pill-btn" id="langBtn" aria-haspopup="dialog"><span id="langName">English</span><span class="sub" id="langSub">translation</span> ▾</button>
+          <span style="flex:1"></span>
+          <button class="icon-btn" id="aaBtn" aria-label="Reading settings" aria-haspopup="dialog">Aa</button>
+        </div>
+      </div>
+
+      <div class="banner" id="reconnBanner" role="status"><span class="spinner"></span>Reconnecting… when we're back, we'll show you what you missed.</div>
+
+      <div class="ph-body" id="phBody">
+        <div id="phList" aria-live="polite" aria-relevant="additions"></div>
+        <div id="phState"></div>
+        <div id="phLive" aria-hidden="true"></div>
+      </div>
+
+      <button class="jump" id="jumpBtn">↓ Back to live</button>
+
+      <div class="toast" id="langToast" role="status">
+        <span>Showing <b>English</b>, your phone's language.</span>
+        <button id="toastChange">Change</button>
+      </div>
+
+      <div class="ph-bottom">
+        <button class="pill-btn" id="sumBtn" aria-haspopup="dialog">What did I miss?</button>
+      </div>
+
+      <div class="scrim" id="scrim"></div>
+
+      <div class="sheet" id="langSheet" role="dialog" aria-label="Choose language">
+        <div class="grab"></div>
+        <h3>Caption language</h3>
+        <div id="langOpts"></div>
+        <p class="help">The talk is in Spanish. Translations arrive 1–2 seconds after the original.</p>
+      </div>
+
+      <div class="sheet" id="aaSheet" role="dialog" aria-label="Reading settings">
+        <div class="grab"></div>
+        <h3>Reading settings</h3>
+        <div class="set-row"><div class="lbl">Text size</div><span id="sizeVal" style="color:var(--muted);font-size:14px">26</span></div>
+        <input type="range" id="sizeRange" min="18" max="44" value="26" aria-label="Text size">
+        <div class="set-row"><label class="lbl" for="biChk">Show the original below<small>Useful if you understand some of the talk's language</small></label><input type="checkbox" class="switch" id="biChk"></div>
+        <div class="set-row"><label class="lbl" for="liveOrigChk">Show the original while translating<small>A small gray line so you can tell where the speaker is</small></label><input type="checkbox" class="switch" id="liveOrigChk" checked></div>
+        <div class="set-row"><label class="lbl" for="streamChk">I'm watching the stream<small>Delays captions to match the video</small></label><input type="checkbox" class="switch" id="streamChk"></div>
+        <div id="delayRow" style="display:none;padding:4px 0 10px">
+          <div class="set-row" style="border:0;padding-bottom:4px"><div class="lbl">Delay</div><span id="delayVal" style="color:var(--muted);font-size:14px">8 s</span></div>
+          <input type="range" id="delayRange" min="0" max="30" value="8" aria-label="Delay in seconds">
+        </div>
+        <div class="set-row"><label class="lbl" for="wakeChk">Keep the screen on</label><input type="checkbox" class="switch" id="wakeChk" checked></div>
+      </div>
+
+      <div class="sheet" id="sumSheet" role="dialog" aria-label="Summary">
+        <div class="grab"></div>
+        <h3 id="sumTitle">The last 5 minutes</h3>
+        <ul class="summary" id="sumList"></ul>
+        <p class="help" id="sumHelp">Updated every minute. Generated by Gemini from the transcript.</p>
+        <button class="btn" style="width:100%" id="sumClose">Back to captions</button>
+      </div>
+    </div>
+
+    <aside class="notes">
+      <h2>Attendee view</h2>
+      <h3>Try the states</h3>
+      <div class="chips" id="stateChips">
+        <button class="chip" data-st="live" aria-pressed="true">Live</button>
+        <button class="chip" data-st="paused">Paused</button>
+        <button class="chip" data-st="no_signal">No audio</button>
+        <button class="chip" data-st="reconnecting">Reconnecting</button>
+        <button class="chip" data-st="interval">Break</button>
+        <button class="chip" data-st="ended">Ended</button>
+      </div>
+      <h3>Why it works this way</h3>
+      <ul>
+        <li><b>The QR code opens the room directly</b> and the language comes from the phone. Two seconds later you're reading, with the latest lines already loaded.</li>
+        <li><b>Languages are labeled relative to the talk</b> ("original", "translation"), each in its own language. There is no redundant "Original / Spanish" option.</li>
+        <li><b>Translation never shows a dead screen:</b> while a sentence is being translated, the "speaking" bars and a gray line with the original show the system is alive.</li>
+        <li><b>Newest text at the bottom, in white;</b> older lines fade to gray. If you scroll up to reread, autoscroll stops and "Back to live" appears with the number of new lines.</li>
+        <li><b>States use plain language and never say "error".</b> "Waiting for audio" and "Break" tell attendees what's going on and that they don't need to do anything.</li>
+        <li><b>Advanced controls stay hidden:</b> the stream delay only appears if you turn on "I'm watching the stream".</li>
+        <li><b>"What did I miss?"</b> serves a summary cached per room, so cost doesn't grow with the audience.</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<!-- ================= TV ================= -->
+<section class="view" id="v-tv">
+  <div class="stage" style="grid-template-columns:minmax(0,1100px) minmax(260px,340px)">
+    <div class="tv" id="tv">
+      <div class="tv-head"><span class="dot"></span><b>Auditorium</b> · Observabilidad sin humo con OpenTelemetry · Lucía Fernández</div>
+      <div class="tv-caps" id="tvCaps"></div>
+      <div class="tv-qr" id="tvQr"></div>
+      <div class="tv-interval" id="tvInterval">
+        <div class="k">Break · back at 15:30</div>
+        <div class="t">WebAssembly fuera del navegador: lo que nadie te cuenta</div>
+        <div class="s">Martín Ibarra · Auditorium</div>
+      </div>
+    </div>
+    <aside class="notes">
+      <h2>Room screen</h2>
+      <h3>Language for this screen</h3>
+      <div class="chips" id="tvLang">
+        <button class="chip" data-l="es" aria-pressed="true">Original (es)</button>
+        <button class="chip" data-l="en">English</button>
+        <button class="chip" data-l="pt">Português</button>
+      </div>
+      <h3>Status</h3>
+      <div class="chips" id="tvState">
+        <button class="chip" data-s="live" aria-pressed="true">Live</button>
+        <button class="chip" data-s="interval">Break</button>
+      </div>
+      <h3>Why it works this way</h3>
+      <ul>
+        <li><b>Two huge lines and nothing else.</b> The top one fades to gray and the bottom one is current. In the original language the live line is added, which is the fastest text there is.</li>
+        <li><b>The corner QR code</b> ("Captions in your language") makes the screen advertise the phone view. It's the cheapest way to get people using it.</li>
+        <li><b>During a break it shows the next talk</b> instead of a black or frozen screen.</li>
+        <li>A 20% margin is kept on the right for the QR code, plus safe margins for projectors that crop.</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<!-- ================= OVERLAY ================= -->
+<section class="view" id="v-overlay">
+  <div class="ov-wrap">
+    <div>
+      <div class="ov-screen" id="ovScreen">
+        <div class="ov-fake"></div><div class="ov-fake2"></div>
+        <div class="ov-tag">Preview · how it looks over the video in OBS</div>
+        <div class="ov-caps box" id="ovCaps"></div>
+      </div>
+      <p class="help">In the dashboard, each room has this configurator. The streaming team copies the URL and pastes it into OBS as a "Browser source" (1920×1080), no CSS needed.</p>
+    </div>
+    <div class="form">
+      <h3>Configure overlay · Auditorium</h3>
+      <div class="field"><label>Language</label>
+        <div class="seg" id="ovLang"><button data-v="es" aria-pressed="false">Español</button><button data-v="en" aria-pressed="true">English</button><button data-v="pt" aria-pressed="false">Português</button></div></div>
+      <div class="field"><label>Lines</label>
+        <div class="seg" id="ovLines"><button data-v="1" aria-pressed="false">1</button><button data-v="2" aria-pressed="true">2</button><button data-v="3" aria-pressed="false">3</button></div></div>
+      <div class="field"><label>Size</label>
+        <div class="seg" id="ovSize"><button data-v="36" aria-pressed="false">Small</button><button data-v="48" aria-pressed="true">Medium</button><button data-v="60" aria-pressed="false">Large</button></div></div>
+      <div class="field"><label>Position</label>
+        <div class="seg" id="ovPos"><button data-v="bottom" aria-pressed="true">Bottom</button><button data-v="top" aria-pressed="false">Top</button></div></div>
+      <div class="field"><label>Background</label>
+        <div class="seg" id="ovBox"><button data-v="1" aria-pressed="true">Dark box</button><button data-v="0" aria-pressed="false">Shadow only</button></div></div>
+      <div class="field"><label>URL for OBS</label><div class="url" id="ovUrl"></div></div>
+      <button class="btn primary" style="width:100%" id="ovCopy">Copy URL</button>
+      <p class="help">Captions arrive 2–3 s after the voice. To keep them in sync on the stream, add a <b>3 s</b> delay to video and audio in OBS (Filters → Render Delay). The README has a step-by-step guide with screenshots.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STATION ================= -->
+<section class="view" id="v-estacion">
+  <div class="station">
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <div style="flex:1;min-width:200px">
+        <div style="color:var(--muted);font-size:14px">Room station</div>
+        <h2>Auditorium</h2>
+      </div>
+      <div class="chips" id="stChips" style="margin:0">
+        <button class="chip" data-s="ok" aria-pressed="true">All good</button>
+        <button class="chip" data-s="low">Too low</button>
+      </div>
+    </div>
+
+    <div class="st-status ok" id="stStatus">
+      <span style="font-size:24px" aria-hidden="true">●</span>
+      <div><span id="stTitle">Sending audio to Everyone Makes Subs</span><small id="stSub">For 1 h 12 min · reconnects automatically if the network drops</small></div>
+    </div>
+
+    <div class="field"><label for="stDev">Audio input</label>
+      <select id="stDev">
+        <option>Line in · Focusrite Scarlett 2i2 (USB)</option>
+        <option>Laptop microphone</option>
+        <option>BlackHole 2ch (virtual audio)</option>
+      </select>
+      <p class="help">Connect the mixer's aux output to the USB audio interface. Select the interface here, not the laptop microphone.</p>
+    </div>
+
+    <div class="field"><label>Level</label>
+      <div class="big-meter" id="bigMeter"></div>
+      <div class="meter-legend"><span>Silence</span><span>Good</span><span>Too loud</span></div>
+    </div>
+
+    <div class="field"><label>What's being transcribed</label>
+      <div class="preview" id="stPreview"><small>Original · live</small><span id="stPrevText">…</span></div>
+      <p class="help">If you see music or the presenter from another room here, the input is wrong.</p>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn" id="stTest">Test audio (5 s)</button>
+      <button class="btn danger">Stop sending</button>
+    </div>
+    <div id="stTestMsg" class="help"></div>
+
+    <ul class="warnlist">
+      <li>Don't close this tab. If the laptop goes to sleep, captions stop.</li>
+      <li>If the internet drops, we buffer 10 seconds of audio and send it when the connection is back.</li>
+    </ul>
+  </div>
+  <div class="notes" style="max-width:680px;margin:20px auto 0">
+    <h2>Why a room station</h2>
+    <ul>
+      <li><b>It's the audio source for someone who isn't a developer:</b> a laptop, a cable from the mixer and a link. RTMP and SRT live under "Advanced".</li>
+      <li><b>The link carries the room key</b> (scanned from the dashboard), so nobody types passwords in the booth.</li>
+      <li><b>"What's being transcribed"</b> is the most useful check: a level meter alone won't tell you that background music is coming in instead of the speaker's mic.</li>
+      <li>It needs HTTPS to use the microphone, which is why first-run setup configures internet access (Tailscale or Cloudflare).</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= DASHBOARD ================= -->
+<section class="view" id="v-panel">
+  <div class="admin" id="admin">
+    <div class="ad-head">
+      <div>
+        <h1>Nerdearla 2026 · Day 2 <span style="color:var(--dim);font-weight:400;font-size:14px">(sample data)</span></h1>
+        <div class="meta"><b style="color:var(--text)" id="totViewers">1,204</b> people reading · 3 of 6 rooms live · 15:29</div>
+      </div>
+      <div class="spacer"></div>
+      <div class="pub"><span class="badge ok" style="font-size:11px;padding:2px 8px">Reachable</span><span style="color:var(--dim)">Public address</span><code>https://everyonemakessubs.your-tailnet.ts.net</code><button class="btn sm">Copy</button></div>
+      <button class="btn">Print QR codes for all rooms</button>
+      <label style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)"><input type="checkbox" class="switch" id="techChk">Technical details</label>
+    </div>
+
+    <div class="alerts" id="alerts">
+      <div class="alert bad"><b>Room 3 · No audio</b><span class="grow">No audio for 42 s. Is the room station open?</span><button class="btn sm" data-open="s3">How to fix it</button></div>
+      <div class="alert info"><b>Room 5 · 15:30</b><span class="grow">“Diseño de APIs que no odies en 6 meses” is starting. Switch to the next talk?</span><button class="btn sm primary">Switch now</button><button class="btn sm ghost">Wait 5 min</button></div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <div class="drawer-scrim" id="drScrim"></div>
+  <aside class="drawer" id="drawer" aria-label="Room details">
+    <div class="dr-head"><h2 id="drTitle">Auditorium</h2><span id="drBadge"></span><button class="icon-btn" id="drClose" aria-label="Close">✕</button></div>
+    <div class="dr-tabs" role="tablist" id="drTabs">
+      <button data-t="charla" aria-selected="true">Talk</button>
+      <button data-t="sonido">Audio</button>
+      <button data-t="compartir">Share</button>
+      <button data-t="descargas">Downloads</button>
+      <button data-t="tecnico">Technical</button>
+    </div>
+    <div class="dr-body" id="drBody"></div>
+  </aside>
+
+  <div class="notes" style="max-width:1320px;margin:24px auto 0">
+    <h2>Why it works this way</h2>
+    <ul>
+      <li><b>Cards instead of a 10-column table.</b> The first thing you see is what needs attention; alerts sit at the top with the button that fixes them.</li>
+      <li><b>The last transcribed line on each card</b> is the most useful signal: you notice right away if the room next door or music is coming in.</li>
+      <li><b>Production language, not engineering language:</b> "No audio", "Delayed", "Break". p50/p95, rotations and cost show up under "Technical details" (for the judges and for you).</li>
+      <li><b>The schedule runs the day:</b> each card shows the current and next talk, and switching is confirmed with one button.</li>
+      <li><b>The vocabulary shows it's working</b> ("Kubernetes ✓ 9"). Click the Auditorium card to see it.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= SETUP ================= -->
+<section class="view" id="v-setup">
+  <div class="setup">
+    <div class="steps" id="suSteps"><div></div><div></div><div></div><div></div></div>
+    <div class="su-card" id="suCard"></div>
+    <div class="notes" style="margin-top:20px">
+      <h2>Why it works this way</h2>
+      <ul>
+        <li><b>Nobody edits a <code>.env</code>.</b> The desktop app opens this on first launch; in Docker it shows until a key is set.</li>
+        <li><b>"Test" makes a real call</b> and turns errors into plain language: invalid key, project without model access, out of quota.</li>
+        <li><b>Internet access is a guided checklist</b>, not a command: the app detects Tailscale, runs <code>tailscale funnel --bg 8080</code>, tells you when the permission click is needed and tests the address from outside before letting you continue.</li>
+        <li><b>The schedule is pasted as is</b>, copied from the website. Gemini turns it into rooms and talks, and you confirm in a table before saving.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+/* =================== data =================== */
+const SCRIPT = [
+ {t:"Bueno, arranquemos. Hoy vamos a hablar de observabilidad sin humo.", en:"Okay, let's get started. Today we're talking about observability without the hype.", pt:"Bom, vamos começar. Hoje vamos falar de observabilidade sem enrolação."},
+ {t:"La mayoría de los equipos tiene dashboards, pero cuando algo se rompe a las tres de la mañana,", en:"Most teams have dashboards, but when something breaks at three in the morning,", pt:"A maioria das equipes tem dashboards, mas quando algo quebra às três da manhã,"},
+ {t:"nadie sabe qué request falló ni en qué servicio.", en:"nobody knows which request failed or in which service.", pt:"ninguém sabe qual request falhou nem em qual serviço."},
+ {t:"Ahí entra OpenTelemetry: un estándar abierto para trazas, métricas y logs.", en:"That's where OpenTelemetry comes in: an open standard for traces, metrics and logs.", pt:"É aí que entra o OpenTelemetry: um padrão aberto para traces, métricas e logs."},
+ {t:"En nuestro cluster de Kubernetes corremos el collector como DaemonSet,", en:"In our Kubernetes cluster we run the collector as a DaemonSet,", pt:"No nosso cluster de Kubernetes rodamos o collector como DaemonSet,"},
+ {t:"y cada pod manda sus spans por OTLP sin tocar el código de la aplicación.", en:"and every pod sends its spans over OTLP without touching the application code.", pt:"e cada pod envia seus spans por OTLP sem mexer no código da aplicação."},
+ {sound:true},
+ {t:"La primera lección fue el sampling: si guardás todo, la factura te come vivo.", en:"The first lesson was sampling: if you keep everything, the bill eats you alive.", pt:"A primeira lição foi o sampling: se você guarda tudo, a conta te come vivo."},
+ {t:"Pasamos a tail-based sampling y nos quedamos solo con las trazas lentas o con errores.", en:"We moved to tail-based sampling and kept only slow traces or traces with errors.", pt:"Passamos para tail-based sampling e ficamos só com os traces lentos ou com erros."},
+ {t:"Eso bajó el volumen un ochenta por ciento, sin perder lo que importa.", en:"That cut the volume by eighty percent, without losing what matters.", pt:"Isso reduziu o volume em oitenta por cento, sem perder o que importa."},
+ {t:"Otro consejo: poné el trace ID en cada log. Parece obvio, pero cambia todo.", en:"Another tip: put the trace ID in every log. It sounds obvious, but it changes everything.", pt:"Outra dica: coloque o trace ID em cada log. Parece óbvio, mas muda tudo."},
+ {t:"Cuando un usuario te reporta un error, buscás ese ID y ves el camino completo del request.", en:"When a user reports an error, you search for that ID and see the request's full path.", pt:"Quando um usuário reporta um erro, você busca esse ID e vê o caminho completo do request."},
+ {t:"Y ahora sí, vamos a la demo en vivo, que es donde las cosas salen mal.", en:"And now, on to the live demo, which is where things go wrong.", pt:"E agora sim, vamos para a demo ao vivo, que é onde as coisas dão errado."},
+];
+const EN_TALK = [
+ "So the idea is to run the model on the edge, right on the device.",
+ "Latency drops from four hundred milliseconds to about forty.",
+ "But you pay for it in memory, so quantization is not optional.",
+ "Let me show you the numbers we got on a mid-range Android phone.",
+];
+const LANGS = {
+  es:{name:"Español", sub:"original", subLong:"Idioma original de la charla", sound:"aplausos"},
+  en:{name:"English", sub:"translation", subLong:"Live translation", sound:"applause"},
+  pt:{name:"Português", sub:"tradução", subLong:"Tradução ao vivo", sound:"aplausos"},
+};
+const SUMMARY = {
+  es:["Lucía presentó OpenTelemetry como estándar abierto para trazas, métricas y logs.","Corren el collector como DaemonSet en Kubernetes: los pods mandan spans por OTLP sin cambiar código.","Con tail-based sampling bajaron el volumen un 80 % conservando las trazas lentas y con errores.","Consejo clave: incluir el trace ID en cada log.","Ahora arranca una demo en vivo."],
+  en:["Lucía introduced OpenTelemetry as an open standard for traces, metrics and logs.","They run the collector as a DaemonSet on Kubernetes: pods send spans over OTLP with no code changes.","Tail-based sampling cut volume by 80% while keeping slow and failing traces.","Key tip: include the trace ID in every log.","A live demo is starting now."],
+  pt:["Lucía apresentou o OpenTelemetry como padrão aberto para traces, métricas e logs.","Rodam o collector como DaemonSet no Kubernetes: os pods enviam spans por OTLP sem mudar código.","Com tail-based sampling reduziram o volume em 80 % mantendo os traces lentos e com erros.","Dica principal: incluir o trace ID em cada log.","Agora começa uma demo ao vivo."],
+};
+const SUMTXT = {es:["Los últimos 5 minutos","Se actualiza cada minuto. Lo arma Gemini a partir de la transcripción.","Volver a los subtítulos"],en:["The last 5 minutes","Updated every minute. Generated by Gemini from the transcript.","Back to captions"],pt:["Os últimos 5 minutos","Atualizado a cada minuto. Gerado pelo Gemini a partir da transcrição.","Voltar às legendas"]};
+
+/* =================== simulated engine (stands in for SSE) =================== */
+const bus = new EventTarget();
+const segs = []; let seq = 0;
+const sim = { live:"", speaking:false, level:0 };
+const wait = ms => new Promise(r=>setTimeout(r,ms));
+const emit = (type, detail) => bus.dispatchEvent(new CustomEvent(type,{detail}));
+
+async function engine(){
+  let i = 0;
+  // preload: the last few lines have already "happened" (replay via Last-Event-ID)
+  for (const s of SCRIPT.slice(0,3)) pushSeg(s, true);
+  i = 3;
+  while(true){
+    const s = SCRIPT[i % SCRIPT.length]; i++;
+    if (s.sound){ sim.speaking=false; await wait(700); pushSeg(s,true); await wait(1600); continue; }
+    const words = s.t.split(" ");
+    sim.speaking = true;
+    for (let w=1; w<=words.length; w++){
+      sim.live = words.slice(0,w).join(" ");
+      emit("live");
+      await wait(190 + Math.random()*140);
+    }
+    await wait(380);
+    sim.live = ""; emit("live");
+    pushSeg(s,false);
+    sim.speaking = Math.random() > .35;
+    await wait(420 + Math.random()*500);
+  }
+}
+function pushSeg(s, instantTr){
+  const seg = { seq:++seq, src:"es", text:s.t||"", sound:!!s.sound, tr:{es:s.t||""}, at:Date.now(), trAt:null };
+  segs.push(seg); if (segs.length>60) segs.shift();
+  emit("segment", seg);
+  const doTr = () => { seg.tr.en = s.en||""; seg.tr.pt = s.pt||""; seg.trAt = Date.now(); emit("tr", seg); };
+  if (instantTr || s.sound) { seg.at -= 20000; doTr(); seg.trAt -= 20000; }
+  else setTimeout(doTr, 850 + Math.random()*700);
+}
+// audio level
+(function levelLoop(){
+  const target = sim.speaking || sim.live ? .35 + Math.random()*.55 : .02 + Math.random()*.04;
+  sim.level += (target - sim.level) * .45;
+  emit("level", sim.level);
+  setTimeout(levelLoop, 90);
+})();
+
+/* =================== util =================== */
+const $ = s => document.querySelector(s);
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function masked(text){ // hides the last (unstable) word of the interim
+  const w = text.split(" "); if (w.length<3) return `<span class="mask">${esc(text)}</span>`;
+  return esc(w.slice(0,-1).join(" ")) + ' <span class="mask">…</span>';
+}
+function tail(t, n){ // last n characters, cut at a word boundary
+  if (t.length<=n) return t;
+  const cut = t.slice(t.length-n); const i = cut.indexOf(" ");
+  return "…" + (i>=0 ? cut.slice(i+1) : cut);
+}
+function qrSVG(seed, n=25){
+  let x = seed*9301+49297; const rnd=()=> (x = (x*9301+49297)%233280)/233280;
+  let r = "";
+  const finder = (cx,cy)=>{ return `<rect x="${cx}" y="${cy}" width="7" height="7"/><rect x="${cx+1}" y="${cy+1}" width="5" height="5" fill="#fff"/><rect x="${cx+2}" y="${cy+2}" width="3" height="3"/>`; };
+  for (let i=0;i<n;i++) for (let j=0;j<n;j++){
+    const inF = (i<8&&j<8)||(i<8&&j>=n-8)||(i>=n-8&&j<8);
+    if (!inF && rnd()>.52) r += `<rect x="${j}" y="${i}" width="1" height="1"/>`;
+  }
+  return `<svg class="qr" viewBox="0 0 ${n} ${n}" role="img" aria-label="Sample QR code" shape-rendering="crispEdges" style="display:block;width:100%;height:auto"><rect width="${n}" height="${n}" fill="#fff"/><g fill="#000">${r}${finder(0,0)}${finder(n-7,0)}${finder(0,n-7)}</g></svg>`;
+}
+
+/* =================== navigation =================== */
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.setAttribute("aria-selected", x===b));
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on", v.id==="v-"+b.dataset.view));
+  if (b.dataset.view==="celular") scrollBottom(true);
+  window.scrollTo(0,0);
+}));
+
+/* =================== PHONE =================== */
+const ph = { lang:"en", bi:false, liveOrig:true, size:26, stream:false, delay:8, state:"live", atBottom:true, unread:0 };
+const phBody = $("#phBody"), phList = $("#phList"), phLive = $("#phLive"), phState = $("#phState");
+
+function visibleSegs(){
+  const now = Date.now();
+  return segs.filter(s=>{
+    if (ph.stream && now - (s.trAt||s.at) < ph.delay*1000) return false;
+    return true;
+  });
+}
+function renderPhone(){
+  const L = ph.lang, list = visibleSegs().slice(-30);
+  phBody.style.fontSize = ph.size+"px";
+  let html = "";
+  list.forEach((s, idx)=>{
+    const recent = idx >= list.length-2;
+    if (s.sound){ html += `<div class="sound">♪ ${LANGS[L].sound}</div>`; return; }
+    if (L === s.src){
+      html += `<p class="cap ${recent?"recent":""}">${esc(s.text)}</p>`;
+    } else if (s.tr[L]){
+      html += `<p class="cap ${recent?"recent":""}">${esc(s.tr[L])}${ph.bi?`<span class="orig">${esc(s.text)}</span>`:""}</p>`;
+    } else {
+      html += `<p class="cap pending" aria-hidden="true">${L==="en"?"translating…":"traduzindo…"}</p>`;
+    }
+  });
+  phList.innerHTML = html;
+  renderLive();
+  renderPhState();
+  if (ph.atBottom) scrollBottom(); else { $("#jumpBtn").textContent = `↓ Back to live${ph.unread?` · ${ph.unread} new`:""}`; }
+}
+function renderLive(){
+  if (ph.state!=="live" && ph.state!=="reconnecting"){ phLive.innerHTML=""; return; }
+  if (ph.stream){ phLive.innerHTML = ""; return; }
+  if (ph.lang === "es"){
+    phLive.innerHTML = sim.live ? `<div class="live-line">${masked(sim.live)}</div>` : speakingRow();
+  } else {
+    const lo = ph.liveOrig && sim.live ? `<div class="live-orig"><span>${esc(sim.live)}</span></div>` : "";
+    phLive.innerHTML = speakingRow(true) + lo;
+  }
+  updateBars();
+}
+function speakingRow(force){
+  const txt = ph.lang==="en" ? "speaking" : ph.lang==="pt" ? "falando" : "hablando";
+  const on = sim.speaking || sim.live;
+  if (!on && !force) return `<div class="speaking" style="opacity:.5"><span class="bars">${"<i></i>".repeat(5)}</span></div>`;
+  return `<div class="speaking" style="opacity:${on?1:.45}"><span class="bars">${"<i></i>".repeat(5)}</span><span>${on?txt+"…":""}</span></div>`;
+}
+function updateBars(){
+  document.querySelectorAll("#phLive .bars").forEach(b=>{
+    [...b.children].forEach((i,k)=>{ const v = Math.max(3, Math.min(16, sim.level*16*(0.55+Math.abs(Math.sin(Date.now()/140+k*1.3))*0.6))); i.style.height = v+"px"; });
+  });
+}
+function renderPhState(){
+  const L = ph.lang;
+  const T = {
+    es:{paused:["El orador hizo una pausa",""], no_signal:["Esperando sonido de la sala","Los subtítulos vuelven solos. No tenés que hacer nada."], interval:["Intervalo · volvemos 15:30","Próxima: «WebAssembly fuera del navegador», Martín Ibarra."], ended:["La charla terminó","Podés llevarte la transcripción completa."], dl:"Descargar texto", sum:"Ver resumen"},
+    en:{paused:["The speaker paused",""], no_signal:["Waiting for audio from the room","Captions will come back on their own."], interval:["Break · back at 15:30","Next: “WebAssembly outside the browser”, Martín Ibarra."], ended:["The talk has ended","Take the full transcript with you."], dl:"Download text", sum:"See summary"},
+    pt:{paused:["O palestrante fez uma pausa",""], no_signal:["Aguardando o áudio da sala","As legendas voltam sozinhas."], interval:["Intervalo · voltamos 15:30","Próxima: «WebAssembly fora do navegador», Martín Ibarra."], ended:["A palestra terminou","Leve a transcrição completa."], dl:"Baixar texto", sum:"Ver resumo"},
+  }[L];
+  const st = ph.state;
+  if (st==="paused") phState.innerHTML = `<div class="speaking" style="font-size:14px;margin:0 0 8px">⏸ ${T.paused[0]}</div>`;
+  else if (st==="no_signal") phState.innerHTML = `<div class="state-card" role="status"><h4>${T.no_signal[0]}</h4><p>${T.no_signal[1]}</p></div>`;
+  else if (st==="interval") phState.innerHTML = `<div class="state-card" role="status"><h4>${T.interval[0]}</h4><p>${T.interval[1]}</p><div class="row"><button class="btn sm" onclick="openSheet('sum')">${T.sum}</button><button class="btn sm">${T.dl}</button></div></div>`;
+  else if (st==="ended") phState.innerHTML = `<div class="state-card" role="status"><h4>${T.ended[0]}</h4><p>${T.ended[1]}</p><div class="row"><button class="btn sm primary">${T.dl} (.txt)</button><button class="btn sm">.srt</button><button class="btn sm" onclick="openSheet('sum')">${T.sum}</button></div></div>`;
+  else phState.innerHTML = "";
+  const dot = $("#phDot");
+  dot.style.background = st==="live"||st==="paused" ? "var(--bad)" : "var(--dim)";
+  dot.style.animationPlayState = st==="live" ? "running":"paused";
+  const roomTxt = {live:"live", paused:"live", reconnecting:"live", no_signal:"no audio", interval:"break", ended:"ended"}[st];
+  $("#phRoom").textContent = "Auditorium · " + roomTxt;
+  $("#reconnBanner").classList.toggle("show", st==="reconnecting");
+  $("#phLat").style.visibility = (st==="live"||st==="paused") ? "visible":"hidden";
+  $("#phLat").textContent = ph.stream ? `+${ph.delay} s (stream)` : (ph.lang==="es" ? "~1.4 s" : "~2.7 s");
+}
+function scrollBottom(force){
+  requestAnimationFrame(()=>{ phBody.scrollTop = phBody.scrollHeight; ph.unread=0; ph.atBottom=true; $("#jumpBtn").classList.remove("show"); });
+}
+phBody.addEventListener("scroll", ()=>{
+  const d = phBody.scrollHeight - phBody.scrollTop - phBody.clientHeight;
+  const was = ph.atBottom; ph.atBottom = d < 40;
+  if (ph.atBottom){ ph.unread = 0; $("#jumpBtn").classList.remove("show"); }
+  else if (was) { $("#jumpBtn").textContent = "↓ Back to live"; $("#jumpBtn").classList.add("show"); }
+});
+$("#jumpBtn").addEventListener("click", ()=>scrollBottom(true));
+
+bus.addEventListener("segment", e=>{ if(!ph.atBottom && !e.detail.sound && ph.lang==="es") ph.unread++; renderPhone(); });
+bus.addEventListener("tr", e=>{ if(!ph.atBottom && ph.lang!=="es") ph.unread++; renderPhone(); });
+bus.addEventListener("live", renderLive);
+bus.addEventListener("level", updateBars);
+setInterval(()=>{ if (ph.stream) renderPhone(); }, 700);
+
+// sheets
+function openSheet(k){ closeSheets(); $("#scrim").classList.add("show"); $("#"+k+"Sheet").classList.add("show"); }
+function closeSheets(){ document.querySelectorAll(".sheet").forEach(s=>s.classList.remove("show")); $("#scrim").classList.remove("show"); }
+window.openSheet = openSheet;
+$("#scrim").addEventListener("click", closeSheets);
+$("#langBtn").addEventListener("click", ()=>{ renderLangOpts(); openSheet("lang"); });
+$("#toastChange").addEventListener("click", ()=>{ $("#langToast").style.display="none"; renderLangOpts(); openSheet("lang"); });
+$("#aaBtn").addEventListener("click", ()=>openSheet("aa"));
+$("#sumBtn").addEventListener("click", ()=>openSheet("sum"));
+$("#sumClose").addEventListener("click", closeSheets);
+setTimeout(()=>{ const t=$("#langToast"); t.style.opacity=0; setTimeout(()=>t.style.display="none",400); }, 6500);
+
+function renderLangOpts(){
+  $("#langOpts").innerHTML = Object.entries(LANGS).map(([k,v])=>
+    `<button class="opt" role="radio" aria-checked="${ph.lang===k}" data-l="${k}"><span><span class="t">${v.name}</span><br><span class="s">${v.subLong}</span></span><span class="check">✓</span></button>`).join("");
+  document.querySelectorAll("#langOpts .opt").forEach(b=>b.addEventListener("click",()=>{ setLang(b.dataset.l); closeSheets(); }));
+}
+function setLang(l){
+  ph.lang = l; $("#langName").textContent = LANGS[l].name; $("#langSub").textContent = LANGS[l].sub;
+  $("#sumTitle").textContent = SUMTXT[l][0]; $("#sumHelp").textContent = SUMTXT[l][1]; $("#sumClose").textContent = SUMTXT[l][2];
+  $("#sumList").innerHTML = SUMMARY[l].map(x=>`<li>${esc(x)}</li>`).join("");
+  $("#sumBtn").textContent = l==="en"?"What did I miss?":l==="pt"?"O que eu perdi?":"¿Qué me perdí?";
+  ph.atBottom = true; renderPhone();
+}
+$("#sizeRange").addEventListener("input", e=>{ ph.size=+e.target.value; $("#sizeVal").textContent=ph.size; renderPhone(); });
+$("#biChk").addEventListener("change", e=>{ ph.bi=e.target.checked; renderPhone(); });
+$("#liveOrigChk").addEventListener("change", e=>{ ph.liveOrig=e.target.checked; renderLive(); });
+$("#streamChk").addEventListener("change", e=>{ ph.stream=e.target.checked; $("#delayRow").style.display=ph.stream?"block":"none"; renderPhone(); });
+$("#delayRange").addEventListener("input", e=>{ ph.delay=+e.target.value; $("#delayVal").textContent=ph.delay+" s"; renderPhone(); });
+document.querySelectorAll("#stateChips .chip").forEach(c=>c.addEventListener("click",()=>{
+  document.querySelectorAll("#stateChips .chip").forEach(x=>x.setAttribute("aria-pressed", x===c));
+  ph.state = c.dataset.st; ph.atBottom = true; renderPhone();
+}));
+
+/* =================== TV =================== */
+const tv = { lang:"es", state:"live" };
+$("#tvQr").innerHTML = qrSVG(7) + "Captions in your language<br><b style='color:#fff'>Scan</b>";
+function renderTV(){
+  $("#tvInterval").classList.toggle("show", tv.state==="interval");
+  $("#tvCaps").style.display = tv.state==="interval" ? "none":"block";
+  $("#tvQr").style.opacity = tv.state==="interval" ? 1 : 1;
+  const L = tv.lang;
+  const done = segs.filter(s=>!s.sound && (L==="es" || s.tr[L]));
+  const txt = s => L==="es" ? s.text : s.tr[L];
+  let h = "";
+  if (L==="es" && sim.live){
+    const last = done[done.length-1];
+    h = (last?`<div class="l2">${esc(tail(txt(last),60))}</div>`:"") + `<div class="lv">${masked(tail(sim.live,60))}</div>`;
+  } else {
+    const [a,b] = done.slice(-2);
+    h = (a?`<div class="l1">${esc(tail(txt(a),60))}</div>`:"") + (b?`<div class="l2">${esc(tail(txt(b),60))}</div>`:"");
+  }
+  $("#tvCaps").innerHTML = h;
+}
+bus.addEventListener("segment", renderTV); bus.addEventListener("tr", renderTV); bus.addEventListener("live", renderTV);
+document.querySelectorAll("#tvLang .chip").forEach(c=>c.addEventListener("click",()=>{ document.querySelectorAll("#tvLang .chip").forEach(x=>x.setAttribute("aria-pressed",x===c)); tv.lang=c.dataset.l; renderTV(); }));
+document.querySelectorAll("#tvState .chip").forEach(c=>c.addEventListener("click",()=>{ document.querySelectorAll("#tvState .chip").forEach(x=>x.setAttribute("aria-pressed",x===c)); tv.state=c.dataset.s; renderTV(); }));
+
+/* =================== OVERLAY =================== */
+const ov = { lang:"en", lines:2, size:48, pos:"bottom", box:"1" };
+function renderOV(){
+  const L = ov.lang;
+  const done = segs.filter(s=>!s.sound && (L==="es"||s.tr[L])).slice(-ov.lines);
+  const el = $("#ovCaps");
+  el.className = "ov-caps" + (ov.box==="1"?" box":"");
+  el.style.fontSize = (ov.size/1920*100)+"cqw";
+  el.style.top = ov.pos==="top" ? "9%" : "auto"; el.style.bottom = ov.pos==="bottom" ? "7%" : "auto";
+  // character budget: ~42 per visible line, shows the tail of the text
+  const joined = done.map(s=>L==="es"?s.text:s.tr[L]).join(" ");
+  el.innerHTML = `<div><span>${esc(tail(joined, ov.lines*42))}</span></div>`;
+  $("#ovUrl").textContent = `https://everyonemakessubs.your-tailnet.ts.net/s/auditorium/overlay?lang=${L}&lines=${ov.lines}&size=${ov.size}&pos=${ov.pos}&box=${ov.box}`;
+}
+[["#ovLang","lang"],["#ovLines","lines"],["#ovSize","size"],["#ovPos","pos"],["#ovBox","box"]].forEach(([sel,key])=>{
+  document.querySelectorAll(sel+" button").forEach(b=>b.addEventListener("click",()=>{
+    document.querySelectorAll(sel+" button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+    ov[key] = key==="lines"||key==="size" ? +b.dataset.v : b.dataset.v; renderOV();
+  }));
+});
+$("#ovCopy").addEventListener("click", ()=>{ try{ navigator.clipboard.writeText($("#ovUrl").textContent); }catch(e){} $("#ovCopy").textContent="Copied ✓"; setTimeout(()=>$("#ovCopy").textContent="Copy URL",1500); });
+bus.addEventListener("tr", renderOV);
+
+/* =================== STATION =================== */
+const bm = $("#bigMeter"); bm.innerHTML = "<i></i>".repeat(30);
+let stMode = "ok";
+bus.addEventListener("level", e=>{
+  const v = stMode==="low" ? e.detail*.18 : e.detail*.8;
+  const n = Math.round(v*30);
+  [...bm.children].forEach((i,k)=>{ i.className = k<n ? "on"+(k>=22?" hot":"")+(k>=27?" clip":"") : ""; });
+});
+bus.addEventListener("live", ()=>{ $("#stPrevText").textContent = sim.live || (segs.filter(s=>!s.sound).slice(-1)[0]||{}).text || "…"; });
+document.querySelectorAll("#stChips .chip").forEach(c=>c.addEventListener("click",()=>{
+  document.querySelectorAll("#stChips .chip").forEach(x=>x.setAttribute("aria-pressed",x===c));
+  stMode = c.dataset.s;
+  const s = $("#stStatus");
+  if (stMode==="ok"){ s.className="st-status ok"; $("#stTitle").textContent="Sending audio to Everyone Makes Subs"; $("#stSub").textContent="For 1 h 12 min · reconnects automatically if the network drops"; }
+  else { s.className="st-status warn"; $("#stTitle").textContent="Audio level is too low"; $("#stSub").textContent="Turn up the aux send gain on the mixer until the bars reach the green zone"; }
+}));
+$("#stTest").addEventListener("click", ()=>{
+  const m = $("#stTestMsg"); m.textContent = "Listening for 5 seconds…";
+  setTimeout(()=>{ m.innerHTML = stMode==="ok" ? '<span style="color:var(--ok)">✓ We can hear you. Average level: good.</span>' : '<span style="color:var(--warn)">Too low: turn up the gain and try again.</span>'; }, 1800);
+});
+
+/* =================== DASHBOARD =================== */
+const STAGES = [
+  {id:"s1", name:"Auditorium", st:"ok", label:"Live", viewers:412, now:"Observabilidad sin humo con OpenTelemetry", who:"Lucía Fernández", next:"15:30 · WebAssembly fuera del navegador", delay:"2.6 s", tech:"p50 1.4/2.6 s · p95 2.9/4.1 s · rot #4 · 0 err · US$0.98/h", live:true},
+  {id:"s2", name:"Room 2", st:"ok", label:"Live", viewers:188, now:"Edge AI on a budget", who:"Priya Raman", next:"15:45 · Rust para devs de Go", delay:"2.9 s", tech:"p50 1.6/2.9 s · p95 3.2/4.4 s · rot #6 · 0 err · US$1.02/h", en:true},
+  {id:"s3", name:"Room 3", st:"bad", label:"No audio", viewers:97, now:"Postgres a escala: lecciones de 5 años", who:"Diego Suárez", next:"16:00 · Seguridad en CI/CD", problem:"No audio for 42 s. Is the room station open?", tech:"lag — · rms 0.000 · ws closed 42 s"},
+  {id:"s4", name:"Room 4", st:"warn", label:"Delayed", viewers:231, now:"Frontend sin frameworks en 2026", who:"Carla Méndez", next:"15:40 · Accesibilidad que sí se usa", delay:"7.4 s", problem:"Captions are running 7 s behind. Recovering on its own.", tech:"p95 7.4 s · lag 8.1 s · 429 ×3/min → fallback 3.1 Flash-Lite", staticLine:"…entonces el problema no es React, es cuánto JavaScript mandás al cliente."},
+  {id:"s5", name:"Room 5", st:"info", label:"Break", viewers:0, now:"—", who:"", next:"15:30 · Diseño de APIs que no odies en 6 meses", problem:"Starts in 1 minute.", tech:"session closed · US$0/h"},
+  {id:"s6", name:"Workshop", st:"off", label:"Stopped", viewers:0, now:"Hands-on: tu primer agente con Gemini", who:"DevRel team", next:"16:30 · Hands-on: MCP en 30 minutos", problem:"The room station hasn't been opened yet.", tech:"idle", action:"Start"},
+];
+let enIdx = 0, enLine = EN_TALK[0];
+setInterval(()=>{ enIdx=(enIdx+1)%EN_TALK.length; enLine=EN_TALK[enIdx]; updateCards(); }, 3400);
+
+function meterHTML(){ return `<div class="mini-meter">${"<i></i>".repeat(24)}</div>`; }
+function renderGrid(){
+  $("#grid").innerHTML = STAGES.map(s=>`
+   <button class="card" data-id="${s.id}" aria-label="${s.name}: ${s.label}">
+     <div class="card-top"><h3>${s.name}</h3><span class="badge ${s.st}">${s.label}</span></div>
+     ${meterHTML()}
+     <div class="lastline" data-line="${s.id}"></div>
+     ${s.problem?`<div class="problem ${s.st==="warn"||s.st==="info"||s.st==="off"?"w":""}">${s.problem}</div>`:""}
+     <div class="talkline"><span class="k">Now</span>${esc(s.now)}${s.who?` <span class="n">· ${esc(s.who)}</span>`:""}</div>
+     <div class="talkline"><span class="k">Next</span><span class="n">${esc(s.next)}</span></div>
+     <div class="card-foot">${s.viewers?`<span><b>${s.viewers}</b> reading</span>`:""}${s.delay?`<span>Delay <b>${s.delay}</b></span>`:""}${s.action?`<span class="btn sm primary" role="presentation">${s.action}</span>`:""}</div>
+     <div class="tech">${s.tech}</div>
+   </button>`).join("");
+  document.querySelectorAll(".card").forEach(c=>c.addEventListener("click",()=>openDrawer(c.dataset.id)));
+  updateCards();
+}
+function updateCards(){
+  STAGES.forEach(s=>{
+    const el = document.querySelector(`[data-line="${s.id}"]`); if(!el) return;
+    let t = "", empty=false;
+    if (s.live){ const last = segs.filter(x=>!x.sound).slice(-1)[0]; t = sim.live ? `<span class="g">${esc(tail(sim.live,80))}</span>` : esc(last?tail(last.text,80):""); }
+    else if (s.en) t = esc(enLine);
+    else if (s.staticLine) t = esc(s.staticLine);
+    else { empty = true; t = s.st==="bad" ? "Last line 42 s ago: “…y por eso el vacuum no alcanza cuando la tabla…”" : s.st==="info" ? "No talk in progress" : "No audio received yet"; }
+    el.innerHTML = t; el.classList.toggle("empty", empty);
+  });
+}
+bus.addEventListener("live", updateCards); bus.addEventListener("segment", updateCards);
+bus.addEventListener("level", e=>{
+  document.querySelectorAll(".card").forEach(c=>{
+    const s = STAGES.find(x=>x.id===c.dataset.id);
+    let v = 0;
+    if (s.live) v = e.detail; else if (s.st==="ok"||s.st==="warn") v = .25+Math.random()*.5;
+    const n = Math.round(v*24);
+    c.querySelectorAll(".mini-meter i").forEach((i,k)=>i.classList.toggle("on", k<n));
+  });
+});
+$("#techChk").addEventListener("change", e=>$("#admin").classList.toggle("show-tech", e.target.checked));
+document.querySelectorAll("[data-open]").forEach(b=>b.addEventListener("click",()=>openDrawer(b.dataset.open,"sonido")));
+
+let drStage = "s1", drTab = "charla";
+function openDrawer(id, tab){
+  drStage = id; drTab = tab || "charla";
+  document.querySelectorAll(".card").forEach(c=>c.classList.toggle("sel", c.dataset.id===id));
+  const s = STAGES.find(x=>x.id===id);
+  $("#drTitle").textContent = s.name;
+  $("#drBadge").innerHTML = `<span class="badge ${s.st}">${s.label}</span>`;
+  document.querySelectorAll("#drTabs button").forEach(b=>b.setAttribute("aria-selected", b.dataset.t===drTab));
+  renderDrawer();
+  $("#drawer").classList.add("show"); $("#drScrim").classList.add("show");
+}
+function closeDrawer(){ $("#drawer").classList.remove("show"); $("#drScrim").classList.remove("show"); document.querySelectorAll(".card").forEach(c=>c.classList.remove("sel")); }
+$("#drClose").addEventListener("click", closeDrawer); $("#drScrim").addEventListener("click", closeDrawer);
+document.querySelectorAll("#drTabs button").forEach(b=>b.addEventListener("click",()=>{ drTab=b.dataset.t; document.querySelectorAll("#drTabs button").forEach(x=>x.setAttribute("aria-selected",x===b)); renderDrawer(); }));
+
+function renderDrawer(){
+  const s = STAGES.find(x=>x.id===drStage);
+  const B = $("#drBody");
+  if (drTab==="charla"){
+    const G = drStage==="s1"
+      ? [["OpenTelemetry",14],["Kubernetes",9],["DaemonSet",3],["OTLP",4],["tail-based sampling",2],["trace ID",5],["collector",6],["Lucía Fernández",1],["Jaeger",0]]
+      : [["Postgres",11],["vacuum",4],["pgbouncer",2],["Diego Suárez",1],["TOAST",0]];
+    B.innerHTML = `
+     <div class="dr-sec"><h4>Now</h4><div style="font-size:16px;font-weight:700">${esc(s.now)}</div><div style="color:var(--muted);font-size:14px">${esc(s.who||"")}</div></div>
+     <div class="dr-sec"><h4>Next</h4><div style="font-size:15px">${esc(s.next)}</div>
+       <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn primary sm">Switch to next talk</button><button class="btn sm">Edit schedule</button></div></div>
+     <div class="dr-sec"><h4>Talk vocabulary</h4>
+       <p class="help" style="margin:0 0 10px">Gemini built it from the title and abstract. The number shows how many times each term has been recognized so far in this talk.</p>
+       ${G.map(([t,c])=>`<span class="gchip ${c?"":"zero"}">${esc(t)} <span class="c">${c?"✓ "+c:"—"}</span></span>`).join("")}
+       <div style="display:flex;gap:8px;margin-top:6px"><input class="inp" placeholder="Add term…" style="padding:8px 10px;font-size:14px"><button class="btn sm">Add</button></div>
+       <p class="help">Changes apply to translation right away and to speech recognition at the speaker's next pause.</p></div>
+     <div class="dr-sec"><h4>Auto-corrections</h4>
+       <div class="kv"><span>cubernetes</span><span>Kubernetes</span><span>open telemetri</span><span>OpenTelemetry</span><span>demon set</span><span>DaemonSet</span></div></div>
+     <div class="dr-sec"><h4>Do not translate</h4>${["trace ID","span","collector","sampling","pod"].map(t=>`<span class="gchip">${t}</span>`).join("")}</div>`;
+  } else if (drTab==="sonido"){
+    const opts = [
+      ["estacion","Room laptop","A laptop connected to the mixer opens a link and sends the audio. Recommended.",true],
+      ["url","YouTube or stream link","Paste the live stream link. Adds a few seconds of delay.",false],
+      ["file","Audio or video file","For testing, or to caption a recorded talk.",false],
+      ["adv","Advanced: OBS or mixer via RTMP/SRT","We give you the address to configure the output.",false]];
+    B.innerHTML = `
+     ${s.st==="bad"?`<div class="alert bad" style="margin-bottom:16px;display:block"><b>No audio for 42 s</b><ol style="margin:8px 0 0;padding-left:18px;line-height:1.6;font-size:14px"><li>Check that the room laptop has the station open (and isn't asleep).</li><li>If it was closed, scan the QR code below from that laptop.</li><li>If it's open and the level meter isn't moving, check the cable from the mixer.</li></ol></div>`:""}
+     <div class="dr-sec"><h4>Where does the audio come from?</h4>
+     ${opts.map(([k,t,d,on])=>`<button class="src" role="radio" aria-checked="${on}"><span class="r"></span><span><span class="t">${t}</span><span class="s" style="display:block">${d}</span></span></button>`).join("")}</div>
+     <div class="dr-sec"><h4>Station link</h4>
+       <div class="share-row" style="border:0"><div class="qr">${qrSVG(21)}</div><div class="t">Open it on the room laptop<small>everyonemakessubs.your-tailnet.ts.net/station/room-3?key=•••</small></div><button class="btn sm">Copy</button></div></div>`;
+    B.querySelectorAll(".src").forEach(x=>x.addEventListener("click",()=>B.querySelectorAll(".src").forEach(y=>y.setAttribute("aria-checked",y===x))));
+  } else if (drTab==="compartir"){
+    B.innerHTML = `
+     <div class="share-row"><div class="qr">${qrSVG(3)}</div><div class="t"><b>Attendees (phone)</b><small>/s/${s.id} · language is picked automatically</small></div><button class="btn sm">Print</button></div>
+     <div class="share-row"><div class="qr">${qrSVG(5)}</div><div class="t"><b>Room screen</b><small>/s/${s.id}/tv?lang=es&amp;qr=1</small></div><button class="btn sm">Copy</button></div>
+     <div class="share-row"><div class="qr">${qrSVG(9)}</div><div class="t"><b>OBS overlay</b><small>Set language, size and position</small></div><button class="btn sm" id="goOv">Configure</button></div>
+     <p class="help">The address is fixed. If internet access goes down, you'll see an alert at the top of the dashboard.</p>`;
+    $("#goOv").addEventListener("click",()=>{ closeDrawer(); document.querySelector('.tab[data-view="overlay"]').click(); });
+  } else if (drTab==="descargas"){
+    const talks = drStage==="s1" ? ["Observabilidad sin humo con OpenTelemetry (in progress)","Keynote: 10 años de comunidad","Platform engineering sin burocracia"] : ["Current talk (in progress)","Previous talk"];
+    B.innerHTML = `<div class="dr-sec"><h4>Transcripts</h4>${talks.map(t=>`<div class="dr-sec" style="margin-bottom:14px"><div style="font-size:14.5px;margin-bottom:6px">${esc(t)}</div>${["es","en","pt"].map(l=>`<div class="dl"><span style="color:var(--muted)">${LANGS[l].name}</span><button class="btn sm">TXT</button><button class="btn sm">SRT</button><button class="btn sm">VTT</button></div>`).join("")}</div>`).join("")}</div>`;
+  } else {
+    B.innerHTML = `<div class="dr-sec"><h4>Last 50 lines</h4><div class="kv">
+      <span>Original delay p50 / p95</span><span>1.4 s / 2.9 s</span>
+      <span>Translation delay p50 / p95</span><span>2.6 s / 4.1 s</span>
+      <span>Lag behind the audio</span><span>0.6 s</span>
+      <span>Text rewritten in translation</span><span>0%</span></div></div>
+     <div class="dr-sec"><h4>Session</h4><div class="kv">
+      <span>Current Live session</span><span>#4 · 6:12</span>
+      <span>Rotations / max gap</span><span>3 / 0.2 s</span>
+      <span>Reconnections</span><span>0</span>
+      <span>429 errors (last hour)</span><span>0</span>
+      <span>Translation model</span><span>3.5 Flash-Lite</span></div></div>
+     <div class="dr-sec"><h4>Estimated cost</h4><div class="kv">
+      <span>This room, per hour</span><span>US$0.98</span>
+      <span>This talk so far</span><span>US$0.41</span>
+      <span>Whole event today</span><span>US$27.30</span></div></div>`;
+  }
+}
+renderGrid();
+
+/* =================== SETUP =================== */
+let su = 0;
+const SU = [
+ ()=>`<h2>Connect Gemini</h2><p class="lead">Everyone Makes Subs uses Gemini to listen and translate. You need an API key; it's free to try.</p>
+   <ol><li>Go to <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> and sign in with your Google account.</li><li>Click <b>Create API key</b>.</li><li>Copy it and paste it here.</li></ol>
+   <input class="inp mono" id="keyInp" placeholder="AIza…" autocomplete="off" aria-label="Gemini API key">
+   <div id="keyMsg"></div>
+   <p class="help">The key is stored only on this computer. The free tier is enough for testing, but Google uses the content to improve its products. For a real event, turn on billing.</p>
+   <div class="su-actions"><span></span><span style="display:flex;gap:8px"><button class="btn" id="keyTest">Test</button><button class="btn primary" id="suNext" disabled>Next</button></span></div>`,
+ ()=>`<h2>Choose a dashboard password</h2><p class="lead">You'll need it to sign in from another computer or your phone. Attendees don't need it.</p>
+   <input class="inp" type="password" placeholder="Password" aria-label="Password" value="nerdearla2026">
+   <div class="su-actions"><button class="btn ghost" id="suBack">Back</button><button class="btn primary" id="suNext">Next</button></div>`,
+ ()=>stepAccess(),
+ ()=>`<h2>Add the rooms</h2><p class="lead">Paste the schedule as it appears on the event website. We'll set up the rooms, times and vocabulary for each talk.</p>
+   <textarea class="inp" id="agInp" aria-label="Schedule">AUDITORIO
+14:30 Observabilidad sin humo con OpenTelemetry — Lucía Fernández
+Cómo instrumentamos 200 microservicios en Kubernetes con OTLP y tail-based sampling...
+15:30 WebAssembly fuera del navegador: lo que nadie te cuenta — Martín Ibarra
+
+SALA 2
+14:45 Edge AI on a budget — Priya Raman (talk in English)
+15:45 Rust para devs de Go — Sofía Paz</textarea>
+   <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn" id="agParse">Read schedule</button><button class="btn ghost">Create rooms manually</button><button class="btn ghost">Try with sample data</button></div>
+   <div id="agOut"></div>
+   <div class="su-actions"><button class="btn ghost" id="suBack">Back</button><button class="btn primary" id="suNext" disabled>Go to dashboard</button></div>`,
+];
+
+/* ---- step 3: public access ---- */
+const acc = { mode:"tailscale", ts:[true,false,false,false], tsWaiting:false, cf:false, more:false };
+const PUB = "https://everyonemakessubs.your-tailnet.ts.net";
+function tsItem(i, title, doneTxt, todo){
+  const done = acc.ts[i], enabled = i===0 || acc.ts[i-1];
+  return `<li class="acc-item ${done?"done":""} ${enabled?"":"locked"}">
+    <span class="acc-n">${done?"✓":i+1}</span>
+    <div class="acc-body"><div class="acc-t">${title}</div>
+      <div class="acc-s">${done?doneTxt:(enabled?todo:"")}</div></div></li>`;
+}
+function stepAccess(){
+  const allTs = acc.ts.every(Boolean);
+  const ready = (acc.mode==="tailscale" && allTs) || (acc.mode==="cloudflare" && acc.cf) || acc.mode==="lan" || acc.mode==="url";
+  let body = "";
+  if (acc.mode==="tailscale"){
+    body = `<ol class="acc-list">
+      ${tsItem(0,"Install Tailscale","Found Tailscale on this computer.",`<a class="btn sm" href="https://tailscale.com/download" target="_blank" rel="noopener">Download Tailscale</a> <button class="btn sm ghost" data-a="recheck">I've installed it</button>`)}
+      ${tsItem(1,"Sign in","Connected to your Tailscale account.",`<button class="btn sm" data-a="login">Open Tailscale to sign in</button><div class="help">You can sign in with your Google account. It's free.</div>`)}
+      ${tsItem(2,"Turn on internet access","Public access is on.", acc.tsWaiting
+          ? `<div class="acc-wait">A Tailscale page opened in your browser. Click <b>Enable</b> (you only do this once) and come back here.</div><button class="btn sm primary" data-a="enabled">Done, it's on</button>`
+          : `<button class="btn sm" data-a="funnel">Turn on</button><div class="help">Behind the scenes we run <code>tailscale funnel --bg 8080</code>.</div>`)}
+      ${tsItem(3,"Test from outside","A phone on mobile data can connect. Response in 0.3 s.",`<span class="acc-wait"><span class="spinner"></span> Testing the address from the internet…</span>`)}
+    </ol>`;
+  } else if (acc.mode==="cloudflare"){
+    body = `<ol class="acc-list">
+      <li class="acc-item"><span class="acc-n">1</span><div class="acc-body"><div class="acc-t">Create a tunnel in Cloudflare</div><div class="acc-s">In <a href="https://dash.cloudflare.com" target="_blank" rel="noopener">dash.cloudflare.com</a>: Zero Trust → Networks → Tunnels → <b>Create a tunnel</b>.</div></div></li>
+      <li class="acc-item"><span class="acc-n">2</span><div class="acc-body"><div class="acc-t">Choose the address</div><div class="acc-s">Under "Public hostname", enter for example <b>captions.yourevent.com</b>, with <code>http://localhost:8080</code> as the service.</div></div></li>
+      <li class="acc-item ${acc.cf?"done":""}"><span class="acc-n">${acc.cf?"✓":3}</span><div class="acc-body"><div class="acc-t">Paste the token and the address</div>
+        ${acc.cf?`<div class="acc-s">Tunnel connected and tested from the internet.</div>`:`
+        <input class="inp mono" placeholder="Token (eyJh…)" aria-label="Tunnel token" style="margin:6px 0">
+        <input class="inp" placeholder="captions.yourevent.com" aria-label="Address" style="margin:0 0 8px">
+        <button class="btn sm" data-a="cf">Connect and test</button>`}</div></li>
+    </ol>`;
+  } else if (acc.mode==="lan"){
+    body = `<div class="acc-wait" style="margin-top:4px">QR codes will point to <b>http://192.168.0.23:8080</b>. It only works for people on this same Wi-Fi, and room laptops won't be able to send microphone audio. Use it for testing.</div>`;
+  } else {
+    body = `<input class="inp" placeholder="https://captions.yourserver.com" aria-label="Public address" style="margin-top:4px"><div class="help">For when Everyone Makes Subs runs on a server that already has its own HTTPS address.</div>`;
+  }
+  const opt = (k,t,d,badge)=>`<button class="src" role="radio" aria-checked="${acc.mode===k}" data-mode="${k}"><span class="r"></span><span><span class="t">${t}${badge?` <span class="badge ok" style="font-size:11px;padding:2px 8px;margin-left:4px">${badge}</span>`:""}</span><span class="s" style="display:block">${d}</span></span></button>`;
+  return `<div id="accessStep"><h2>How will phones connect?</h2>
+   <p class="lead">Attendees scan a QR code on mobile data or any Wi-Fi. That QR code has to reach this computer over the internet, at a secure (https) address.</p>
+   ${opt("tailscale","With Tailscale","Free, no domain of your own needed. We'll guide you through 4 steps, about 5 minutes.","Recommended")}
+   ${opt("cloudflare","With Cloudflare and my own domain","For large events. You need a domain on Cloudflare.")}
+   ${acc.more||acc.mode==="lan"||acc.mode==="url" ? opt("lan","This Wi-Fi only (for testing)","Nobody outside the network can connect.") + opt("url","I already have a server with a public address","If you installed Everyone Makes Subs on a server with Docker.") : `<button class="btn sm ghost" data-a="more" style="margin:2px 0 6px">Other options</button>`}
+   <div class="acc-panel">${body}</div>
+   ${ready && acc.mode!=="lan" && acc.mode!=="url" ? `<div class="acc-result"><div class="qr-mini">${qrSVG(33)}</div><div><div style="color:var(--muted);font-size:13px">Your public address</div><div class="mono-url">${acc.mode==="tailscale"?PUB:"https://captions.yourevent.com"}</div><div class="help" style="margin-top:4px">It stays the same even if you restart the computer, so you can print the QR codes now.</div></div></div>`:""}
+   <div class="su-actions"><button class="btn ghost" id="suBack">Back</button><button class="btn primary" id="suNext" ${ready?"":"disabled"}>Next</button></div></div>`;
+}
+function bindAccess(){
+  const card = $("#suCard");
+  card.querySelectorAll("[data-mode]").forEach(b=>b.addEventListener("click",()=>{ acc.mode=b.dataset.mode; renderSetup(); }));
+  card.querySelectorAll("[data-a]").forEach(b=>b.addEventListener("click",()=>{
+    const a = b.dataset.a;
+    if (a==="more"){ acc.more=true; renderSetup(); }
+    if (a==="recheck"){ acc.ts[0]=true; renderSetup(); }
+    if (a==="login"){ b.innerHTML='<span class="spinner"></span> Waiting for you to sign in…'; setTimeout(()=>{ acc.ts[1]=true; renderSetup(); },1400); }
+    if (a==="funnel"){ acc.tsWaiting=true; renderSetup(); }
+    if (a==="enabled"){ acc.tsWaiting=false; acc.ts[2]=true; renderSetup(); setTimeout(()=>{ acc.ts[3]=true; if (su===2) renderSetup(); },1600); }
+    if (a==="cf"){ b.innerHTML='<span class="spinner"></span> Connecting…'; setTimeout(()=>{ acc.cf=true; renderSetup(); },1500); }
+  }));
+}
+function renderSetup(){
+  document.querySelectorAll("#suSteps div").forEach((d,i)=>d.classList.toggle("on", i<=su));
+  $("#suCard").innerHTML = SU[su]();
+  const next = $("#suNext"), back = $("#suBack");
+  if (back) back.addEventListener("click",()=>{ su--; renderSetup(); });
+  if (next) next.addEventListener("click",()=>{ if (su<SU.length-1){ su++; renderSetup(); } else { document.querySelector('.tab[data-view="panel"]').click(); } });
+  const kt = $("#keyTest");
+  if (kt) kt.addEventListener("click",()=>{
+    const v = $("#keyInp").value.trim(); const m = $("#keyMsg");
+    if (!v){ m.innerHTML = `<div class="errmsg">Paste the key first.</div>`; return; }
+    m.innerHTML = `<div class="okmsg" style="color:var(--muted)"><span class="spinner"></span>Testing with a short translation…</div>`;
+    setTimeout(()=>{
+      if (!v.startsWith("AIza")) m.innerHTML = `<div class="errmsg">That doesn't look like a Gemini key. It should start with “AIza”. Copy it again from AI Studio.</div>`;
+      else { m.innerHTML = `<div class="okmsg">✓ It works. "Hola, Nerdearla" → "Hello, Nerdearla" in 0.4 s.</div>`; next.disabled = false; }
+    }, 1100);
+  });
+  if ($("#accessStep")) bindAccess();
+  const ap = $("#agParse");
+  if (ap) ap.addEventListener("click",()=>{
+    $("#agOut").innerHTML = `<div class="okmsg" style="color:var(--muted)"><span class="spinner"></span>Reading the schedule and building the vocabulary…</div>`;
+    setTimeout(()=>{
+      $("#agOut").innerHTML = `<table class="agenda"><thead><tr><th>Room</th><th>Time</th><th>Talk</th><th>Language</th><th>Vocabulary</th></tr></thead><tbody>
+        <tr><td>Auditorium</td><td>14:30</td><td>Observabilidad sin humo… <span style="color:var(--dim)">· Lucía Fernández</span></td><td>es</td><td>9 terms</td></tr>
+        <tr><td>Auditorium</td><td>15:30</td><td>WebAssembly fuera del navegador… <span style="color:var(--dim)">· Martín Ibarra</span></td><td>es</td><td>7 terms</td></tr>
+        <tr><td>Room 2</td><td>14:45</td><td>Edge AI on a budget <span style="color:var(--dim)">· Priya Raman</span></td><td>en</td><td>8 terms</td></tr>
+        <tr><td>Room 2</td><td>15:45</td><td>Rust para devs de Go <span style="color:var(--dim)">· Sofía Paz</span></td><td>es</td><td>6 terms</td></tr></tbody></table>
+        <div class="okmsg">✓ 2 rooms and 4 talks. Review and confirm; you can edit everything later from the dashboard.</div>`;
+      $("#suNext").disabled = false;
+    }, 1400);
+  });
+}
+renderSetup();
+
+/* =================== boot =================== */
+setLang("en");
+engine();
+</script>
+</body>
+</html>
