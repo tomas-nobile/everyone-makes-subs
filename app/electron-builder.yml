@@ -1,0 +1,28 @@
+appId: com.everyonemakessubs.app
+productName: Everyone Makes Subs
+directories:
+  output: app/release
+  buildResources: app/icons
+extraMetadata:
+  main: app/dist/main.cjs
+files:
+  - app/dist/**
+  - package.json
+  - "!node_modules/**"
+artifactName: "EveryoneMakesSubs-${version}-${os}-${arch}.${ext}"
+mac:
+  target:
+    - target: dmg
+      arch: [arm64, x64]
+  category: public.app-category.productivity
+  extendInfo:
+    NSMicrophoneUsageDescription: Everyone Makes Subs uses the microphone to caption the room.
+win:
+  target: nsis
+linux:
+  target: AppImage
+  category: AudioVideo
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+publish: null
