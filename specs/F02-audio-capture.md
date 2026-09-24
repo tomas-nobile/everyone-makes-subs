@@ -25,7 +25,7 @@ As an operator, I want to paste a stream link to caption it without cables.
 
 **Verify:** a Nerdearla talk on YouTube produces chunks for 30 s.
 
-### [ ] F02.3 · Level and silence
+### [x] F02.3 · Level and silence
 As the system, I need to know when there's speech to rotate sessions, save audio and drive the VU meter.
 
 - `meter.ts`: RMS per chunk, normalized 0–1.
