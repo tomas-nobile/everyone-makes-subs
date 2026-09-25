@@ -10,9 +10,11 @@ The AI side is not part of this test on purpose: it is one Live session plus one
 
 ## Results
 
-| Rooms | Viewers (total) | Spread p50 | Spread p95 | Server CPU (avg, max) | RSS idle → loaded | Machine |
+| Rooms | Viewers (total) | Spread p50 | Spread p95 (max) | Server CPU (avg, max) | RSS idle → loaded | Machine |
 |---|---|---|---|---|---|---|
-| _pending: run `npm run load -- --stages=8 --clients=2000`_ | | | | | | |
+| **8** | **2,000** (250 per room) | **7 ms** | **11 ms** (15 ms) | 44 % (61 %) of one core | 103 → 157 MB | AMD Ryzen 5 3600 (12 threads), 16 GB, Windows 11, Node 25 · `bench/scale-2026-09-25T04-20-25.json` |
+
+Every room delivered every phrase to all 250 of its viewers (one room missed one phrase that was in flight when the 30 s window closed); 0 connection failures.
 
 Earlier, single-room run (v1.0.0 README): 1 room × 2,000 viewers, every phrase to every viewer within ~65 ms, +67 MB of RAM (92 → 159 MB).
 

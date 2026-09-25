@@ -113,8 +113,8 @@ Read the p95s as what the free tier does, not what the pipeline does: at 15 tran
 1. **Up to ~10–15 rooms:** one laptop running the app, or a 2 vCPU container. The work is I/O-bound.
 2. **More rooms or more reliability:** a server with Docker instead of a laptop; split `worker` and `web` roles with Redis pub/sub in place of the in-process EventBus (same publish/subscribe interface).
 3. **Bigger audience:** SSE fan-out is cheap (a few hundred bytes per phrase); put `web` replicas behind a proxy/CDN. The AI cost does not change with the audience.
-   Measured with `npm run load` (server and 2,000 clients on the same laptop): **2,000 viewers on one stage, every phrase delivered to all of them within ~65 ms of each other, +67 MB of RAM** (92 → 159 MB).
-4. **Quotas:** use a billed (Tier 1+) project. Each room holds up to 2 Live sessions during a rotation.
+   Measured with `npm run load -- --stages=8 --clients=2000` (server and viewers on the same desktop, Ryzen 5 3600): **8 rooms × 250 viewers = 2,000 viewers, every phrase delivered to every viewer within 7 ms (p50) / 11 ms (p95) of each other, 44 % of one core, 103 → 157 MB of RAM**. Details and the raw JSON in [`docs/scale.md`](docs/scale.md).
+4. **Quotas:** use a billed (Tier 1+) project. Each room holds up to 2 Live sessions during a rotation. One speech session per room — not per language, not per viewer.
 
 ## Costs
 

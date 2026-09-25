@@ -13,7 +13,7 @@ As the team, we want the dashboard to look like a whole conference.
 
 **Verify:** `DEMO_STAGES=8 npm run dev:fake` → the dashboard shows 8 rooms live.
 
-### [ ] F19.2 · Load numbers for N rooms
+### [x] F19.2 · Load numbers for N rooms
 As a judge, I want to know what one machine holds.
 
 - `npm run load -- --stages=N --clients=M`: N rooms × M viewers in total (e.g. 8 × 250 = 2,000); reports server CPU % and RAM, and the delivery spread p95 per room.

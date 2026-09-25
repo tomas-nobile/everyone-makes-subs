@@ -1,0 +1,25 @@
+{
+ "at": "2026-09-25T04:20:25.840Z",
+ "stages": 8,
+ "viewers": 2000,
+ "failed": 0,
+ "seconds": 30,
+ "spreadP50Ms": 7,
+ "spreadP95Ms": 11,
+ "spreadMaxMs": 15,
+ "cpuAvgPct": 44,
+ "cpuMaxPct": 60.7,
+ "rssIdleMb": 103,
+ "rssMb": 157,
+ "machine": "AMD Ryzen 5 3600 6-Core Processor · 12 threads · 16 GB · win32 · node v25.2.1",
+ "perStage": [
+  "  auditorium     250 viewers · 13 phrases seen, 13 delivered to every viewer · spread p50 7 ms · p95 11 ms · max 11 ms",
+  "  room-2         250 viewers · 13 phrases seen, 13 delivered to every viewer · spread p50 8 ms · p95 11 ms · max 11 ms",
+  "  room-3         250 viewers · 12 phrases seen, 11 delivered to every viewer · spread p50 8 ms · p95 9 ms · max 9 ms",
+  "  room-4         250 viewers · 13 phrases seen, 13 delivered to every viewer · spread p50 6 ms · p95 11 ms · max 11 ms",
+  "  room-5         250 viewers · 13 phrases seen, 13 delivered to every viewer · spread p50 9 ms · p95 11 ms · max 11 ms",
+  "  room-6         250 viewers · 12 phrases seen, 11 delivered to every viewer · spread p50 6 ms · p95 9 ms · max 9 ms",
+  "  room-7         250 viewers · 13 phrases seen, 13 delivered to every viewer · spread p50 7 ms · p95 9 ms · max 9 ms",
+  "  room-8         250 viewers · 13 phrases seen, 13 delivered to every viewer · spread p50 7 ms · p95 15 ms · max 15 ms"
+ ]
+}

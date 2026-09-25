@@ -15,7 +15,7 @@ Rules for every story:
 
 ## Stories
 
-### [ ] F16.1 · Chapter frame
+### [x] F16.1 · Chapter frame
 As the team, we want every chapter to share one look, so the video reads like a pitch and not like a screen recording.
 
 - `scripts/demo-video.ts` gets a `chapter({ kicker, title, body, footage })` scene: the explanation panel (prototype tokens: `#0B0C0E` ground, `#FFD24A` kicker) over the chapter's footage for ~4 s, then the footage full screen.
