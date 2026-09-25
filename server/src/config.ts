@@ -24,6 +24,8 @@ export interface Config {
   sentenceMinWords: number;
   commaMinWords: number;
   maxPhraseWords: number;
+  translateStream: boolean;       // F17.4: stream the translation and publish `es` as soon as it closes
+  jobSpeed: number;               // F18.1: feed a video job's audio at N× real time
   demo: boolean;
   demoStages: number;
   fakeBackend: boolean;
@@ -57,6 +59,8 @@ const DEFAULTS: EnvConfig = {
   sentenceMinWords: 5,
   commaMinWords: 8,
   maxPhraseWords: 18,
+  translateStream: true,
+  jobSpeed: 1,
   demo: false,
   demoStages: 2,
   fakeBackend: false,
@@ -82,6 +86,8 @@ const ENV_KEYS: Record<keyof typeof DEFAULTS, string> = {
   sentenceMinWords: 'SENTENCE_MIN_WORDS',
   commaMinWords: 'COMMA_MIN_WORDS',
   maxPhraseWords: 'MAX_PHRASE_WORDS',
+  translateStream: 'TRANSLATE_STREAM',
+  jobSpeed: 'JOB_SPEED',
   demo: 'DEMO',
   demoStages: 'DEMO_STAGES',
   fakeBackend: 'FAKE_BACKEND',

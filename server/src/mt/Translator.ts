@@ -9,8 +9,13 @@ const MAX_BATCH = 6;
 const QUOTA_WAIT_MS = 10_000;
 
 export interface TranslateResult { src: string; tr: Record<string, string | null>; ms: number }
+/** F17.4: the Spanish value, published as soon as it closes in the streamed JSON (before the other languages). */
+export type PartialHandler = (partial: { tr: Record<string, string>; ms: number }) => void;
 
-interface Job { text: string; srcHint?: string; context: string[]; enqueued: number; done: (r: TranslateResult) => void }
+interface Job { text: string; srcHint?: string; context: string[]; enqueued: number; done: (r: TranslateResult) => void; onPartial?: PartialHandler }
+
+// Streamed JSON: the `es` value is complete once its closing quote is followed by a comma or brace.
+const ES_VALUE = /"es"\s*:\s*"((?:[^"\\]|\\.)*)"\s*[,}]/;
 
 /**
  * One TRANSLATE_MODEL call per committed segment, JSON with every target language
@@ -18,6 +23,8 @@ interface Job { text: string; srcHint?: string; context: string[]; enqueued: num
  * busy calls (fast speaker, free-tier quota), the next call takes up to 6 of them at once.
  * 5xx → backoff 1-2-4 s; 429 → TRANSLATE_FALLBACK_MODEL (waiting ≤ 10 s if both are out of quota)
  * → null for the languages that could not be translated.
+ * Spanish first (F17.4): `es` leads the schema's propertyOrdering and the call is streamed, so the
+ * `es` value is published the moment it closes; the other languages follow in the same call.
  */
 export class Translator {
   private context: string[] = [];
@@ -32,12 +39,12 @@ export class Translator {
     private onError: (status: number) => void,
   ) {}
 
-  translate(text: string, srcHint?: string): Promise<TranslateResult> {
+  translate(text: string, srcHint?: string, onPartial?: PartialHandler): Promise<TranslateResult> {
     const context = this.context.slice(-3);
     this.context.push(text);
     if (this.context.length > 3) this.context.shift();
     return new Promise((done) => {
-      this.queue.push({ text, srcHint, context, enqueued: Date.now(), done });
+      this.queue.push({ text, srcHint, context, enqueued: Date.now(), done, onPartial });
       this.pump();
     });
   }
@@ -79,7 +86,9 @@ export class Translator {
       `DO NOT translate: ${JSON.stringify(g?.doNotTranslate ?? [])}. Required translations: ${JSON.stringify(g?.preferred ?? {})}.`,
       `CONTEXT (do not translate): ${JSON.stringify(batch[0].context)}`,
     ];
-    const one = `{"src":"<iso 639-1 of the segment>", ${todo.map((l) => `"${l}":"..."`).join(', ')}}`;
+    // es first: its tokens are generated first, so Spanish costs the same as a dedicated call (F17.4)
+    const order = [...(todo.includes('es') ? ['es'] : []), 'src', ...todo.filter((l) => l !== 'es')];
+    const one = `{${order.map((k) => (k === 'src' ? '"src":"<iso 639-1 of the segment>"' : `"${k}":"..."`)).join(', ')}}`;
     const prompt = [
       ...head,
       ...(many ? batch.map((j, i) => `SEGMENT ${i + 1}: ${j.text}`) : [`SEGMENT: ${batch[0].text}`]),
@@ -87,17 +96,32 @@ export class Translator {
     ].join('\n');
     const item = {
       type: Type.OBJECT,
-      properties: Object.fromEntries([['src', { type: Type.STRING }], ...todo.map((l) => [l, { type: Type.STRING }])]),
-      required: ['src', ...todo],
+      properties: Object.fromEntries(order.map((k) => [k, { type: Type.STRING }])),
+      required: order,
+      propertyOrdering: order,
     };
     const schema = many ? { type: Type.OBJECT, properties: { items: { type: Type.ARRAY, items: item } }, required: ['items'] } : item;
+
+    // single segment with a Spanish target: stream and publish `es` the moment its value closes
+    const job = batch[0];
+    let esPublished = false;
+    const onText = this.cfg.translateStream && !many && todo.includes('es') && job.onPartial ? (acc: string) => {
+      if (esPublished) return;
+      const m = ES_VALUE.exec(acc);
+      if (!m) return;
+      esPublished = true;
+      try {
+        const es = (JSON.parse(`"${m[1]}"`) as string).trim();
+        if (es) job.onPartial?.({ tr: { es }, ms: Date.now() - job.enqueued });
+      } catch { /* not a complete JSON string yet */ }
+    } : undefined;
 
     // TRANSLATE_MODEL, then TRANSLATE_FALLBACK_MODEL (also while the first one is out of quota)
     let outs: Array<Record<string, string> | undefined> = [];
     try {
       const { value } = await generateJsonWithFallback<Record<string, string> | { items: Array<Record<string, string>> }>(
         this.cfg.geminiApiKey, [this.cfg.translateModel, this.cfg.translateFallbackModel], prompt,
-        { schema, temperature: 0.2, maxWaitMs: QUOTA_WAIT_MS }, (status) => { if (status === 429) this.onError(429); },
+        { schema, temperature: 0.2, maxWaitMs: QUOTA_WAIT_MS, onText }, (status) => { if (status === 429) this.onError(429); },
       );
       outs = many ? ((value as { items?: Array<Record<string, string>> }).items ?? []) : [value as Record<string, string>];
     } catch (err) {

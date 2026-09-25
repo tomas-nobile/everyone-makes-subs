@@ -70,6 +70,7 @@ export type LiveEvent = { type: 'live'; text: string };
 /** `lag` = seconds from the end of the spoken audio (t1) to publication; the phone shows it as "~1.4 s". */
 /** BENCH=1 only (F17.1): `at` = server wall clock at publication, `heardAt` = first interim that reached the phrase's last word, `endAt` = end of speech (utterances closed by a pause). */
 export type SegmentEvent = { type: 'segment'; seq: number; src: string; text: string; t0: number; t1: number; kind: SegmentKind; lag?: number; u?: number; at?: number; heardAt?: number; endAt?: number };
+/** `tr` may carry a SUBSET of the languages (F17.4: `es` first, the rest in a later event); clients merge by seq. */
 export type TrEvent = { type: 'tr'; seq: number; tr: Record<string, string | null>; ms: number; at?: number };
 export type StateEvent = { type: 'state'; state: StageState; talk?: Talk | null; next?: Talk | null; last?: Talk | null };
 export type LevelEvent = { type: 'level'; v: number };
@@ -229,6 +230,32 @@ export interface TailscaleStatus {
   url: string | null;                                     // https://<dnsName>
   consentUrl?: string;                                    // "Click Enable and come back"
   message?: string;
+}
+
+// ── Video jobs (F18): subtitle an uploaded video or a YouTube link, one job at a time ──
+//   POST /api/jobs?lang=es&srcLang=en&title=&speaker=&abstract=&name=<file>  (raw video body)  → Job (201)
+//   POST /api/jobs  { url, lang?, srcLang?, title?, speaker?, abstract? }                       → Job (201)
+//   GET  /api/jobs · GET /api/jobs/:id · DELETE /api/jobs/:id
+//   GET  /api/jobs/:id/video.mp4 | video.vtt | video.srt   (Range supported on the mp4)
+
+export type JobStatus = 'queued' | 'transcribing' | 'burning' | 'done' | 'error';
+
+export interface Job {
+  id: string;
+  status: JobStatus;
+  progress: number;                                       // 0..1
+  etaSec: number;                                         // 0 when done/error
+  message?: string;                                       // plain-language step or error
+  title: string;
+  speaker?: string;
+  abstract?: string;
+  lang: string;                                           // subtitle language
+  srcLang?: string;                                       // spoken language (auto-detect when empty)
+  source: { kind: 'file'; name: string } | { kind: 'url'; url: string };
+  createdAt: number;
+  durationSec?: number;
+  speed?: number;                                         // audio fed at N× real time
+  segments?: number;
 }
 
 export function emptyGlossary(): Glossary {

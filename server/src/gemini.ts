@@ -60,9 +60,19 @@ function noThinking(model: string) {
   return /gemini-[3-9]/.test(model) ? { thinkingLevel: ThinkingLevel.MINIMAL } : { thinkingBudget: 0 };
 }
 
-/** generateContent with JSON output; returns the parsed object. */
-export async function generateJson<T>(apiKey: string, model: string, prompt: string, opts: { schema?: object; temperature?: number; thinking?: boolean } = {}): Promise<T> {
-  const res = await genai(apiKey).models.generateContent({
+export interface JsonOptions {
+  schema?: object;
+  temperature?: number;
+  thinking?: boolean;
+  /** Streams the response and reports the accumulated text after every chunk (F17.4: publish `es` as soon as it closes). */
+  onText?: (accumulated: string) => void;
+  /** Token usage of the call (F19.3 cost measurement). */
+  onUsage?: (u: { model: string; input: number; output: number }) => void;
+}
+
+/** generateContent with JSON output; returns the parsed object. Streams when `onText` is given. */
+export async function generateJson<T>(apiKey: string, model: string, prompt: string, opts: JsonOptions = {}): Promise<T> {
+  const req = {
     model,
     contents: prompt,
     config: {
@@ -71,8 +81,21 @@ export async function generateJson<T>(apiKey: string, model: string, prompt: str
       temperature: opts.temperature ?? 0.2,
       ...(opts.thinking ? {} : { thinkingConfig: noThinking(model) }),
     },
-  });
-  const text = res.text ?? '';
+  };
+  let text = '';
+  let usage: { promptTokenCount?: number; candidatesTokenCount?: number } | undefined;
+  if (opts.onText) {
+    for await (const chunk of await genai(apiKey).models.generateContentStream(req)) {
+      const t = chunk.text;
+      if (t) { text += t; opts.onText(text); }
+      if (chunk.usageMetadata) usage = chunk.usageMetadata;
+    }
+  } else {
+    const res = await genai(apiKey).models.generateContent(req);
+    text = res.text ?? '';
+    usage = res.usageMetadata;
+  }
+  if (usage && opts.onUsage) opts.onUsage({ model, input: usage.promptTokenCount ?? 0, output: usage.candidatesTokenCount ?? 0 });
   return JSON.parse(text.replace(/^```(?:json)?\s*|\s*```$/g, '')) as T;
 }
 
@@ -86,7 +109,7 @@ export function modelCooling(model: string): boolean {
  */
 export async function generateJsonWithFallback<T>(
   apiKey: string, models: string[], prompt: string,
-  opts: { schema?: object; temperature?: number; thinking?: boolean; maxWaitMs?: number } = {}, onError?: (status: number) => void,
+  opts: JsonOptions & { maxWaitMs?: number } = {}, onError?: (status: number) => void,
 ): Promise<{ value: T; model: string }> {
   const list = [...new Set(models.filter(Boolean))];
   // every model out of quota: wait for the first one to recover when the caller can afford it

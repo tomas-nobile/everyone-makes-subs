@@ -11,6 +11,8 @@ export interface FileRunOptions {
   targetLangs: string[];
   /** Stop after this many seconds of audio (0 = whole file). */
   seconds?: number;
+  /** F18.1: feed the audio at N× real time (1 = real time, as a live stage). */
+  speed?: number;
   label?: string;
   onLine?: (line: string) => void;
 }
@@ -60,18 +62,19 @@ export function runFile(opts: FileRunOptions): Promise<FileRunResult> {
       if (ev.lag !== undefined) lagSec.push(ev.lag);
       log(`[${label}] ${ev.t0.toFixed(2)}–${ev.t1.toFixed(2)} s · lag ${ev.lag?.toFixed(2) ?? '?'} s · ${ev.kind === 'speech' ? '' : `(${ev.kind}) `}${ev.text}`);
     } else if (ev.type === 'tr') {
+      // F17.4: partial `tr` events (es first) are merged; the first one's ms is the Spanish latency
       const s = segments.get(ev.seq);
       if (!s) return;
-      s.tr = ev.tr;
-      s.ms.mt = ev.ms;
-      if (ev.ms) mtMs.push(ev.ms);
+      s.tr = { ...s.tr, ...ev.tr };
+      if (s.ms.mt === undefined) { s.ms.mt = ev.ms; if (ev.ms) mtMs.push(ev.ms); }
       for (const [l, t] of Object.entries(ev.tr)) if (l !== s.src) log(`          ${l}: ${t ?? '(null: translation failed)'}`);
     }
   });
+  const complete = (s: Segment) => opts.targetLangs.every((l) => l in s.tr);
 
   const worker = new StageWorker(
     { id: label, name: label, source: { kind: 'file', path: opts.file }, targetLangs: opts.targetLangs, state: 'live', viewers: 0 },
-    { cfg: opts.cfg, bus, getTalk: () => talk, nextSeq: () => ++seq, onError: () => errors++, onSourceEnd: () => finish('end of file') },
+    { cfg: opts.cfg, bus, getTalk: () => talk, nextSeq: () => ++seq, onError: () => errors++, onSourceEnd: () => finish('end of file'), speed: opts.speed },
   );
 
   let done: (r: FileRunResult) => void;
@@ -86,7 +89,7 @@ export function runFile(opts: FileRunOptions): Promise<FileRunResult> {
     // translation (on the free tier they can queue behind the quota): wait for both, 60 s max
     const endedAt = Date.now();
     const waiting = setInterval(() => {
-      const pending = [...segments.values()].filter((s) => Object.keys(s.tr).length === 0).length;
+      const pending = [...segments.values()].filter((s) => !complete(s)).length;
       if ((Date.now() - endedAt < 5000 || pending > 0) && Date.now() - endedAt < 60_000) return;
       clearInterval(waiting);
       if (pending) log(`[${label}] ${pending} translation(s) still missing after 60 s`);

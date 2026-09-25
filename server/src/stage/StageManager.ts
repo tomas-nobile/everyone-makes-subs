@@ -116,8 +116,13 @@ export class StageManager {
         rt.stats.onSegment(ev.seq, ev.text, ev.lag);
         setTimeout(() => this.persist(rt, ev.seq), 20_000).unref?.();
       } else if (ev.type === 'tr') {
+        // F17.4: `tr` may carry a subset of languages (es first); merge, persist once every target language is in
         const seg = rt.pending.get(ev.seq);
-        if (seg) { seg.tr = ev.tr; seg.ms.mt = ev.ms; this.persist(rt, ev.seq); }
+        if (seg) {
+          seg.tr = { ...seg.tr, ...ev.tr };
+          seg.ms.mt ??= ev.ms;
+          if (rt.stage.targetLangs.every((l) => l in seg.tr)) this.persist(rt, ev.seq);
+        }
         rt.stats.onTr(ev.seq, ev.ms);
       } else if (ev.type === 'level') rt.stats.level = ev.v;
       else if (ev.type === 'live') rt.stats.liveLine = ev.text;

@@ -16,6 +16,7 @@ export interface WorkerDeps {
   nextSeq: () => number;
   onError: (status: number) => void;
   onSourceEnd?: () => void;          // a non-looping file finished (offline runs)
+  speed?: number;                    // F18.1: feed a file at N× real time (video jobs)
 }
 
 /** Common surface of the real pipeline and the fake replay, as the StageManager sees it. */
@@ -55,7 +56,7 @@ export class StageWorker implements Worker {
   constructor(private stage: Stage, private deps: WorkerDeps) {
     const { cfg, bus } = deps;
     this.label = stage.id;
-    this.source = stage.source.kind === 'station' ? new StationSource(stage.id) : new AudioSource(stage.source, stage.id, cfg.dataDir);
+    this.source = stage.source.kind === 'station' ? new StationSource(stage.id) : new AudioSource(stage.source, stage.id, cfg.dataDir, { speed: deps.speed });
     this.meter = new Meter((v) => bus.publish({ type: 'level', v }));
     this.transcriber = new Transcriber({
       label: stage.id,

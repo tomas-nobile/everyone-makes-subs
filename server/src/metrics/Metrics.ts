@@ -30,9 +30,10 @@ export class StageStats {
     this.countVocab(text);
   }
 
+  /** The first `tr` of a segment is the Spanish one (F17.4): that is the delay the attendee felt. */
   onTr(seq: number, ms: number): void {
     const d = this.delays.find((x) => x.seq === seq);
-    if (d) d.tr = d.seg + ms / 1000;
+    if (d && d.tr === null) d.tr = d.seg + ms / 1000;
   }
 
   /**
