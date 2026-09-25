@@ -214,6 +214,34 @@ export function Phone({ stageId }: { stageId: string }) {
     return () => clearTimeout(t);
   }, [showToast]);
 
+  // F07.6: for stream viewers, hold each phrase back until it's `prefs.delay` seconds old so
+  // captions line up with the (also delayed) video instead of racing ahead of it.
+  const arrivalRef = useRef(new Map<number, { at: number; trAt?: number }>());
+  useEffect(() => {
+    const map = arrivalRef.current;
+    for (const s of segments) {
+      const entry = map.get(s.seq);
+      if (!entry) {
+        map.set(s.seq, { at: Date.now(), trAt: Object.keys(s.tr).length ? Date.now() : undefined });
+      } else if (entry.trAt === undefined && Object.keys(s.tr).length) {
+        entry.trAt = Date.now();
+      }
+    }
+  }, [segments]);
+  const [, forceTick] = useState(0);
+  useEffect(() => {
+    if (!prefs.stream) return;
+    const id = setInterval(() => forceTick((t) => t + 1), 700);
+    return () => clearInterval(id);
+  }, [prefs.stream]);
+  const visibleSegments = prefs.stream
+    ? segments.filter((s) => {
+        const entry = arrivalRef.current.get(s.seq);
+        const readyAt = entry?.trAt ?? entry?.at ?? Date.now();
+        return Date.now() - readyAt >= prefs.delay * 1000;
+      })
+    : segments;
+
   // F07.4: pause autoscroll once the attendee scrolls up more than 40px; "back to live" resumes it.
   const bodyRef = useRef<HTMLDivElement>(null);
   const [atBottom, setAtBottom] = useState(true);
@@ -221,8 +249,8 @@ export function Phone({ stageId }: { stageId: string }) {
   const prevSegCount = useRef(0);
 
   useEffect(() => {
-    const grew = segments.length > prevSegCount.current;
-    prevSegCount.current = segments.length;
+    const grew = visibleSegments.length > prevSegCount.current;
+    prevSegCount.current = visibleSegments.length;
     const el = bodyRef.current;
     if (!el) return;
     if (atBottom) {
@@ -232,7 +260,7 @@ export function Phone({ stageId }: { stageId: string }) {
     } else if (grew) {
       setUnread((n) => n + 1);
     }
-  }, [segments, live, atBottom]);
+  }, [visibleSegments, live, atBottom]);
 
   const onScroll = () => {
     const el = bodyRef.current;
@@ -290,7 +318,7 @@ export function Phone({ stageId }: { stageId: string }) {
               title="Delay measured from when the speaker finishes the sentence"
               style={{ visibility: attendeeState === 'live' || attendeeState === 'paused' ? 'visible' : 'hidden' }}
             >
-              {lag !== null ? `~${lag.toFixed(1)} s` : ''}
+              {prefs.stream ? `+${prefs.delay} s (stream)` : lag !== null ? `~${lag.toFixed(1)} s` : ''}
             </span>
           </div>
           <div>
@@ -316,7 +344,7 @@ export function Phone({ stageId }: { stageId: string }) {
 
         <div className="ph-body" id="phBody" style={{ fontSize: prefs.size }} ref={bodyRef} onScroll={onScroll}>
           <div aria-live="polite" aria-relevant="additions">
-            {segments.slice(-30).map((s, idx, list) => (
+            {visibleSegments.slice(-30).map((s, idx, list) => (
               <Caption
                 key={s.seq}
                 seg={s}
@@ -329,7 +357,7 @@ export function Phone({ stageId }: { stageId: string }) {
             ))}
           </div>
           <StateCard attendeeState={attendeeState} lang={lang} next={next} talk={talk} onSummary={() => setSheet('sum')} />
-          {attendeeState === 'live' && <LiveLine lang={lang} isOriginal={isOriginal} live={live} level={level} showLiveOrig={prefs.liveOrig} />}
+          {attendeeState === 'live' && !prefs.stream && <LiveLine lang={lang} isOriginal={isOriginal} live={live} level={level} showLiveOrig={prefs.liveOrig} />}
         </div>
 
         <button className={`jump${!atBottom ? ' show' : ''}`} onClick={jumpToLive}>

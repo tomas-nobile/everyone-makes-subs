@@ -54,7 +54,7 @@ As an attendee, I want to understand what's going on when there are no captions,
 
 **Verify:** force each state from the fake (`/api/dev/state?stage=&state=`, fake mode only).
 
-### [ ] F07.6 · Delay for stream viewers
+### [x] F07.6 · Delay for stream viewers
 As someone watching on YouTube, I want captions to line up with the video.
 
 - In "Aa": the "I'm watching the stream" toggle shows a 0–30 s slider (default 8 s). Phrases appear only once they've met the delay.
