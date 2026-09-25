@@ -2,6 +2,7 @@
 
 One line per entry, newest first. Prefixes: `DECISION:`, `TODO:`, `CONTRACT:` (change requested to `shared/contract.ts`), `LIVE-API:` (findings from F03.1).
 
+- 2026-09-24 · DECISION: Docker image has no deno (yt-dlp 2026.08.19 standalone works without it); MediaMTX host comes from `MEDIAMTX_HOST` (compose sets `mediamtx`); in Docker with no `PUBLIC_URL`, `publicUrl` is empty and the web uses its own origin (F14.1).
 - 2026-09-24 · DECISION: `isLocal` = loopback AND no proxy headers (x-forwarded-for, cf-connecting-ip, tailscale-*): a Funnel/Cloudflare request also arrives from 127.0.0.1 and must never get passwordless admin (F09.1/F11.2).
 - 2026-09-24 · DECISION: stage state is computed by the StageManager every second: source state → live/paused (silence > 20 s)/no_signal/connecting; `degraded` if ASR backlog > 10 s, > 3 errors/min or p95 (translation) > 6 s; `error` when a real stage has no key. Alerts are computed server-side and sent in `AdminMetrics.alerts` (F09.2/F09.3).
 - 2026-09-24 · DECISION: cost estimate = US$0.005 per minute of audio sent + US$0.00005 per translated segment (rough list prices, "Technical details" only).

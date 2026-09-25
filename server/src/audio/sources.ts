@@ -87,7 +87,7 @@ export class AudioSource extends EventEmitter {
         return [...(vod ? ['-re'] : []), ...(spec.url.startsWith('http') ? RECONNECT : []), '-i', spec.url];
       }
       case 'mediamtx':
-        return ['-i', `rtmp://127.0.0.1:1935/${spec.path}`];
+        return ['-i', `rtmp://${process.env.MEDIAMTX_HOST || '127.0.0.1'}:1935/${spec.path}`];
       case 'station':
         throw new Error('station audio arrives over WS (F08), not ffmpeg');
     }

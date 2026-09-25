@@ -23,6 +23,8 @@ export function lanUrl(port: number): string {
 }
 
 export function publicUrl(cfg: Config): string {
+  // In Docker the LAN address is the container's: better none (the web falls back to its origin).
+  if (inDocker && !cfg.publicUrl) return '';
   return (cfg.publicMode !== 'lan' && cfg.publicUrl ? cfg.publicUrl : lanUrl(cfg.port)).replace(/\/+$/, '');
 }
 

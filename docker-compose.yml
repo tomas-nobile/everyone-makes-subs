@@ -1,0 +1,22 @@
+# docker compose up            → http://localhost:8080 (setup wizard if there is no key)
+# DEMO=1 docker compose up     → 2 sample stages at startup
+# docker compose --profile advanced up → also MediaMTX for RTMP/SRT from OBS or a mixing console
+services:
+  everyone-makes-subs:
+    build: .
+    ports: ["8080:8080"]
+    environment:
+      - GEMINI_API_KEY
+      - ADMIN_PASSWORD
+      - DEMO
+      - FAKE_BACKEND
+      - PUBLIC_MODE=${PUBLIC_MODE:-url}
+      - PUBLIC_URL
+      - MEDIAMTX_HOST=mediamtx
+    volumes: ["./data:/data"]
+    restart: unless-stopped
+  mediamtx:
+    image: bluenviron/mediamtx:latest
+    ports: ["1935:1935", "8890:8890/udp"]
+    profiles: ["advanced"]
+    restart: unless-stopped

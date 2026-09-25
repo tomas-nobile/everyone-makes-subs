@@ -4,7 +4,7 @@
 
 ## Stories
 
-### [ ] F14.1 · Docker
+### [x] F14.1 · Docker
 As a judge, I want to start it with one command.
 
 - Multi-stage `Dockerfile` (standalone yt-dlp with a pinned version, deno) + `.dockerignore`, as in `docs/architecture.md`.
