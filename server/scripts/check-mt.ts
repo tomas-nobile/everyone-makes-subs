@@ -5,7 +5,7 @@ import { Translator } from '../src/mt/Translator.js';
 
 try { process.loadEnvFile(); } catch { /* no .env */ }
 const cfg = loadConfig();
-if (process.argv.includes('--bad-key')) cfg.geminiApiKey = 'AIzaSy-invalid-key-for-testing-000000000';
+if (process.argv.includes('--bad-key')) cfg.geminiApiKey = 'invalid-key-for-testing';
 const text = process.argv[2] && !process.argv[2].startsWith('--') ? process.argv[2] : 'Hoy vamos a hablar de observabilidad con OpenTelemetry.';
 let errors = 0;
 const tr = new Translator('check', cfg, () => ({ id: 't', stageId: 's', title: 'Observabilidad sin dolor', lang: 'es', status: 'live', glossary: { asrVocabulary: [], doNotTranslate: ['OpenTelemetry'], preferred: {}, replacements: {} } }), () => cfg.targetLangs, () => errors++);
