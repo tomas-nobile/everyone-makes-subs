@@ -41,6 +41,8 @@ The video is rebuilt around the judging criteria (F16) and shows **English → S
 
 **Never cut:** F17.1, F17.2, F16.1–F16.3, F16.5, F16.9.
 
+**Where it stands (2026-09-25 01:50 ART):** F17.1–F17.3, F17.6, F18.1–F18.3, F19.1–F19.2 and F16.1 are done and measured; the free-tier daily quota (500 requests per model) ran out at 01:20, so F16.2 (clip), F16.4 (A/B), F19.3 (measured cost), the F18.1 speed test and the final benchmark for F17.4/F17.5/F17.7 run after the reset at 04:00 ART, then the final `npm run demo-video -- --replay` and F16.9. F16.3's desktop capture needs a human (`npm run rec:desktop`).
+
 ## Status
 
 | Feature | Priority | Stories |
