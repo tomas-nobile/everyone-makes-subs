@@ -79,6 +79,9 @@ if (opt('vtt')) {
   fs.writeFileSync(vtt, toVtt(r.segments, lang === srcLang ? undefined : lang));
   fs.writeFileSync(`${out}.${lang}.srt`, toSrt(r.segments, lang === srcLang ? undefined : lang));
   fs.writeFileSync(`${out}.${lang}.txt`, toTxt(r.segments, lang === srcLang ? undefined : lang, talk.title));
+  // the run as a replay (F16.5): the demo video's split screen replays the clip with this run's real
+  // timing (no shift, no capped waits) when it is built with --replay
+  fs.writeFileSync(`${out}.transcript.json`, JSON.stringify({ lang: srcLang, title: talk.title, speaker: talk.speaker, durationSec: Math.ceil(r.durationSec + 2), events: r.events, glossary }, null, 1));
   console.log(`[clip] ${r.segments.length} segments · translation p50 ${[...r.mtMs].sort((a, b) => a - b)[Math.floor(r.mtMs.length / 2)] ?? '?'} ms`);
 }
 

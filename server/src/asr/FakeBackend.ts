@@ -30,7 +30,7 @@ import type { Worker } from '../stage/StageWorker.js';
 export type TranscriptEvent =
   | { t: number; type: 'interim'; text: string }
   | { t: number; type: 'final'; text: string; src: string; t0: number; t1: number;
-      kind: SegmentKind; tr: Record<string, string | null>; mtMs?: number };
+      kind: SegmentKind; tr: Record<string, string | null>; mtMs?: number; lag?: number; u?: number };
 
 export interface Transcript {
   lang: string;
@@ -123,9 +123,10 @@ export class FakeBackend implements Worker {
         this.at(ev.t, () => {
           const seq = this.nextSeq();
           this.stats.sentSec = (Date.now() - this.startedAt) / 1000;
-          const lag = Math.max(0.6, Math.round((ev.t - ev.t1 + 0.6) * 100) / 100);   // ≥ the ASR latency the live metric does not see
+          // a recorded run carries its real pause → caption `lag` (F17.6); the hand-made samples estimate it
+          const lag = ev.lag ?? Math.max(0.6, Math.round((ev.t - ev.t1 + 0.6) * 100) / 100);
           const stamp = () => (BENCH ? { at: Date.now() } : {});   // F17.1: delivery (publish → receive) is measurable in fake mode too
-          this.bus.publish({ type: 'segment', seq, src: ev.src, text: ev.text, t0: ev.t0 + offset, t1: ev.t1 + offset, kind: ev.kind, lag, ...stamp() });
+          this.bus.publish({ type: 'segment', seq, src: ev.src, text: ev.text, t0: ev.t0 + offset, t1: ev.t1 + offset, kind: ev.kind, lag, ...(ev.u ? { u: ev.u } : {}), ...stamp() });
           const mtMs = ev.mtMs ?? 600;
           this.at(mtMs / 1000, () => this.bus.publish({ type: 'tr', seq, tr: ev.tr, ms: mtMs, ...stamp() }));
         });

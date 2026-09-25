@@ -100,7 +100,7 @@ export function runFile(opts: FileRunOptions): Promise<FileRunResult> {
       for (const s of segs) {
         events.push({
           t: publishedAt.get(s.seq) ?? 0, type: 'final', text: s.text, src: s.src || talk.lang || '', t0: s.t0, t1: s.t1,
-          kind: s.kind as SegmentKind, tr: s.tr, mtMs: s.ms.mt,
+          kind: s.kind as SegmentKind, tr: s.tr, mtMs: s.ms.mt, ...(s.ms.asr ? { lag: s.ms.asr / 1000 } : {}), ...(s.u ? { u: s.u } : {}),
         });
       }
       events.sort((a, b) => a.t - b.t);

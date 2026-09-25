@@ -23,6 +23,9 @@
     "clip": "tsx scripts/subtitle-clip.ts",
     "load": "tsx scripts/load-sse.ts",
     "bench:latency": "tsx scripts/bench-latency.ts",
+    "cost": "tsx scripts/measure-cost.ts",
+    "ab": "tsx scripts/ab-glossary.ts",
+    "rec:desktop": "tsx scripts/rec-desktop.ts",
     "demo-video": "tsx scripts/demo-video.ts"
   },
   "dependencies": {

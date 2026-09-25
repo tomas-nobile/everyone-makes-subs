@@ -1,0 +1,21 @@
+{
+  "asOf": "2026-09-24",
+  "sources": {
+    "gemini": "https://ai.google.dev/gemini-api/docs/pricing",
+    "openai": "https://openai.com/api/pricing/"
+  },
+  "listPrices": {
+    "gemini-3.5-transcribe-live": { "usdPerMin": 0.009, "note": "Google's blended effective rate: $0.005/min audio in + $0.004/min text out ($3.50 / $21.00 per 1M tokens)" },
+    "gemini-3.5-flash-lite": { "usdPerMTokensIn": 0.3, "usdPerMTokensOut": 2.5 },
+    "gemini-3.5-live-translate-preview": { "usdPerMin": 0.0368, "note": "audio in $0.0053/min + audio out $0.0315/min; one session per target language" },
+    "openai-gpt-realtime-translate": { "usdPerMin": 0.034, "note": "one session per target language" }
+  },
+  "estimateAssumptions": "60 min of audio per room-hour; ~720 translation calls per hour (one every ~5 s) with ~800 input tokens (prompt, glossary, context) and ~30 output tokens per language; every language in the same call, so the input is paid once",
+  "perRoomHour": {
+    "ems": { "label": "Everyone Makes Subs (this pipeline)", "es": 0.77, "esPt": 0.82, "measured": false },
+    "liveTranslate": { "label": "Gemini Live Translate", "es": 2.21, "esPt": 4.42 },
+    "openai": { "label": "OpenAI gpt-realtime-translate", "es": 2.04, "esPt": 4.08 }
+  },
+  "nerdearlaDay": { "rooms": 10, "hours": 9, "roomHours": 90 },
+  "audienceLine": "The audience adds no cost: 10 or 10,000 viewers cost the same."
+}

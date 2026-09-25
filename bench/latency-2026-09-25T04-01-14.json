@@ -1,0 +1,256 @@
+{
+ "at": "2026-09-25T04:03:47.952Z",
+ "file": "samples\\en.mp3",
+ "lang": "en",
+ "runCount": 1,
+ "fake": false,
+ "machine": "AMD Ryzen 5 3600 6-Core Processor · win32 · node v25.2.1",
+ "env": {
+  "FORCE_COMMIT_MS": "4500",
+  "KEEP_ALIVE": "0",
+  "SESSION_HARD_CUT_SEC": "580",
+  "SESSION_ROTATE_SEC": "510",
+  "TRANSCRIBE_MODEL": "gemini-3.5-transcribe-live",
+  "TRANSLATE_FALLBACK_MODEL": "gemini-3.1-flash-lite",
+  "TRANSLATE_MODEL": "gemini-3.5-flash-lite",
+  "TRANSLATE_STREAM": "0",
+  "VAD_END_MS": "500"
+ },
+ "summary": {
+  "columns": [
+   {
+    "name": "pause → original",
+    "p50": null,
+    "p95": null,
+    "max": null,
+    "n": 0
+   },
+   {
+    "name": "pause → Spanish",
+    "p50": null,
+    "p95": null,
+    "max": null,
+    "n": 0
+   },
+   {
+    "name": "heard → original",
+    "p50": 1821,
+    "p95": 4400,
+    "max": 4400,
+    "n": 13
+   },
+   {
+    "name": "heard → Spanish",
+    "p50": 8074,
+    "p95": 31950,
+    "max": 31950,
+    "n": 13
+   },
+   {
+    "name": "translation (es)",
+    "p50": 5199,
+    "p95": 29685,
+    "max": 29685,
+    "n": 13
+   },
+   {
+    "name": "delivery",
+    "p50": 1,
+    "p95": 2,
+    "max": 2,
+    "n": 26
+   }
+  ],
+  "phrasesPerMin": 7.828181453231633,
+  "timeToFirstCaptionMs": [
+   27178
+  ],
+  "untranslated": 1,
+  "diff": {
+   "added": 3,
+   "removed": 221,
+   "words": 62,
+   "baselineWords": 280
+  }
+ },
+ "runs": [
+  {
+   "startAt": 1790308884566,
+   "ttfcMs": 27178,
+   "phrases": 13,
+   "audioSec": 99.64,
+   "text": "model. You'll get a very different answer.If you do that via API, you'll something likean answer saying, \"Hey, I don't have access to live information. I don't have access to the web or a live forecast, so I can't really do this for you.\"And that's kind of strange. What is what is the difference between ChatGPT, the the application or the website,"
+  }
+ ],
+ "phrases": [
+  {
+   "run": 1,
+   "seq": 1,
+   "text": "model. You'll get a",
+   "t0": 0.26,
+   "t1": 27.61,
+   "at": 1790308911742,
+   "heardAt": 1790308910308,
+   "recvAt": 1790308911744,
+   "trAt": 1790308921166,
+   "trRecvAt": 1790308921168,
+   "es": "modelo. Obtendrás un"
+  },
+  {
+   "run": 1,
+   "seq": 2,
+   "text": "very different answer.If you do that",
+   "t0": 27.61,
+   "t1": 43.42,
+   "at": 1790308927539,
+   "heardAt": 1790308924461,
+   "recvAt": 1790308927539,
+   "trAt": 1790308930246,
+   "trRecvAt": 1790308930247,
+   "es": "respuesta muy diferente. Si haces eso"
+  },
+  {
+   "run": 1,
+   "seq": 3,
+   "text": "via API, you'll something",
+   "t0": 43.42,
+   "t1": 51.73,
+   "at": 1790308935849,
+   "heardAt": 1790308934042,
+   "recvAt": 1790308935850,
+   "trAt": 1790308948648,
+   "trRecvAt": 1790308948649,
+   "es": "vía API, obtendrás algo"
+  },
+  {
+   "run": 1,
+   "seq": 4,
+   "text": "likean answer saying, \"Hey, I",
+   "t0": 51.73,
+   "t1": 62.61,
+   "at": 1790308946699,
+   "heardAt": 1790308944827,
+   "recvAt": 1790308946700,
+   "trAt": 1790308949475,
+   "trRecvAt": 1790308949477,
+   "es": "como una respuesta diciendo, \"Oye, yo"
+  },
+  {
+   "run": 1,
+   "seq": 5,
+   "text": "don't have access to live information.",
+   "t0": 62.61,
+   "t1": 65.7,
+   "at": 1790308949792,
+   "heardAt": 1790308948632,
+   "recvAt": 1790308949792,
+   "trAt": 1790308951603,
+   "trRecvAt": 1790308951604,
+   "es": "no tengo acceso a información en tiempo real."
+  },
+  {
+   "run": 1,
+   "seq": 6,
+   "text": "I don't have access to",
+   "t0": 65.7,
+   "t1": 72.22,
+   "at": 1790308956316,
+   "heardAt": 1790308953864,
+   "recvAt": 1790308956317,
+   "trAt": 1790308958424,
+   "trRecvAt": 1790308958425,
+   "es": "No tengo acceso a"
+  },
+  {
+   "run": 1,
+   "seq": 7,
+   "text": "the web or a",
+   "t0": 72.22,
+   "t1": 86.01,
+   "at": 1790308970107,
+   "heardAt": 1790308967842,
+   "recvAt": 1790308970108,
+   "trAt": 1790308999792,
+   "trRecvAt": 1790308999792,
+   "es": "la web o un"
+  },
+  {
+   "run": 1,
+   "seq": 8,
+   "text": "live forecast, so I can't",
+   "t0": 86.01,
+   "t1": 93.42,
+   "at": 1790308977609,
+   "heardAt": 1790308976251,
+   "recvAt": 1790308977610,
+   "trAt": 1790308978937,
+   "trRecvAt": 1790308978938,
+   "es": "pronóstico en vivo, así que no puedo"
+  },
+  {
+   "run": 1,
+   "seq": 9,
+   "text": "really do this for",
+   "t0": 93.42,
+   "t1": 99.9,
+   "at": 1790308984274,
+   "heardAt": 1790308979875,
+   "recvAt": 1790308984275,
+   "trAt": 1790308987948,
+   "trRecvAt": 1790308987949,
+   "es": "realmente hacer esto para"
+  },
+  {
+   "run": 1,
+   "seq": 10,
+   "text": "you.\"And that's kind of",
+   "t0": 99.9,
+   "t1": 99.9,
+   "at": 1790308991900,
+   "heardAt": 1790308990140,
+   "recvAt": 1790308991901,
+   "trAt": 1790309018853,
+   "trRecvAt": 1790309018853,
+   "es": null
+  },
+  {
+   "run": 1,
+   "seq": 11,
+   "text": "strange. What is what is the difference",
+   "t0": 99.9,
+   "t1": 99.9,
+   "at": 1790308996515,
+   "heardAt": 1790308994757,
+   "recvAt": 1790308996515,
+   "trAt": 1790309009194,
+   "trRecvAt": 1790309009195,
+   "es": "extraño. ¿Cuál es cuál es la diferencia"
+  },
+  {
+   "run": 1,
+   "seq": 12,
+   "text": "between ChatGPT, the the",
+   "t0": 99.9,
+   "t1": 99.9,
+   "at": 1790309006527,
+   "heardAt": 1790309004205,
+   "recvAt": 1790309006527,
+   "trAt": 1790309011726,
+   "trRecvAt": 1790309011727,
+   "es": "entre ChatGPT, el el"
+  },
+  {
+   "run": 1,
+   "seq": 13,
+   "text": "application or the website,",
+   "t0": 99.9,
+   "t1": 99.9,
+   "at": 1790309015536,
+   "heardAt": 1790309013715,
+   "recvAt": 1790309015536,
+   "trAt": 1790309022471,
+   "trRecvAt": 1790309022472,
+   "es": "aplicación o el sitio web,"
+  }
+ ]
+}
