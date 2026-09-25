@@ -2,18 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import { useStageStream } from '../hooks/useStageStream';
 import { useEventInfo } from '../hooks/useEventInfo';
 import { detectLang, isLang, LANG_META, STRINGS, SUPPORTED_LANGS, subLabel, type Lang } from '../i18n';
-import { maskLive } from '../lib/captionText';
+import { formatTime, maskLive } from '../lib/captionText';
 import { readPref, writePref } from '../lib/prefs';
 import type { Segment, Talk } from '../../../shared/contract';
 
 type AttendeeState = 'live' | 'paused' | 'no_signal' | 'break' | 'ended' | 'reconnecting';
-
-function formatTime(iso: string | undefined): string {
-  if (!iso) return '';
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-}
 
 interface PhonePrefs {
   size: number;

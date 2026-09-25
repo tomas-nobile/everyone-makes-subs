@@ -14,3 +14,11 @@ export function maskLive(text: string): { allMasked: true; text: string } | { al
   if (words.length < 3) return { allMasked: true, text };
   return { allMasked: false, stable: words.slice(0, -1).join(' ') };
 }
+
+/** "HH:MM" in the viewer's own timezone, for "back at HH:MM" break messages. */
+export function formatTime(iso: string | undefined): string {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}

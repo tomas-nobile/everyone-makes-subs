@@ -42,7 +42,7 @@ F13.2 → F10.2 → F10.3 → F11.4 → F14.3 → F14.2 → F12.2 → F07.6 → 
 | [F09 · Production dashboard](../specs/F09-dashboard.md) | P1 | [ ] .1 · [ ] .2 · [ ] .3 · [ ] .4 · [ ] .5 |
 | [F10 · Talks, schedule and vocabulary](../specs/F10-talks-vocabulary.md) | P1/P2 | [ ] .1 · [ ] .2 · [ ] .3 · [ ] .4 |
 | [F11 · First-run setup](../specs/F11-first-run-setup.md) | P1/P2 | [ ] .1 · [ ] .2 · [ ] .3 · [ ] .4 |
-| [F12 · Room screen and overlay](../specs/F12-tv-overlay.md) | P1/P2 | [ ] .1 · [ ] .2 |
+| [F12 · Room screen and overlay](../specs/F12-tv-overlay.md) | P1/P2 | [x] .1 · [ ] .2 |
 | [F13 · Export and summary](../specs/F13-export-summary.md) | P1/P2 | [ ] .1 · [ ] .2 |
 | [F14 · Packaging](../specs/F14-packaging.md) | P1/P2 | [ ] .1 · [ ] .2 · [ ] .3 |
 | [F15 · Submission](../specs/F15-submission.md) | P0 | [ ] .1 · [ ] .2 · [ ] .3 |

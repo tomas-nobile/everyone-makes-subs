@@ -6,7 +6,7 @@
 
 ## Stories
 
-### [ ] F12.1 · TV mode
+### [x] F12.1 · TV mode
 As a room, I want a screen with giant captions and a QR so people can take them on their phones.
 
 - `/s/:id/tv?lang=&qr=1`: black background, small header (stage, talk and speaker), 2 giant lines at the bottom (the upper one gray, the current one white; in the original language, plus the live line).
