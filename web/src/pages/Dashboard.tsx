@@ -2,6 +2,32 @@ import { useState } from 'react';
 import { useAdminMetrics } from '../hooks/useAdminMetrics';
 import { StageCard } from '../components/StageCard';
 import { Qr } from '../components/Qr';
+import { api } from '../lib/api';
+import type { Alert } from '../../../shared/contract';
+
+function AlertRow({ alert, onFix, onSwitchNow, onSnooze }: { alert: Alert; onFix: (stageId: string) => void; onSwitchNow: () => void; onSnooze: () => void }) {
+  const isSwitch = alert.kind === 'talk_switch';
+  return (
+    <div className={`alert ${isSwitch ? 'info' : 'bad'}`}>
+      <span className="grow">{alert.message}</span>
+      {alert.kind === 'no_audio' && alert.stageId && (
+        <button className="btn sm" onClick={() => onFix(alert.stageId!)}>
+          How to fix it
+        </button>
+      )}
+      {isSwitch && (
+        <>
+          <button className="btn sm primary" onClick={onSwitchNow}>
+            Switch now
+          </button>
+          <button className="btn sm ghost" onClick={onSnooze}>
+            Wait 5 min
+          </button>
+        </>
+      )}
+    </div>
+  );
+}
 
 /** The authed `/admin` body: header, alerts, and one card per stage (F09.2/.3). */
 export function Dashboard() {
@@ -59,6 +85,20 @@ export function Dashboard() {
             Technical details
           </label>
         </div>
+
+        {metrics.alerts.length > 0 && (
+          <div className="alerts">
+            {metrics.alerts.map((a) => (
+              <AlertRow
+                key={a.id}
+                alert={a}
+                onFix={(stageId) => setSelected(stageId)}
+                onSwitchNow={() => a.stageId && api.post(`/api/stages/${a.stageId}/next-talk`).catch(() => {})}
+                onSnooze={() => api.post(`/api/alerts/${a.id}/snooze`).catch(() => {})}
+              />
+            ))}
+          </div>
+        )}
 
         <div className="grid">
           {metrics.stages.map((m) => (
