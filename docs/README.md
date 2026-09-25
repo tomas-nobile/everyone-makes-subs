@@ -37,7 +37,7 @@ F13.2 → F10.2 → F10.3 → F11.4 → F14.3 → F14.2 → F12.2 → F07.6 → 
 | [F04 · Segmentation and translation](../specs/F04-segmentation-translation.md) | P0 | [ ] .1 · [ ] .2 · [ ] .3 · [ ] .4 |
 | [F05 · Parallel stages and broadcast](../specs/F05-stages-broadcast.md) | P0 | [ ] .1 · [ ] .2 · [ ] .3 |
 | [F06 · Sessions that don't drop](../specs/F06-resilient-sessions.md) | P1 | [ ] .1 · [ ] .2 · [ ] .3 |
-| [F07 · Attendee view](../specs/F07-attendee-view.md) | P0/P1 | [ ] .1 · [ ] .2 · [ ] .3 · [ ] .4 · [ ] .5 · [ ] .6 |
+| [F07 · Attendee view](../specs/F07-attendee-view.md) | P0/P1 | [x] .1 · [ ] .2 · [ ] .3 · [ ] .4 · [ ] .5 · [ ] .6 |
 | [F08 · Room station](../specs/F08-room-station.md) | P1 | [ ] .1 · [ ] .2 · [ ] .3 |
 | [F09 · Production dashboard](../specs/F09-dashboard.md) | P1 | [ ] .1 · [ ] .2 · [ ] .3 · [ ] .4 · [ ] .5 |
 | [F10 · Talks, schedule and vocabulary](../specs/F10-talks-vocabulary.md) | P1/P2 | [ ] .1 · [ ] .2 · [ ] .3 · [ ] .4 |
