@@ -16,7 +16,7 @@ As a room, I want a screen with giant captions and a QR so people can take them 
 
 **Verify:** at 1920×1080 it looks like the prototype.
 
-### [ ] F12.2 · OBS overlay
+### [x] F12.2 · OBS overlay
 As the streaming team, I want to paste a URL into OBS and get captions over the video.
 
 - `/s/:id/overlay?lang=&lines=&size=&pos=&box=`: transparent background, text with shadow or a dark box, ~42 characters per line.
