@@ -1,9 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useStageStream } from '../hooks/useStageStream';
 import { useEventInfo } from '../hooks/useEventInfo';
-import { detectLang, LANG_META, STRINGS, subLabel, type Lang } from '../i18n';
+import { detectLang, isLang, LANG_META, STRINGS, SUPPORTED_LANGS, subLabel, type Lang } from '../i18n';
 import { maskLive } from '../lib/captionText';
+import { readPref, writePref } from '../lib/prefs';
 import type { Segment } from '../../../shared/contract';
+
+interface PhonePrefs {
+  size: number;
+  bilingual: boolean;
+  liveOrig: boolean;
+  wakeScreen: boolean;
+  stream: boolean;
+  delay: number;
+}
+const DEFAULT_PREFS: PhonePrefs = { size: 26, bilingual: false, liveOrig: true, wakeScreen: true, stream: false, delay: 8 };
 
 const BAR_COUNT = 5;
 
@@ -112,15 +123,29 @@ function useWakeLock(enabled: boolean) {
 export function Phone({ stageId }: { stageId: string }) {
   const params = new URLSearchParams(location.search);
   const explicitLang = params.get('lang');
-  const [lang, setLang] = useState<Lang>(() => detectLang(explicitLang));
-  const [showToast, setShowToast] = useState(!explicitLang);
+  const storedLang = readPref<Lang | null>(`phone.${stageId}.lang`, null);
+  const [lang, setLangState] = useState<Lang>(() => (isLang(explicitLang) ? explicitLang : (storedLang ?? detectLang(null))));
+  const [showToast, setShowToast] = useState(!explicitLang && !storedLang);
+  const [prefs, setPrefsState] = useState<PhonePrefs>(() => readPref(`phone.${stageId}.prefs`, DEFAULT_PREFS));
+  const [sheet, setSheet] = useState<'lang' | 'aa' | 'sum' | null>(null);
+
+  const setLang = (l: Lang) => {
+    setLangState(l);
+    writePref(`phone.${stageId}.lang`, l);
+  };
+  const setPrefs = (patch: Partial<PhonePrefs>) =>
+    setPrefsState((prev) => {
+      const next = { ...prev, ...patch };
+      writePref(`phone.${stageId}.prefs`, next);
+      return next;
+    });
 
   const { talk, state, segments, live, level, lastLag } = useStageStream(stageId);
   const { data: event } = useEventInfo();
   const stage = event?.stages.find((s) => s.id === stageId);
   const stageName = stage?.name ?? stageId;
 
-  useWakeLock(true);
+  useWakeLock(prefs.wakeScreen);
 
   useEffect(() => {
     if (!showToast) return;
@@ -132,6 +157,9 @@ export function Phone({ stageId }: { stageId: string }) {
   const isOriginal = lang === srcLang || (!srcLang && lang === 'es');
   const T = STRINGS[lang];
   const lag = lastLag;
+  const langsAvailable = [...new Set([srcLang, ...(stage?.targetLangs ?? [])])].filter(isLang) as Lang[];
+  const langOptions = langsAvailable.length ? langsAvailable : SUPPORTED_LANGS;
+  const srcLangName = (srcLang && isLang(srcLang) ? LANG_META[srcLang].name : srcLang) ?? '—';
 
   const statusWord = state === 'no_signal' ? T.noAudio : state === 'paused' ? T.paused : state === 'idle' ? T.ended : T.live;
 
@@ -155,14 +183,18 @@ export function Phone({ stageId }: { stageId: string }) {
             <div className="ph-speaker">{talk?.speaker ?? ''}</div>
           </div>
           <div className="ph-row">
-            <button className="pill-btn" aria-haspopup="dialog">
+            <button className="pill-btn" aria-haspopup="dialog" onClick={() => setSheet('lang')}>
               <span>{LANG_META[lang].name}</span>
               <span className="sub">{subLabel(lang, isOriginal)}</span> ▾
+            </button>
+            <span style={{ flex: 1 }} />
+            <button className="icon-btn" aria-label={T.aaSheetTitle} aria-haspopup="dialog" onClick={() => setSheet('aa')}>
+              Aa
             </button>
           </div>
         </div>
 
-        <div className="ph-body" id="phBody">
+        <div className="ph-body" id="phBody" style={{ fontSize: prefs.size }}>
           <div aria-live="polite" aria-relevant="additions">
             {segments.slice(-30).map((s, idx, list) => (
               <Caption
@@ -171,24 +203,122 @@ export function Phone({ stageId }: { stageId: string }) {
                 lang={lang}
                 isOriginal={isOriginal}
                 recent={idx >= list.length - 2}
-                bilingual={false}
+                bilingual={prefs.bilingual}
                 sound={LANG_META[lang].sound}
               />
             ))}
           </div>
-          {state === 'live' && <LiveLine lang={lang} isOriginal={isOriginal} live={live} level={level} showLiveOrig={true} />}
+          {state === 'live' && <LiveLine lang={lang} isOriginal={isOriginal} live={live} level={level} showLiveOrig={prefs.liveOrig} />}
         </div>
 
         {showToast && (
           <div className="toast" role="status">
             <span dangerouslySetInnerHTML={{ __html: T.langToast(`<b>${LANG_META[lang].name}</b>`) }} />
-            <button onClick={() => setShowToast(false)}>{T.langToastChange}</button>
+            <button
+              onClick={() => {
+                setShowToast(false);
+                setSheet('lang');
+              }}
+            >
+              {T.langToastChange}
+            </button>
           </div>
         )}
 
         <div className="ph-bottom">
-          <button className="pill-btn" aria-haspopup="dialog">
+          <button className="pill-btn" aria-haspopup="dialog" onClick={() => setSheet('sum')}>
             {T.whatDidIMiss}
+          </button>
+        </div>
+
+        <div className={`scrim${sheet ? ' show' : ''}`} onClick={() => setSheet(null)} />
+
+        <div className={`sheet${sheet === 'lang' ? ' show' : ''}`} role="dialog" aria-label={T.langSheetTitle}>
+          <div className="grab" />
+          <h3>{T.langSheetTitle}</h3>
+          <div>
+            {langOptions.map((l) => (
+              <button
+                key={l}
+                className="opt"
+                role="radio"
+                aria-checked={lang === l}
+                onClick={() => {
+                  setLang(l);
+                  setSheet(null);
+                }}
+              >
+                <span>
+                  <span className="t">{LANG_META[l].name}</span>
+                  <br />
+                  <span className="s">{subLabel(l, l === srcLang)}</span>
+                </span>
+                <span className="check">✓</span>
+              </button>
+            ))}
+          </div>
+          <p className="help">{T.langSheetHelp(srcLangName)}</p>
+        </div>
+
+        <div className={`sheet${sheet === 'aa' ? ' show' : ''}`} role="dialog" aria-label={T.aaSheetTitle}>
+          <div className="grab" />
+          <h3>{T.aaSheetTitle}</h3>
+          <div className="set-row">
+            <div className="lbl">{T.textSize}</div>
+            <span style={{ color: 'var(--muted)', fontSize: 14 }}>{prefs.size}</span>
+          </div>
+          <input
+            type="range"
+            min={18}
+            max={44}
+            value={prefs.size}
+            aria-label={T.textSize}
+            onChange={(e) => setPrefs({ size: +e.target.value })}
+          />
+          <div className="set-row">
+            <label className="lbl" htmlFor="biChk">
+              {T.showOriginalBelow}
+              <small>{T.showOriginalBelowHint}</small>
+            </label>
+            <input id="biChk" type="checkbox" className="switch" checked={prefs.bilingual} onChange={(e) => setPrefs({ bilingual: e.target.checked })} />
+          </div>
+          <div className="set-row">
+            <label className="lbl" htmlFor="liveOrigChk">
+              {T.showLiveOriginal}
+              <small>{T.showLiveOriginalHint}</small>
+            </label>
+            <input id="liveOrigChk" type="checkbox" className="switch" checked={prefs.liveOrig} onChange={(e) => setPrefs({ liveOrig: e.target.checked })} />
+          </div>
+          <div className="set-row">
+            <label className="lbl" htmlFor="streamChk">
+              {T.watchingStream}
+              <small>{T.watchingStreamHint}</small>
+            </label>
+            <input id="streamChk" type="checkbox" className="switch" checked={prefs.stream} onChange={(e) => setPrefs({ stream: e.target.checked })} />
+          </div>
+          {prefs.stream && (
+            <div style={{ padding: '4px 0 10px' }}>
+              <div className="set-row" style={{ border: 0, paddingBottom: 4 }}>
+                <div className="lbl">{T.delay}</div>
+                <span style={{ color: 'var(--muted)', fontSize: 14 }}>{prefs.delay} s</span>
+              </div>
+              <input type="range" min={0} max={30} value={prefs.delay} aria-label={T.delay} onChange={(e) => setPrefs({ delay: +e.target.value })} />
+            </div>
+          )}
+          <div className="set-row">
+            <label className="lbl" htmlFor="wakeChk">
+              {T.keepScreenOn}
+            </label>
+            <input id="wakeChk" type="checkbox" className="switch" checked={prefs.wakeScreen} onChange={(e) => setPrefs({ wakeScreen: e.target.checked })} />
+          </div>
+        </div>
+
+        <div className={`sheet${sheet === 'sum' ? ' show' : ''}`} role="dialog" aria-label={T.summaryTitle}>
+          <div className="grab" />
+          <h3>{T.summaryTitle}</h3>
+          <p className="help">{T.summaryEmpty}</p>
+          <button className="btn" style={{ width: '100%' }} onClick={() => setSheet(null)}>
+            {T.summaryClose}
           </button>
         </div>
       </div>

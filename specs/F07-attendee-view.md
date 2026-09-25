@@ -29,7 +29,7 @@ As an attendee, I want to read the latest phrase large and know the system is al
 
 **Verify:** switch between es and en with the fake and see both behaviors.
 
-### [ ] F07.3 · Language and reading settings
+### [x] F07.3 · Language and reading settings
 As an attendee, I want to adjust how I read without losing the thread.
 
 - Language sheet: each option in its own language, labeled "original" or "translation". Switching doesn't reconnect (the SSE carries every language).
