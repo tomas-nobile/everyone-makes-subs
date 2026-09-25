@@ -231,15 +231,15 @@ export function StageDrawer({
               </div>
               <div className="share-row">
                 <div className="qr">
-                  <Qr data={`${publicUrl}/s/${stage.id}/tv?lang=${talk?.lang ?? 'es'}&qr=1`} />
+                  <Qr data={`${publicUrl}/s/${stage.id}/tv?lang=es&qr=1`} />
                 </div>
                 <div className="t">
                   <b>Room screen</b>
                   <small>
-                    /s/{stage.id}/tv?lang={talk?.lang ?? 'es'}&qr=1
+                    /s/{stage.id}/tv?lang=es&qr=1
                   </small>
                 </div>
-                <button className="btn sm" onClick={() => copy('tv', `${publicUrl}/s/${stage.id}/tv?lang=${talk?.lang ?? 'es'}&qr=1`)}>
+                <button className="btn sm" onClick={() => copy('tv', `${publicUrl}/s/${stage.id}/tv?lang=es&qr=1`)}>
                   {copiedKey === 'tv' ? 'Copied ✓' : 'Copy'}
                 </button>
               </div>
@@ -257,7 +257,7 @@ export function StageDrawer({
               </div>
               {showOverlayConfig && (
                 <div style={{ marginTop: 12 }}>
-                  <OverlayConfigurator publicUrl={publicUrl} stageId={stage.id} defaultLang={talk?.lang ?? 'es'} />
+                  <OverlayConfigurator publicUrl={publicUrl} stageId={stage.id} defaultLang="es" />
                 </div>
               )}
               <p className="help">The address is fixed. If internet access goes down, you'll see an alert at the top of the dashboard.</p>

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useStageStream } from '../hooks/useStageStream';
-import { isLang } from '../i18n';
+import { DEFAULT_LANG, isLang, isOriginalLang } from '../i18n';
 import { tail } from '../lib/captionText';
 
 /** `/s/:id/overlay?lang=&lines=&size=&pos=&box=`: transparent OBS browser-source captions. */
@@ -15,8 +15,8 @@ export function Overlay({ stageId }: { stageId: string }) {
 
   const params = new URLSearchParams(location.search);
   const { talk, segments } = useStageStream(stageId);
-  const lang = params.get('lang') ?? talk?.lang ?? 'es';
-  const isOriginal = lang === talk?.lang;
+  const lang = params.get('lang') ?? DEFAULT_LANG;
+  const isOriginal = isOriginalLang(lang, talk?.lang);
   const lines = Math.min(3, Math.max(1, Number(params.get('lines')) || 2));
   const size = Number(params.get('size')) || 48;
   const pos = params.get('pos') === 'top' ? 'top' : 'bottom';

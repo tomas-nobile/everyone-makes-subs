@@ -35,6 +35,11 @@ export interface StageRuntime {
 const SUMMARY_EVERY_MS = 60_000;
 const AUTO_SWITCH_AFTER_MS = 5 * 60_000;
 
+/** Every stage translates into Spanish (English talk → Spanish captions), whatever the form or TARGET_LANGS say. */
+export function withSpanish(langs: string[]): string[] {
+  return ['es', ...langs.filter((l) => l !== 'es')];
+}
+
 /** Creates/starts/stops stage workers, persists stages.json + talks.json, runs the schedule. */
 export class StageManager {
   private stages = new Map<string, StageRuntime>();
@@ -58,7 +63,7 @@ export class StageManager {
     try { recs = JSON.parse(fs.readFileSync(this.file('stages.json'), 'utf8')); } catch { /* first run */ }
     try { this.talks = JSON.parse(fs.readFileSync(this.file('talks.json'), 'utf8')); } catch { this.talks = []; }
     for (const r of recs) {
-      const rt = this.makeRuntime({ id: r.id, name: r.name, source: r.source, targetLangs: r.targetLangs, state: 'idle', talkId: r.talkId, viewers: 0 }, r.stationKey);
+      const rt = this.makeRuntime({ id: r.id, name: r.name, source: r.source, targetLangs: withSpanish(r.targetLangs), state: 'idle', talkId: r.talkId, viewers: 0 }, r.stationKey);
       if (r.running) this.start(r.id);
     }
     this.ticker = setInterval(() => this.tick(), 1000);
@@ -124,7 +129,7 @@ export class StageManager {
   create(input: StageInput): StageRuntime {
     const id = uniqueId(slug(input.name) || 'stage', (x) => this.stages.has(x));
     const rt = this.makeRuntime({
-      id, name: input.name.trim(), source: input.source, targetLangs: input.targetLangs?.length ? input.targetLangs : this.cfg.targetLangs,
+      id, name: input.name.trim(), source: input.source, targetLangs: withSpanish(input.targetLangs?.length ? input.targetLangs : this.cfg.targetLangs),
       state: 'idle', viewers: 0,
     }, crypto.randomBytes(9).toString('base64url'));
     this.save();
@@ -138,7 +143,7 @@ export class StageManager {
     const restart = rt.running && patch.source && JSON.stringify(patch.source) !== JSON.stringify(rt.stage.source);
     if (patch.name?.trim()) rt.stage.name = patch.name.trim();
     if (patch.source) rt.stage.source = patch.source;
-    if (patch.targetLangs?.length) rt.stage.targetLangs = patch.targetLangs;
+    if (patch.targetLangs?.length) rt.stage.targetLangs = withSpanish(patch.targetLangs);
     this.save();
     if (restart) { this.stop(id); this.start(id); }
     return rt;

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useStageStream } from '../hooks/useStageStream';
 import { useEventInfo } from '../hooks/useEventInfo';
-import { detectLang, isLang, LANG_META, STRINGS, SUPPORTED_LANGS, subLabel, type Lang } from '../i18n';
+import { detectLang, isLang, isOriginalLang, LANG_META, STRINGS, SUPPORTED_LANGS, subLabel, type Lang } from '../i18n';
 import { formatTime, maskLive } from '../lib/captionText';
 import { readPref, writePref } from '../lib/prefs';
 import { useWakeLock } from '../hooks/useWakeLock';
@@ -256,7 +256,7 @@ export function Phone({ stageId }: { stageId: string }) {
   };
 
   const srcLang = talk?.lang;
-  const isOriginal = lang === srcLang || (!srcLang && lang === 'es');
+  const isOriginal = isOriginalLang(lang, srcLang);
   const T = STRINGS[lang];
   const lag = lastLag;
   const langsAvailable = [...new Set([srcLang, ...(stage?.targetLangs ?? [])])].filter(isLang) as Lang[];

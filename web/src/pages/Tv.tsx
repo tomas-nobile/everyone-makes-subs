@@ -2,7 +2,7 @@ import { useStageStream } from '../hooks/useStageStream';
 import { useEventInfo } from '../hooks/useEventInfo';
 import { Qr } from '../components/Qr';
 import { formatTime, maskLive, tail } from '../lib/captionText';
-import { isLang, STRINGS } from '../i18n';
+import { DEFAULT_LANG, isLang, isOriginalLang, STRINGS } from '../i18n';
 
 const LINE_BUDGET = 60;
 
@@ -14,11 +14,11 @@ export function Tv({ stageId }: { stageId: string }) {
   const { data: event } = useEventInfo();
   const stage = event?.stages.find((s) => s.id === stageId);
   const stageName = stage?.name ?? stageId;
-  const lang = params.get('lang') ?? talk?.lang ?? 'es';
-  const isOriginal = lang === talk?.lang;
+  const lang = params.get('lang') ?? DEFAULT_LANG;
+  const isOriginal = isOriginalLang(lang, talk?.lang);
 
   const base = event?.publicUrl || location.origin;
-  const T = STRINGS[isLang(lang) ? lang : 'en'];
+  const T = STRINGS[isLang(lang) ? lang : DEFAULT_LANG];
   const isBreak = !!next && (state === 'idle' || !talk);
 
   const confirmed = segments.filter((s) => s.kind === 'speech' && (isOriginal || (isLang(lang) && s.tr[lang])));

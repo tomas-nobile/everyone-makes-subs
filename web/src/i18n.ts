@@ -3,6 +3,8 @@
 
 export type Lang = 'es' | 'en' | 'pt';
 export const SUPPORTED_LANGS: Lang[] = ['es', 'en', 'pt'];
+/** Room screen and overlay without `?lang=`: the Spanish translation (English talk → Spanish captions). */
+export const DEFAULT_LANG: Lang = 'es';
 
 export function isLang(v: string | null | undefined): v is Lang {
   return v === 'es' || v === 'en' || v === 'pt';
@@ -14,6 +16,15 @@ export function detectLang(queryLang: string | null, fallback: Lang = 'en'): Lan
   const nav = typeof navigator !== 'undefined' ? navigator.language.slice(0, 2).toLowerCase() : '';
   if (isLang(nav)) return nav;
   return fallback;
+}
+
+/**
+ * Whether `lang` is the talk's own language, so the raw transcript can be shown as is. An unknown
+ * talk language is never "original": the ASR detects it per phrase and the translator fills
+ * `tr[lang]` (with the original text itself when the phrase already is in `lang`).
+ */
+export function isOriginalLang(lang: string, talkLang: string | undefined): boolean {
+  return !!talkLang && lang === talkLang;
 }
 
 export interface LangMeta {
