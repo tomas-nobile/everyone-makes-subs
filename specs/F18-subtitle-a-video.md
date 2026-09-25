@@ -6,7 +6,9 @@ As an organizer, I want to upload a talk video (or paste a YouTube link) and get
 
 ## Stories
 
-### [ ] F18.1 · Video jobs (server)
+### [x] F18.1 · Video jobs (server)
+
+> **Shipped 2026-09-25.** Verified offline (fake job: 40 segments burned, progress reaches 1) and the UI end to end; the real-key run at 1× is the same `runFile` as `npm run clip`. The 2×/4× speed comparison is a `TODO` in `docs/decisions.md` (free-tier quota ran out); `JOB_SPEED` defaults to 1.
 As the operator, I want the server to turn a video into a subtitled one without the terminal.
 
 - `POST /api/jobs` (admin): raw upload like `/api/uploads`, or `{ url }` (YouTube via yt-dlp), plus `{ lang = 'es', srcLang?, title?, speaker?, abstract? }` → `{ id }`.
@@ -18,7 +20,7 @@ As the operator, I want the server to turn a video into a subtitled one without 
 
 **Verify:** a 2-minute English mp4 → `video.mp4` with Spanish subtitles; progress reaches 1.
 
-### [ ] F18.2 · "Subtitle a video" in the dashboard
+### [x] F18.2 · "Subtitle a video" in the dashboard
 As the operator, I want to do it from the dashboard.
 
 - Header button → modal: drop a file or paste a link, subtitle language (Spanish by default), optional title/abstract. Operator UI in English, like the rest.
@@ -26,7 +28,7 @@ As the operator, I want to do it from the dashboard.
 
 **Verify:** upload from the UI → the preview plays with Spanish subtitles → the downloads work.
 
-### [ ] F18.3 · Burned-in style (optional)
+### [x] F18.3 · Burned-in style (optional)
 As a viewer of the subtitled video, I want it to look like the room screen.
 
 - ffmpeg `force_style` matching the TV: white on a semi-transparent black box, 2 lines max, ~42 characters per line, Atkinson Hyperlegible / Segoe UI.
