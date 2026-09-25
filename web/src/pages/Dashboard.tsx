@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useAdminMetrics } from '../hooks/useAdminMetrics';
+import { useAdminStages } from '../hooks/useAdminStages';
 import { StageCard } from '../components/StageCard';
+import { StageDrawer } from '../components/StageDrawer';
 import { Qr } from '../components/Qr';
 import { api } from '../lib/api';
 import type { Alert } from '../../../shared/contract';
@@ -32,6 +34,7 @@ function AlertRow({ alert, onFix, onSwitchNow, onSnooze }: { alert: Alert; onFix
 /** The authed `/admin` body: header, alerts, and one card per stage (F09.2/.3). */
 export function Dashboard() {
   const { metrics } = useAdminMetrics(true);
+  const { stages: adminStages, refetch: refetchStages } = useAdminStages();
   const [techVisible, setTechVisible] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -106,8 +109,23 @@ export function Dashboard() {
           ))}
         </div>
 
-        {selected && <p className="muted" style={{ marginTop: 16 }}>Stage details panel: coming in F09.4.</p>}
       </div>
+
+      {selected &&
+        (() => {
+          const adminStage = adminStages.find((s) => s.id === selected);
+          const stageMetrics = metrics.stages.find((s) => s.id === selected);
+          if (!adminStage) return null;
+          return (
+            <StageDrawer
+              stage={adminStage}
+              metrics={stageMetrics}
+              publicUrl={metrics.publicUrl}
+              onClose={() => setSelected(null)}
+              onChanged={refetchStages}
+            />
+          );
+        })()}
 
       {printing && (
         <div id="printArea" className="admin" style={{ padding: 24 }}>

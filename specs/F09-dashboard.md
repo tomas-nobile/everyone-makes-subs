@@ -32,7 +32,7 @@ As an operator, I want problems to come with the button that fixes them.
 
 **Verify:** stop the source of a fake stage and watch the alert appear and disappear.
 
-### [ ] F09.4 · Stage details
+### [x] F09.4 · Stage details
 As an operator, I want everything about a stage in one place.
 
 - Side panel with tabs:
