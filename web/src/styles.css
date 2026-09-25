@@ -291,6 +291,13 @@ table.agenda td{border-bottom:1px solid #1d2025;padding:7px 6px;vertical-align:t
   .stage:has(.phone){padding:0}
   .stage:has(.phone) .notes{display:none}
 }
+@media print{
+  body *{visibility:hidden}
+  #printArea, #printArea *{visibility:visible}
+  #printArea{position:absolute;top:0;left:0;right:0;background:#fff;color:#000}
+  #printArea .card{border-color:#ccc}
+  .ems-no-print{display:none}
+}
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }

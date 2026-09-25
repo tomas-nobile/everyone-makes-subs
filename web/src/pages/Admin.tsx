@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api, ApiError } from '../lib/api';
+import { Dashboard } from './Dashboard';
 
 function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
   const [password, setPassword] = useState('');
@@ -74,12 +75,5 @@ export function Admin() {
   }
   if (!authed) return <LoginScreen onSuccess={() => setAuthed(true)} />;
 
-  return (
-    <div className="admin-page">
-      <div className="admin">
-        <h1>Dashboard</h1>
-        <p className="muted">Coming soon.</p>
-      </div>
-    </div>
-  );
+  return <Dashboard />;
 }
