@@ -3,7 +3,10 @@ import type { AgendaProposal, Glossary, Segment, TalkInput } from '../../../shar
 import { emptyGlossary } from '../../../shared/contract.js';
 import { parseAgendaText } from '../agenda/parse.js';
 import type { Config } from '../config.js';
-import { generateJson, withRetry } from '../gemini.js';
+import { generateJsonWithFallback } from '../gemini.js';
+
+/** AUX_MODEL first; the translation models when it is out of quota (free tier: 20 requests/day). */
+const auxModels = (cfg: Config) => [cfg.auxModel, cfg.translateModel, cfg.translateFallbackModel];
 
 // AUX_MODEL calls: glossary per talk, agenda parsing and the "What did I miss?" summary.
 // Each one has a fake twin (FAKE_BACKEND=1 or no key) so the whole flow works offline.
@@ -53,7 +56,7 @@ Return JSON:
 - preferred: required translations for ambiguous terms, as {term, es, en, pt}.
 - replacements: likely misrecognitions → correct spelling, as {from, to} (e.g. "cubernetes" → "Kubernetes", "open telemetri" → "OpenTelemetry").`;
   try {
-    const out = await withRetry(() => generateJson<{ asrVocabulary: string[]; doNotTranslate: string[]; preferred: Array<{ term: string; es?: string; en?: string; pt?: string }>; replacements: Array<{ from: string; to: string }> }>(cfg.geminiApiKey, cfg.auxModel, prompt, { schema: GLOSSARY_SCHEMA, temperature: 0.3 }));
+    const { value: out } = await generateJsonWithFallback<{ asrVocabulary: string[]; doNotTranslate: string[]; preferred: Array<{ term: string; es?: string; en?: string; pt?: string }>; replacements: Array<{ from: string; to: string }> }>(cfg.geminiApiKey, auxModels(cfg), prompt, { schema: GLOSSARY_SCHEMA, temperature: 0.3 });
     const g = emptyGlossary();
     g.asrVocabulary = [...new Set(out.asrVocabulary ?? [])].slice(0, 100);
     g.doNotTranslate = out.doNotTranslate ?? [];
@@ -99,7 +102,7 @@ Keep titles and names exactly as written. Room names as written (title case).
 SCHEDULE:
 ${text.slice(0, 30000)}`;
   try {
-    return await withRetry(() => generateJson<AgendaProposal>(cfg.geminiApiKey, cfg.auxModel, prompt, { schema: AGENDA_SCHEMA, temperature: 0.1 }));
+    return (await generateJsonWithFallback<AgendaProposal>(cfg.geminiApiKey, auxModels(cfg), prompt, { schema: AGENDA_SCHEMA, temperature: 0.1 })).value;
   } catch (err) {
     console.log(`[agenda] AUX model failed (${(err as Error).message}); using the offline parser`);
     return parseAgendaText(text);
@@ -119,10 +122,10 @@ export async function summarize(cfg: Config, title: string, segments: Segment[],
 Write the bullets in each of: ${langs.join(', ')}.
 TRANSCRIPT:
 ${transcript.slice(-12000)}`;
-  return withRetry(() => generateJson<Record<string, string[]>>(cfg.geminiApiKey, cfg.auxModel, prompt, { schema, temperature: 0.3 }));
+  return (await generateJsonWithFallback<Record<string, string[]>>(cfg.geminiApiKey, auxModels(cfg), prompt, { schema, temperature: 0.3 })).value;
 }
 
 /** Setup "Test" (F11.1): a minimal translation; throws with a plain-language code. */
 export async function testKey(cfg: Config, key: string): Promise<void> {
-  await generateJson(key, cfg.translateModel, 'Translate "hello" to Spanish. JSON: {"es":"..."}', { temperature: 0 });
+  await generateJsonWithFallback(key, [cfg.translateModel, cfg.translateFallbackModel], 'Translate "hello" to Spanish. JSON: {"es":"..."}', { temperature: 0 });
 }

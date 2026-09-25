@@ -1,708 +1,1483 @@
 {
  "lang": "en",
- "title": "Shipping LLM features on a budget",
- "speaker": "Sam Rivera",
- "durationSec": 54.6,
+ "title": "Model Context Protocol in Plain English",
+ "speaker": "Nate Barbettini",
+ "durationSec": 103,
  "events": [
   {
-   "t": 0.88,
+   "t": 1,
    "type": "interim",
-   "text": "Good morning"
+   "text": "model."
   },
   {
-   "t": 1.18,
+   "t": 1.27,
    "type": "interim",
-   "text": "Good morning, and"
+   "text": "model. You'll get a"
   },
   {
-   "t": 1.66,
+   "t": 1.7,
    "type": "interim",
-   "text": "Good morning, and welcome to"
+   "text": "model. You'll get a very different"
   },
   {
-   "t": 2.11,
-   "type": "interim",
-   "text": "Good morning, and welcome to room"
-  },
-  {
-   "t": 2.58,
-   "type": "interim",
-   "text": "Good morning, and welcome to room two"
-  },
-  {
-   "t": 2.88,
+   "t": 2.16,
    "type": "final",
-   "text": "Good morning, and welcome to room two.",
-   "t0": 0.6,
-   "t1": 2.58,
-   "kind": "speech",
+   "text": "model. You'll get a very different answer.",
    "src": "en",
+   "t0": 0.33,
+   "t1": 3.31,
+   "kind": "speech",
    "tr": {
-    "es": "Buenos días, y bienvenidos a la sala dos.",
-    "en": "Good morning, and welcome to room two.",
-    "pt": "Bom dia, e bem-vindos à sala dois."
+    "es": "modelo. Obtendrás una respuesta muy diferente.",
+    "en": "model. You'll get a very different answer.",
+    "pt": "modelo. Você obterá uma resposta muito diferente."
    },
-   "mtMs": 931
+   "mtMs": 2500
+  },
+  {
+   "t": 3.16,
+   "type": "interim",
+   "text": "If you"
+  },
+  {
+   "t": 3.67,
+   "type": "interim",
+   "text": "If you do that"
   },
   {
    "t": 4.09,
    "type": "interim",
-   "text": "I'm"
+   "text": "If you do that via API,"
   },
   {
-   "t": 4.46,
+   "t": 4.59,
    "type": "interim",
-   "text": "I'm going to"
+   "text": "If you do that via API, you'll"
   },
   {
-   "t": 4.85,
+   "t": 5.08,
    "type": "interim",
-   "text": "I'm going to show"
+   "text": "you'll"
   },
   {
-   "t": 5.28,
-   "type": "interim",
-   "text": "I'm going to show you"
-  },
-  {
-   "t": 5.7,
-   "type": "interim",
-   "text": "I'm going to show you how"
-  },
-  {
-   "t": 6.18,
-   "type": "interim",
-   "text": "I'm going to show you how we"
-  },
-  {
-   "t": 6.68,
-   "type": "interim",
-   "text": "I'm going to show you how we cut"
-  },
-  {
-   "t": 7.06,
-   "type": "interim",
-   "text": "I'm going to show you how we cut our"
-  },
-  {
-   "t": 7.56,
-   "type": "interim",
-   "text": "I'm going to show you how we cut our model"
-  },
-  {
-   "t": 7.85,
-   "type": "interim",
-   "text": "I'm going to show you how we cut our model bill"
-  },
-  {
-   "t": 8.33,
-   "type": "interim",
-   "text": "I'm going to show you how we cut our model bill by eighty"
-  },
-  {
-   "t": 8.77,
-   "type": "interim",
-   "text": "I'm going to show you how we cut our model bill by eighty percent"
-  },
-  {
-   "t": 9.07,
+   "t": 5.08,
    "type": "final",
-   "text": "I'm going to show you how we cut our model bill by eighty percent.",
-   "t0": 3.68,
-   "t1": 8.77,
-   "kind": "speech",
+   "text": "If you do that via API,",
    "src": "en",
+   "t0": 3.31,
+   "t1": 5.83,
+   "kind": "speech",
    "tr": {
-    "es": "Les voy a mostrar cómo recortamos nuestra factura de modelos en un ochenta por ciento.",
-    "en": "I'm going to show you how we cut our model bill by eighty percent.",
-    "pt": "Vou mostrar como cortamos nossa conta de modelos em oitenta por cento."
+    "es": "Si haces eso a través de la API,",
+    "en": "If you do that via API,",
+    "pt": "Se você fizer isso por meio da API,"
    },
-   "mtMs": 928
+   "mtMs": 1676
   },
   {
-   "t": 10.2,
+   "t": 5.57,
    "type": "interim",
-   "text": "The first"
+   "text": "you'll get something"
   },
   {
-   "t": 10.5,
+   "t": 6.03,
    "type": "interim",
-   "text": "The first trick"
+   "text": "you'll get something like"
   },
   {
-   "t": 10.96,
-   "type": "interim",
-   "text": "The first trick is"
-  },
-  {
-   "t": 11.39,
-   "type": "interim",
-   "text": "The first trick is embarrassingly"
-  },
-  {
-   "t": 11.77,
-   "type": "interim",
-   "text": "The first trick is embarrassingly simple:"
-  },
-  {
-   "t": 12.17,
-   "type": "interim",
-   "text": "The first trick is embarrassingly simple: cache"
-  },
-  {
-   "t": 12.51,
-   "type": "interim",
-   "text": "The first trick is embarrassingly simple: cache everything"
-  },
-  {
-   "t": 12.89,
-   "type": "interim",
-   "text": "The first trick is embarrassingly simple: cache everything you"
-  },
-  {
-   "t": 13.21,
-   "type": "interim",
-   "text": "The first trick is embarrassingly simple: cache everything you can"
-  },
-  {
-   "t": 13.51,
+   "t": 6.37,
    "type": "final",
-   "text": "The first trick is embarrassingly simple: cache everything you can.",
-   "t0": 9.86,
-   "t1": 13.21,
-   "kind": "speech",
+   "text": "you'll get something like",
    "src": "en",
+   "t0": 5.83,
+   "t1": 7.53,
+   "kind": "speech",
    "tr": {
-    "es": "El primer truco es vergonzosamente simple: cacheen todo lo que puedan.",
-    "en": "The first trick is embarrassingly simple: cache everything you can.",
-    "pt": "O primeiro truque é vergonhosamente simples: façam cache de tudo o que puderem."
+    "es": "obtendrás algo como",
+    "en": "you'll get something like",
+    "pt": "você receberá algo como"
+   },
+   "mtMs": 1057
+  },
+  {
+   "t": 7.49,
+   "type": "interim",
+   "text": "an"
+  },
+  {
+   "t": 8.02,
+   "type": "interim",
+   "text": "an answer saying, \"Hey,"
+  },
+  {
+   "t": 8.45,
+   "type": "interim",
+   "text": "an answer saying, \"Hey, I don't"
+  },
+  {
+   "t": 8.94,
+   "type": "interim",
+   "text": "An answer saying, \"Hey, I don't have"
+  },
+  {
+   "t": 9.43,
+   "type": "interim",
+   "text": "I don't have access"
+  },
+  {
+   "t": 9.43,
+   "type": "final",
+   "text": "An answer saying, \"Hey,",
+   "src": "en",
+   "t0": 7.53,
+   "t1": 10.62,
+   "kind": "speech",
+   "tr": {
+    "es": "Una respuesta que dice: «Oye,",
+    "en": "An answer saying, \"Hey,",
+    "pt": "Uma resposta dizendo: \"Ei,"
    },
    "mtMs": 745
   },
   {
-   "t": 14.49,
+   "t": 9.92,
    "type": "interim",
-   "text": "Most"
+   "text": "I don't have access to live"
   },
   {
-   "t": 14.92,
+   "t": 10.45,
    "type": "interim",
-   "text": "Most prompts share"
+   "text": "I don't have"
   },
   {
-   "t": 15.22,
-   "type": "interim",
-   "text": "Most prompts share a"
-  },
-  {
-   "t": 15.71,
-   "type": "interim",
-   "text": "Most prompts share a long prefix"
-  },
-  {
-   "t": 16.01,
-   "type": "interim",
-   "text": "Most prompts share a long prefix, and prompt"
-  },
-  {
-   "t": 16.3,
-   "type": "interim",
-   "text": "Most prompts share a long prefix, and prompt caching"
-  },
-  {
-   "t": 16.78,
-   "type": "interim",
-   "text": "Most prompts share a long prefix, and prompt caching makes"
-  },
-  {
-   "t": 17.1,
-   "type": "interim",
-   "text": "Most prompts share a long prefix, and prompt caching makes that prefix"
-  },
-  {
-   "t": 17.54,
-   "type": "interim",
-   "text": "Most prompts share a long prefix, and prompt caching makes that prefix almost"
-  },
-  {
-   "t": 17.84,
-   "type": "interim",
-   "text": "Most prompts share a long prefix, and prompt caching makes that prefix almost free"
-  },
-  {
-   "t": 18.14,
+   "t": 10.45,
    "type": "final",
-   "text": "Most prompts share a long prefix, and prompt caching makes that prefix almost free.",
-   "t0": 14.03,
-   "t1": 17.84,
-   "kind": "speech",
+   "text": "I don't have access to live information.",
    "src": "en",
+   "t0": 10.62,
+   "t1": 11.63,
+   "kind": "speech",
    "tr": {
-    "es": "La mayoría de los prompts comparten un prefijo largo, y el prompt caching hace que ese prefijo sea casi gratis.",
-    "en": "Most prompts share a long prefix, and prompt caching makes that prefix almost free.",
-    "pt": "A maioria dos prompts compartilha um prefixo longo, e o prompt caching torna esse prefixo quase de graça."
+    "es": "No tengo acceso a información en tiempo real.",
+    "en": "I don't have access to live information.",
+    "pt": "Eu não tenho acesso a informações em tempo real."
    },
-   "mtMs": 763
+   "mtMs": 699
   },
   {
-   "t": 18.96,
+   "t": 10.86,
    "type": "interim",
-   "text": "The"
+   "text": "I don't have"
   },
   {
-   "t": 19.27,
+   "t": 11.35,
    "type": "interim",
-   "text": "The second"
+   "text": "I don't have access to"
   },
   {
-   "t": 19.71,
+   "t": 11.83,
    "type": "interim",
-   "text": "The second trick is"
+   "text": "I don't have access to"
   },
   {
-   "t": 20.11,
+   "t": 12.32,
    "type": "interim",
-   "text": "The second trick is routing"
+   "text": "I don't have access to the"
   },
   {
-   "t": 20.56,
+   "t": 12.86,
    "type": "interim",
-   "text": "The second trick is routing, so"
+   "text": "or"
   },
   {
-   "t": 21,
-   "type": "interim",
-   "text": "The second trick is routing, so small"
-  },
-  {
-   "t": 21.3,
-   "type": "interim",
-   "text": "The second trick is routing, so small questions"
-  },
-  {
-   "t": 21.72,
-   "type": "interim",
-   "text": "The second trick is routing, so small questions go to"
-  },
-  {
-   "t": 22.12,
-   "type": "interim",
-   "text": "The second trick is routing, so small questions go to small models"
-  },
-  {
-   "t": 22.42,
+   "t": 12.86,
    "type": "final",
-   "text": "The second trick is routing, so small questions go to small models.",
-   "t0": 18.55,
-   "t1": 22.12,
-   "kind": "speech",
+   "text": "I don't have access to the web",
    "src": "en",
+   "t0": 11.63,
+   "t1": 13.93,
+   "kind": "speech",
    "tr": {
-    "es": "El segundo truco es el ruteo, para que las preguntas chicas vayan a modelos chicos.",
-    "en": "The second trick is routing, so small questions go to small models.",
-    "pt": "O segundo truque é o roteamento, para que perguntas pequenas vão para modelos pequenos."
+    "es": "No tengo acceso a la web",
+    "en": "I don't have access to the web",
+    "pt": "Eu não tenho acesso à web"
    },
-   "mtMs": 575
+   "mtMs": 962
   },
   {
-   "t": 23.35,
+   "t": 13.27,
    "type": "interim",
-   "text": "We"
+   "text": "or a live"
   },
   {
-   "t": 23.69,
+   "t": 13.75,
    "type": "interim",
-   "text": "We measured"
+   "text": "or a live forecast.\""
   },
   {
-   "t": 23.98,
+   "t": 14.25,
    "type": "interim",
-   "text": "We measured it"
+   "text": "or a live forecast.\""
   },
   {
-   "t": 24.35,
+   "t": 14.71,
    "type": "interim",
-   "text": "We measured it, and"
+   "text": "or a live forecast, so I"
   },
   {
-   "t": 24.77,
+   "t": 15.21,
    "type": "interim",
-   "text": "We measured it, and ninety"
+   "text": "so I can't really do this"
   },
   {
-   "t": 25.08,
-   "type": "interim",
-   "text": "We measured it, and ninety percent"
-  },
-  {
-   "t": 25.47,
-   "type": "interim",
-   "text": "We measured it, and ninety percent of"
-  },
-  {
-   "t": 25.84,
-   "type": "interim",
-   "text": "We measured it, and ninety percent of our"
-  },
-  {
-   "t": 26.29,
-   "type": "interim",
-   "text": "We measured it, and ninety percent of our traffic"
-  },
-  {
-   "t": 26.77,
-   "type": "interim",
-   "text": "We measured it, and ninety percent of our traffic never"
-  },
-  {
-   "t": 27.1,
-   "type": "interim",
-   "text": "We measured it, and ninety percent of our traffic never needed"
-  },
-  {
-   "t": 27.41,
-   "type": "interim",
-   "text": "We measured it, and ninety percent of our traffic never needed the"
-  },
-  {
-   "t": 27.9,
-   "type": "interim",
-   "text": "We measured it, and ninety percent of our traffic never needed the big model"
-  },
-  {
-   "t": 28.2,
+   "t": 15.21,
    "type": "final",
-   "text": "We measured it, and ninety percent of our traffic never needed the big model.",
-   "t0": 22.94,
-   "t1": 27.9,
-   "kind": "speech",
+   "text": "or a live forecast,",
    "src": "en",
+   "t0": 13.93,
+   "t1": 16.42,
+   "kind": "speech",
    "tr": {
-    "es": "Lo medimos, y el noventa por ciento de nuestro tráfico nunca necesitó el modelo grande.",
-    "en": "We measured it, and ninety percent of our traffic never needed the big model.",
-    "pt": "Nós medimos, e noventa por cento do nosso tráfego nunca precisou do modelo grande."
+    "es": "o un pronóstico en vivo,",
+    "en": "or a live forecast,",
+    "pt": "ou uma previsão ao vivo,"
    },
-   "mtMs": 927
+   "mtMs": 953
   },
   {
-   "t": 28.96,
-   "type": "interim",
-   "text": "(audience question)"
+   "t": 15.65,
+   "type": "final",
+   "text": "so I can't really do this for you.\"",
+   "src": "en",
+   "t0": 16.42,
+   "t1": 16.53,
+   "kind": "speech",
+   "tr": {
+    "es": "así que no puedo hacer esto por ti.",
+    "en": "so I can't really do this for you.\"",
+    "pt": "então eu não posso realmente fazer isso por você."
+   },
+   "mtMs": 873
   },
   {
-   "t": 29.44,
+   "t": 17.14,
    "type": "interim",
-   "text": "(audience question) What"
+   "text": "And that's"
   },
   {
-   "t": 29.78,
+   "t": 17.61,
    "type": "interim",
-   "text": "(audience question) What about"
+   "text": "And that's kind of"
+  },
+  {
+   "t": 18.06,
+   "type": "interim",
+   "text": "What is"
+  },
+  {
+   "t": 18.06,
+   "type": "final",
+   "text": "And that's kind of strange.",
+   "src": "en",
+   "t0": 16.53,
+   "t1": 19.23,
+   "kind": "speech",
+   "tr": {
+    "es": "Y eso es un poco extraño.",
+    "en": "And that's kind of strange.",
+    "pt": "E isso é meio estranho."
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 18.56,
+   "type": "interim",
+   "text": "What is what is"
+  },
+  {
+   "t": 19.05,
+   "type": "interim",
+   "text": "What is what is the difference"
+  },
+  {
+   "t": 19.52,
+   "type": "interim",
+   "text": "What is the difference"
+  },
+  {
+   "t": 20.02,
+   "type": "interim",
+   "text": "What is the difference between ChatGPT"
+  },
+  {
+   "t": 20.45,
+   "type": "interim",
+   "text": "What is the difference between"
+  },
+  {
+   "t": 20.94,
+   "type": "interim",
+   "text": "What is the difference between ChatGPT, the"
+  },
+  {
+   "t": 21.44,
+   "type": "interim",
+   "text": "What is the difference between ChatGPT, the"
+  },
+  {
+   "t": 21.93,
+   "type": "interim",
+   "text": "the application,"
+  },
+  {
+   "t": 21.93,
+   "type": "final",
+   "text": "What is the difference between ChatGPT,",
+   "src": "en",
+   "t0": 19.23,
+   "t1": 22.93,
+   "kind": "speech",
+   "tr": {
+    "es": "¿Cuál es la diferencia entre ChatGPT,",
+    "en": "What is the difference between ChatGPT,",
+    "pt": "Qual é a diferença entre o ChatGPT,"
+   },
+   "mtMs": 1683
+  },
+  {
+   "t": 22.45,
+   "type": "interim",
+   "text": "the application or the"
+  },
+  {
+   "t": 22.82,
+   "type": "interim",
+   "text": "the application or the website,"
+  },
+  {
+   "t": 23.31,
+   "type": "interim",
+   "text": "the application or the website,"
+  },
+  {
+   "t": 23.84,
+   "type": "interim",
+   "text": "the application or the website, and the"
+  },
+  {
+   "t": 24.33,
+   "type": "interim",
+   "text": "and"
+  },
+  {
+   "t": 24.33,
+   "type": "final",
+   "text": "the application or the website,",
+   "src": "en",
+   "t0": 22.93,
+   "t1": 25.53,
+   "kind": "speech",
+   "tr": {
+    "es": "la aplicación o el sitio web,",
+    "en": "the application or the website,",
+    "pt": "o aplicativo ou o site,"
+   },
+   "mtMs": 822
+  },
+  {
+   "t": 24.82,
+   "type": "interim",
+   "text": "and the GPT"
+  },
+  {
+   "t": 25.29,
+   "type": "interim",
+   "text": "and the GPT API?"
+  },
+  {
+   "t": 25.76,
+   "type": "interim",
+   "text": "and the GPT API? Aren't"
+  },
+  {
+   "t": 26.22,
+   "type": "interim",
+   "text": "and the GPT API? Aren't they kind"
+  },
+  {
+   "t": 26.73,
+   "type": "interim",
+   "text": "and the GPT API? Aren't they kind of the"
+  },
+  {
+   "t": 27.26,
+   "type": "final",
+   "text": "and the GPT API? Aren't they kind of the same thing?",
+   "src": "en",
+   "t0": 25.53,
+   "t1": 28.41,
+   "kind": "speech",
+   "tr": {
+    "es": "¿y la API de GPT? ¿No son un poco lo mismo?",
+    "en": "and the GPT API? Aren't they kind of the same thing?",
+    "pt": "e a API do GPT? Eles não são meio que a mesma coisa?"
+   },
+   "mtMs": 725
+  },
+  {
+   "t": 27.67,
+   "type": "interim",
+   "text": "Why can"
+  },
+  {
+   "t": 28.16,
+   "type": "interim",
+   "text": "Why can one"
+  },
+  {
+   "t": 28.66,
+   "type": "interim",
+   "text": "Why can one give me"
+  },
+  {
+   "t": 29.11,
+   "type": "interim",
+   "text": "Why can one give me tomorrow's weather"
+  },
+  {
+   "t": 29.62,
+   "type": "interim",
+   "text": "and"
+  },
+  {
+   "t": 29.62,
+   "type": "final",
+   "text": "Why can one give me tomorrow's weather",
+   "src": "en",
+   "t0": 28.41,
+   "t1": 30.13,
+   "kind": "speech",
+   "tr": {
+    "es": "Por qué uno puede darme el clima de mañana",
+    "en": "Why can one give me tomorrow's weather",
+    "pt": "Por que um pode me dar a previsão do tempo de amanhã"
+   },
+   "mtMs": 848
   },
   {
    "t": 30.06,
    "type": "interim",
-   "text": "(audience question) What about quality, did"
+   "text": "and one can't?"
   },
   {
-   "t": 30.47,
+   "t": 30.52,
    "type": "interim",
-   "text": "(audience question) What about quality, did it"
+   "text": "and one can't?"
   },
   {
-   "t": 30.82,
+   "t": 31.08,
    "type": "interim",
-   "text": "(audience question) What about quality, did it drop"
+   "text": "and one"
   },
   {
-   "t": 31.12,
+   "t": 31.44,
+   "type": "interim",
+   "text": "and one can't?Well,"
+  },
+  {
+   "t": 31.95,
+   "type": "interim",
+   "text": "and one can't?Well, to understand"
+  },
+  {
+   "t": 32.46,
+   "type": "interim",
+   "text": "and one can't?Well, to understand that"
+  },
+  {
+   "t": 32.94,
+   "type": "interim",
+   "text": "and"
+  },
+  {
+   "t": 32.94,
    "type": "final",
-   "text": "(audience question) What about quality, did it drop?",
-   "t0": 28.63,
-   "t1": 30.82,
-   "kind": "audience",
+   "text": "and one can't?Well, to understand that",
    "src": "en",
-   "tr": {
-    "es": "(pregunta del público) ¿Y la calidad, bajó?",
-    "en": "(audience question) What about quality, did it drop?",
-    "pt": "(pergunta da plateia) E a qualidade, caiu?"
-   },
-   "mtMs": 690
-  },
-  {
-   "t": 31.92,
-   "type": "interim",
-   "text": "Great question"
-  },
-  {
-   "t": 32.34,
-   "type": "interim",
-   "text": "Great question, and no"
-  },
-  {
-   "t": 32.8,
-   "type": "interim",
-   "text": "Great question, and no, not"
-  },
-  {
-   "t": 33.19,
-   "type": "interim",
-   "text": "Great question, and no, not in"
-  },
-  {
-   "t": 33.55,
-   "type": "interim",
-   "text": "Great question, and no, not in our"
-  },
-  {
-   "t": 34.05,
-   "type": "interim",
-   "text": "Great question, and no, not in our evals"
-  },
-  {
-   "t": 34.35,
-   "type": "final",
-   "text": "Great question, and no, not in our evals.",
-   "t0": 31.63,
-   "t1": 34.05,
+   "t0": 30.13,
+   "t1": 34.13,
    "kind": "speech",
-   "src": "en",
    "tr": {
-    "es": "Excelente pregunta, y no, no en nuestras evaluaciones.",
-    "en": "Great question, and no, not in our evals.",
-    "pt": "Ótima pergunta, e não, não nas nossas avaliações."
+    "es": "¿y uno no? Bueno, para entender eso",
+    "en": "and one can't?Well, to understand that",
+    "pt": "e um não? Bem, para entender isso"
    },
-   "mtMs": 835
+   "mtMs": 678
   },
   {
-   "t": 35.64,
+   "t": 33.42,
    "type": "interim",
-   "text": "The"
+   "text": "and dig deeper"
   },
   {
-   "t": 35.96,
+   "t": 33.88,
    "type": "interim",
-   "text": "The third"
+   "text": "and dig deeper into this,"
   },
   {
-   "t": 36.4,
+   "t": 34.33,
    "type": "interim",
-   "text": "The third trick is"
+   "text": "and dig deeper into this,"
   },
   {
-   "t": 36.77,
+   "t": 34.83,
    "type": "interim",
-   "text": "The third trick is batching"
+   "text": "and dig deeper into this,"
   },
   {
-   "t": 37.14,
+   "t": 35.33,
    "type": "interim",
-   "text": "The third trick is batching everything"
+   "text": "and dig deeper into this, we're"
   },
   {
-   "t": 37.44,
+   "t": 35.82,
    "type": "interim",
-   "text": "The third trick is batching everything that"
+   "text": "we're going"
+  },
+  {
+   "t": 35.82,
+   "type": "final",
+   "text": "and dig deeper into this,",
+   "src": "en",
+   "t0": 34.13,
+   "t1": 37.01,
+   "kind": "speech",
+   "tr": {
+    "es": "y profundizar más en esto,",
+    "en": "and dig deeper into this,",
+    "pt": "e aprofundar mais nisso,"
+   },
+   "mtMs": 980
+  },
+  {
+   "t": 36.23,
+   "type": "interim",
+   "text": "we're going to pull"
+  },
+  {
+   "t": 36.72,
+   "type": "interim",
+   "text": "we're going to pull apart"
+  },
+  {
+   "t": 37.24,
+   "type": "interim",
+   "text": "we're going to pull apart what makes"
   },
   {
    "t": 37.74,
    "type": "interim",
-   "text": "The third trick is batching everything that is not"
+   "text": "we're going to pull apart what makes up an"
   },
   {
-   "t": 38.1,
+   "t": 38.24,
    "type": "interim",
-   "text": "The third trick is batching everything that is not user"
+   "text": "we're going to pull apart what makes up an AI"
   },
   {
-   "t": 38.52,
+   "t": 38.66,
    "type": "interim",
-   "text": "The third trick is batching everything that is not user facing"
+   "text": "we're going to pull apart what makes up an AI application"
   },
   {
-   "t": 38.82,
+   "t": 39.16,
+   "type": "interim",
+   "text": "or"
+  },
+  {
+   "t": 39.16,
    "type": "final",
-   "text": "The third trick is batching everything that is not user facing.",
-   "t0": 35.23,
-   "t1": 38.52,
-   "kind": "speech",
+   "text": "we're going to pull apart what makes up an AI application",
    "src": "en",
+   "t0": 37.01,
+   "t1": 40.32,
+   "kind": "speech",
    "tr": {
-    "es": "El tercer truco es procesar en lote todo lo que no está de cara al usuario.",
-    "en": "The third trick is batching everything that is not user facing.",
-    "pt": "O terceiro truque é processar em lote tudo o que não é voltado ao usuário."
+    "es": "vamos a desglosar lo que compone una aplicación de IA",
+    "en": "we're going to pull apart what makes up an AI application",
+    "pt": "vamos a desmembrar o que compõe uma aplicação de IA"
    },
-   "mtMs": 513
+   "mtMs": 899
   },
   {
-   "t": 39.71,
+   "t": 39.67,
    "type": "interim",
-   "text": "Nightly summaries"
+   "text": "or an agent."
   },
   {
-   "t": 40,
+   "t": 40.16,
    "type": "interim",
-   "text": "Nightly summaries, tagging"
+   "text": "or an agent."
   },
   {
-   "t": 40.35,
+   "t": 40.62,
    "type": "interim",
-   "text": "Nightly summaries, tagging and"
+   "text": "or an agent. And"
   },
   {
-   "t": 40.83,
+   "t": 41.16,
    "type": "interim",
-   "text": "Nightly summaries, tagging and evals"
+   "text": "or an agent. And when you"
   },
   {
-   "t": 41.11,
+   "t": 41.53,
    "type": "interim",
-   "text": "Nightly summaries, tagging and evals all"
+   "text": "or an agent. And when you"
   },
   {
-   "t": 41.44,
+   "t": 42.03,
    "type": "interim",
-   "text": "Nightly summaries, tagging and evals all run"
+   "text": "And when you open up"
   },
   {
-   "t": 41.81,
-   "type": "interim",
-   "text": "Nightly summaries, tagging and evals all run in"
-  },
-  {
-   "t": 42.13,
-   "type": "interim",
-   "text": "Nightly summaries, tagging and evals all run in batch at"
-  },
-  {
-   "t": 42.57,
-   "type": "interim",
-   "text": "Nightly summaries, tagging and evals all run in batch at half"
-  },
-  {
-   "t": 43.04,
-   "type": "interim",
-   "text": "Nightly summaries, tagging and evals all run in batch at half the price"
-  },
-  {
-   "t": 43.34,
+   "t": 42.03,
    "type": "final",
-   "text": "Nightly summaries, tagging and evals all run in batch at half the price.",
-   "t0": 39.24,
-   "t1": 43.04,
-   "kind": "speech",
+   "text": "or an agent.",
    "src": "en",
+   "t0": 40.32,
+   "t1": 43.2,
+   "kind": "speech",
    "tr": {
-    "es": "Los resúmenes nocturnos, el etiquetado y las evaluaciones corren en lote a mitad de precio.",
-    "en": "Nightly summaries, tagging and evals all run in batch at half the price.",
-    "pt": "Os resumos noturnos, a marcação e as avaliações rodam em lote pela metade do preço."
+    "es": "o un agente.",
+    "en": "or an agent.",
+    "pt": "ou um agente."
    },
-   "mtMs": 857
+   "mtMs": 895
   },
   {
-   "t": 44.25,
+   "t": 42.55,
    "type": "interim",
-   "text": "Finally"
+   "text": "And when you open up something like"
   },
   {
-   "t": 44.72,
+   "t": 43.01,
    "type": "interim",
-   "text": "Finally, set a"
+   "text": "And when you open up something like"
   },
   {
-   "t": 45.15,
-   "type": "interim",
-   "text": "Finally, set a budget"
-  },
-  {
-   "t": 45.62,
-   "type": "interim",
-   "text": "Finally, set a budget alert"
-  },
-  {
-   "t": 46.08,
-   "type": "interim",
-   "text": "Finally, set a budget alert before"
-  },
-  {
-   "t": 46.57,
-   "type": "interim",
-   "text": "Finally, set a budget alert before you"
-  },
-  {
-   "t": 46.92,
-   "type": "interim",
-   "text": "Finally, set a budget alert before you need"
-  },
-  {
-   "t": 47.27,
-   "type": "interim",
-   "text": "Finally, set a budget alert before you need it"
-  },
-  {
-   "t": 47.58,
-   "type": "interim",
-   "text": "Finally, set a budget alert before you need it, not"
-  },
-  {
-   "t": 48.01,
-   "type": "interim",
-   "text": "Finally, set a budget alert before you need it, not after"
-  },
-  {
-   "t": 48.31,
+   "t": 43.45,
    "type": "final",
-   "text": "Finally, set a budget alert before you need it, not after.",
-   "t0": 43.9,
-   "t1": 48.01,
-   "kind": "speech",
+   "text": "And when you open up something like Claude",
    "src": "en",
+   "t0": 43.2,
+   "t1": 44.61,
+   "kind": "speech",
    "tr": {
-    "es": "Por último, configuren una alerta de presupuesto antes de necesitarla, no después.",
-    "en": "Finally, set a budget alert before you need it, not after.",
-    "pt": "Por fim, configurem um alerta de orçamento antes de precisar, não depois."
+    "es": "Y cuando abres algo como Claude",
+    "en": "And when you open up something like Claude",
+    "pt": "E quando você abre algo como o Claude"
    },
-   "mtMs": 858
+   "mtMs": 845
   },
   {
-   "t": 49.4,
+   "t": 43.93,
    "type": "interim",
-   "text": "Thank"
+   "text": "or"
   },
   {
-   "t": 49.73,
+   "t": 44.42,
    "type": "interim",
-   "text": "Thank you, I'll"
+   "text": "or ChatGPT or"
   },
   {
-   "t": 50.02,
+   "t": 44.95,
    "type": "interim",
-   "text": "Thank you, I'll be around"
+   "text": "or ChatGPT or maybe an agent"
   },
   {
-   "t": 50.48,
+   "t": 45.44,
    "type": "interim",
-   "text": "Thank you, I'll be around for"
+   "text": "that"
   },
   {
-   "t": 50.95,
-   "type": "interim",
-   "text": "Thank you, I'll be around for questions"
-  },
-  {
-   "t": 51.25,
+   "t": 45.44,
    "type": "final",
-   "text": "Thank you, I'll be around for questions.",
-   "t0": 48.94,
-   "t1": 50.95,
-   "kind": "speech",
+   "text": "or ChatGPT or maybe an agent",
    "src": "en",
+   "t0": 44.61,
+   "t1": 46.62,
+   "kind": "speech",
    "tr": {
-    "es": "Gracias, voy a estar por acá para preguntas.",
-    "en": "Thank you, I'll be around for questions.",
-    "pt": "Obrigado, vou estar por aqui para perguntas."
+    "es": "o ChatGPT o tal vez un agente",
+    "en": "or ChatGPT or maybe an agent",
+    "pt": "ou o ChatGPT ou talvez um agente"
    },
-   "mtMs": 883
+   "mtMs": 795
+  },
+  {
+   "t": 45.89,
+   "type": "interim",
+   "text": "that you're building,"
+  },
+  {
+   "t": 46.37,
+   "type": "interim",
+   "text": "that you're building, under the"
+  },
+  {
+   "t": 46.85,
+   "type": "interim",
+   "text": "that you're building, under the hood,"
+  },
+  {
+   "t": 47.35,
+   "type": "interim",
+   "text": "that you're building, under the hood, there's"
+  },
+  {
+   "t": 47.81,
+   "type": "interim",
+   "text": "there's more"
+  },
+  {
+   "t": 47.81,
+   "type": "final",
+   "text": "that you're building, under the hood,",
+   "src": "en",
+   "t0": 46.62,
+   "t1": 49.03,
+   "kind": "speech",
+   "tr": {
+    "es": "que estás construyendo, bajo el capó,",
+    "en": "that you're building, under the hood,",
+    "pt": "que você está construindo, por baixo do capô,"
+   },
+   "mtMs": 1023
+  },
+  {
+   "t": 48.28,
+   "type": "interim",
+   "text": "there's more than one"
+  },
+  {
+   "t": 48.74,
+   "type": "interim",
+   "text": "there's more than one component that goes"
+  },
+  {
+   "t": 49.24,
+   "type": "final",
+   "text": "there's more than one component that goes into this.",
+   "src": "en",
+   "t0": 49.03,
+   "t1": 50.4,
+   "kind": "speech",
+   "tr": {
+    "es": "hay más de un componente que interviene en esto.",
+    "en": "there's more than one component that goes into this.",
+    "pt": "há mais de um componente envolvido nisso."
+   },
+   "mtMs": 890
+  },
+  {
+   "t": 50.23,
+   "type": "interim",
+   "text": "An"
+  },
+  {
+   "t": 50.67,
+   "type": "interim",
+   "text": "An AI application,"
+  },
+  {
+   "t": 51.14,
+   "type": "interim",
+   "text": "An AI application, if you think of"
+  },
+  {
+   "t": 51.66,
+   "type": "interim",
+   "text": "An AI application, if you think of it as kind"
+  },
+  {
+   "t": 52.15,
+   "type": "interim",
+   "text": "An AI application, if you think of it as kind of like"
+  },
+  {
+   "t": 52.65,
+   "type": "interim",
+   "text": "An AI application, if you think of it as kind of like"
+  },
+  {
+   "t": 53.05,
+   "type": "interim",
+   "text": "An AI application, if you think of it as kind of like the"
+  },
+  {
+   "t": 53.57,
+   "type": "interim",
+   "text": "An AI application, if you think of it as kind of like the larger"
+  },
+  {
+   "t": 54.08,
+   "type": "interim",
+   "text": "the thing"
+  },
+  {
+   "t": 54.08,
+   "type": "final",
+   "text": "An AI application, if you think of it as kind of like the larger surface,",
+   "src": "en",
+   "t0": 50.4,
+   "t1": 55.23,
+   "kind": "speech",
+   "tr": {
+    "es": "Una aplicación de IA, si lo piensas como una especie de superficie más grande,",
+    "en": "An AI application, if you think of it as kind of like the larger surface,",
+    "pt": "Uma aplicação de IA, se você pensar nela como uma espécie de superfície maior,"
+   },
+   "mtMs": 723
+  },
+  {
+   "t": 54.56,
+   "type": "interim",
+   "text": "the thing that the"
+  },
+  {
+   "t": 55.01,
+   "type": "interim",
+   "text": "the thing that the"
+  },
+  {
+   "t": 55.48,
+   "type": "interim",
+   "text": "the thing that the user might"
+  },
+  {
+   "t": 55.93,
+   "type": "interim",
+   "text": "the thing that the user might interact with,"
+  },
+  {
+   "t": 56.44,
+   "type": "interim",
+   "text": "the thing that the user might interact with,"
+  },
+  {
+   "t": 56.94,
+   "type": "final",
+   "text": "the thing that the user might interact with,",
+   "src": "en",
+   "t0": 55.23,
+   "t1": 58.11,
+   "kind": "speech",
+   "tr": {
+    "es": "lo que el usuario podría interactuar,",
+    "en": "the thing that the user might interact with,",
+    "pt": "aquilo com que o utilizador pode interagir,"
+   },
+   "mtMs": 781
+  },
+  {
+   "t": 57.41,
+   "type": "interim",
+   "text": "underneath that,"
+  },
+  {
+   "t": 57.84,
+   "type": "interim",
+   "text": "underneath that, the"
+  },
+  {
+   "t": 58.34,
+   "type": "interim",
+   "text": "underneath that, the AI"
+  },
+  {
+   "t": 58.84,
+   "type": "interim",
+   "text": "underneath that, the AI model"
+  },
+  {
+   "t": 59.35,
+   "type": "interim",
+   "text": "underneath that, the AI model itself is"
+  },
+  {
+   "t": 59.83,
+   "type": "interim",
+   "text": "underneath that, the AI model itself is kind of"
+  },
+  {
+   "t": 60.26,
+   "type": "interim",
+   "text": "underneath that, the AI model itself is kind of like the"
+  },
+  {
+   "t": 60.77,
+   "type": "interim",
+   "text": "underneath that, the AI model itself is kind of like the brain"
+  },
+  {
+   "t": 61.24,
+   "type": "interim",
+   "text": "underneath that, the AI model itself is kind of like the brain powering"
+  },
+  {
+   "t": 61.75,
+   "type": "final",
+   "text": "underneath that, the AI model itself is kind of like the brain powering it.",
+   "src": "en",
+   "t0": 58.11,
+   "t1": 62.93,
+   "kind": "speech",
+   "tr": {
+    "es": "debajo de eso, el propio modelo de IA es como el cerebro que lo impulsa.",
+    "en": "underneath that, the AI model itself is kind of like the brain powering it.",
+    "pt": "por baixo disso, o próprio modelo de IA é como o cérebro que o alimenta."
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 62.26,
+   "type": "interim",
+   "text": "Obviously,"
+  },
+  {
+   "t": 62.68,
+   "type": "interim",
+   "text": "Obviously, it's not"
+  },
+  {
+   "t": 63.16,
+   "type": "interim",
+   "text": "Obviously, it's not actually a brain,"
+  },
+  {
+   "t": 63.65,
+   "type": "interim",
+   "text": "but it's"
+  },
+  {
+   "t": 63.65,
+   "type": "final",
+   "text": "Obviously, it's not actually a brain,",
+   "src": "en",
+   "t0": 62.93,
+   "t1": 64.8,
+   "kind": "speech",
+   "tr": {
+    "es": "Obviamente, no es realmente un cerebro,",
+    "en": "Obviously, it's not actually a brain,",
+    "pt": "Obviamente, não é realmente um cérebro,"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 64.14,
+   "type": "interim",
+   "text": "but it's kind of like"
+  },
+  {
+   "t": 64.64,
+   "type": "final",
+   "text": "but it's kind of like a brain.",
+   "src": "en",
+   "t0": 64.8,
+   "t1": 65.81,
+   "kind": "speech",
+   "tr": {
+    "es": "pero es como una especie de cerebro.",
+    "en": "but it's kind of like a brain.",
+    "pt": "mas é como uma espécie de cérebro."
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 65.06,
+   "type": "interim",
+   "text": "It's"
+  },
+  {
+   "t": 65.56,
+   "type": "interim",
+   "text": "It's sitting"
+  },
+  {
+   "t": 66.03,
+   "type": "interim",
+   "text": "It's sitting behind some"
+  },
+  {
+   "t": 66.54,
+   "type": "interim",
+   "text": "It's sitting behind some API"
+  },
+  {
+   "t": 67.03,
+   "type": "final",
+   "text": "It's sitting behind some API somewhere.",
+   "src": "en",
+   "t0": 65.81,
+   "t1": 68.22,
+   "kind": "speech",
+   "tr": {
+    "es": "Está detrás de alguna API en algún lugar.",
+    "en": "It's sitting behind some API somewhere.",
+    "pt": "Está atrás de alguma API em algum lugar."
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 67.97,
+   "type": "interim",
+   "text": "Whether"
+  },
+  {
+   "t": 68.47,
+   "type": "interim",
+   "text": "Whether that's hosted"
+  },
+  {
+   "t": 68.94,
+   "type": "interim",
+   "text": "Whether that's hosted by"
+  },
+  {
+   "t": 69.43,
+   "type": "interim",
+   "text": "Whether that's hosted by OpenAI,"
+  },
+  {
+   "t": 69.89,
+   "type": "interim",
+   "text": "Whether that's hosted by"
+  },
+  {
+   "t": 70.35,
+   "type": "interim",
+   "text": "Whether that's hosted by OpenAI or"
+  },
+  {
+   "t": 70.84,
+   "type": "interim",
+   "text": "Whether that's hosted by OpenAI or maybe"
+  },
+  {
+   "t": 71.34,
+   "type": "interim",
+   "text": "or maybe a"
+  },
+  {
+   "t": 71.34,
+   "type": "final",
+   "text": "Whether that's hosted by OpenAI",
+   "src": "en",
+   "t0": 68.22,
+   "t1": 72.51,
+   "kind": "speech",
+   "tr": {
+    "es": "Ya sea que esté alojado por OpenAI",
+    "en": "Whether that's hosted by OpenAI",
+    "pt": "Seja hospedado pela OpenAI"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 71.84,
+   "type": "interim",
+   "text": "or maybe a local model that's"
+  },
+  {
+   "t": 72.26,
+   "type": "interim",
+   "text": "or maybe a local model that's running on"
+  },
+  {
+   "t": 72.74,
+   "type": "interim",
+   "text": "or maybe a local model that's running on your machine or"
+  },
+  {
+   "t": 73.28,
+   "type": "interim",
+   "text": "it's kind"
+  },
+  {
+   "t": 73.28,
+   "type": "final",
+   "text": "or maybe a local model that's running on your machine or something,",
+   "src": "en",
+   "t0": 72.51,
+   "t1": 74.41,
+   "kind": "speech",
+   "tr": {
+    "es": "o tal vez un modelo local que se está ejecutando en su máquina o algo así,",
+    "en": "or maybe a local model that's running on your machine or something,",
+    "pt": "ou talvez um modelo local que esteja rodando na sua máquina ou algo do tipo,"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 73.77,
+   "type": "interim",
+   "text": "it's kind of like"
+  },
+  {
+   "t": 74.25,
+   "type": "interim",
+   "text": "it's kind of like a brain"
+  },
+  {
+   "t": 74.67,
+   "type": "interim",
+   "text": "it's kind of like a brain"
+  },
+  {
+   "t": 75.19,
+   "type": "interim",
+   "text": "it's kind of like a brain behind an"
+  },
+  {
+   "t": 75.66,
+   "type": "final",
+   "text": "it's kind of like a brain behind an API.",
+   "src": "en",
+   "t0": 74.41,
+   "t1": 76.83,
+   "kind": "speech",
+   "tr": {
+    "es": "es como un cerebro detrás de una API.",
+    "en": "it's kind of like a brain behind an API.",
+    "pt": "é como um cérebro por trás de uma API."
+   },
+   "mtMs": 1343
+  },
+  {
+   "t": 76.63,
+   "type": "interim",
+   "text": "And that's"
+  },
+  {
+   "t": 77.08,
+   "type": "interim",
+   "text": "And that's only one part"
+  },
+  {
+   "t": 77.54,
+   "type": "interim",
+   "text": "And that's only one part of the"
+  },
+  {
+   "t": 78.06,
+   "type": "final",
+   "text": "And that's only one part of the application.",
+   "src": "en",
+   "t0": 76.83,
+   "t1": 79.2,
+   "kind": "speech",
+   "tr": {
+    "es": "Y esa es solo una parte de la aplicación.",
+    "en": "And that's only one part of the application.",
+    "pt": "E essa é apenas uma parte da aplicação."
+   },
+   "mtMs": 1103
+  },
+  {
+   "t": 79.05,
+   "type": "interim",
+   "text": "It's"
+  },
+  {
+   "t": 79.46,
+   "type": "interim",
+   "text": "It's obviously a"
+  },
+  {
+   "t": 79.94,
+   "type": "interim",
+   "text": "It's obviously a very important part"
+  },
+  {
+   "t": 80.44,
+   "type": "interim",
+   "text": "It's obviously a very important part of the"
+  },
+  {
+   "t": 80.95,
+   "type": "interim",
+   "text": "It's obviously a very important part of the"
+  },
+  {
+   "t": 81.44,
+   "type": "interim",
+   "text": "but it's"
+  },
+  {
+   "t": 81.44,
+   "type": "final",
+   "text": "It's obviously a very important part of the application,",
+   "src": "en",
+   "t0": 79.2,
+   "t1": 82.62,
+   "kind": "speech",
+   "tr": {
+    "es": "Es obviamente una parte muy importante de la aplicación,",
+    "en": "It's obviously a very important part of the application,",
+    "pt": "É obviamente uma parte muito importante da aplicação,"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 81.88,
+   "type": "interim",
+   "text": "but it's only one part"
+  },
+  {
+   "t": 82.37,
+   "type": "interim",
+   "text": "but it's only one part of the"
+  },
+  {
+   "t": 82.87,
+   "type": "final",
+   "text": "but it's only one part of the application.",
+   "src": "en",
+   "t0": 82.62,
+   "t1": 84.03,
+   "kind": "speech",
+   "tr": {
+    "es": "pero es solo una parte de la aplicación.",
+    "en": "but it's only one part of the application.",
+    "pt": "mas é apenas uma parte da aplicação."
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 83.82,
+   "type": "interim",
+   "text": "And the"
+  },
+  {
+   "t": 84.25,
+   "type": "interim",
+   "text": "And the way that"
+  },
+  {
+   "t": 84.75,
+   "type": "interim",
+   "text": "And the way that AI"
+  },
+  {
+   "t": 85.25,
+   "type": "interim",
+   "text": "And the way that AI models"
+  },
+  {
+   "t": 85.75,
+   "type": "final",
+   "text": "And the way that AI models work,",
+   "src": "en",
+   "t0": 84.03,
+   "t1": 86.91,
+   "kind": "speech",
+   "tr": {
+    "es": "Y la forma en que funcionan los modelos de IA,",
+    "en": "And the way that AI models work,",
+    "pt": "E a maneira como os modelos de IA funcionam,"
+   },
+   "mtMs": 2022
+  },
+  {
+   "t": 86.25,
+   "type": "interim",
+   "text": "at least"
+  },
+  {
+   "t": 86.71,
+   "type": "interim",
+   "text": "at least here in"
+  },
+  {
+   "t": 87.16,
+   "type": "interim",
+   "text": "at least here in"
+  },
+  {
+   "t": 87.63,
+   "type": "interim",
+   "text": "at least here in 2026,"
+  },
+  {
+   "t": 88.19,
+   "type": "interim",
+   "text": "at least here in 2026,"
+  },
+  {
+   "t": 88.63,
+   "type": "interim",
+   "text": "at least here in 2026, is"
+  },
+  {
+   "t": 89.06,
+   "type": "interim",
+   "text": "that they go"
+  },
+  {
+   "t": 89.06,
+   "type": "final",
+   "text": "at least here in 2026, is",
+   "src": "en",
+   "t0": 86.91,
+   "t1": 90.22,
+   "kind": "speech",
+   "tr": {
+    "es": "al menos aquí en 2026, es",
+    "en": "at least here in 2026, is",
+    "pt": "pelo menos aqui em 2026, é"
+   },
+   "mtMs": 1902
+  },
+  {
+   "t": 89.54,
+   "type": "interim",
+   "text": "that they go through a"
+  },
+  {
+   "t": 90.06,
+   "type": "interim",
+   "text": "that they go through a tremendous"
+  },
+  {
+   "t": 90.57,
+   "type": "interim",
+   "text": "that they go through a tremendous amount of"
+  },
+  {
+   "t": 91.02,
+   "type": "final",
+   "text": "that they go through a tremendous amount of training.",
+   "src": "en",
+   "t0": 90.22,
+   "t1": 92.23,
+   "kind": "speech",
+   "tr": {
+    "es": "que pasan por una tremenda cantidad de entrenamiento.",
+    "en": "that they go through a tremendous amount of training.",
+    "pt": "que passam por uma tremenda quantidade de treinamento."
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 91.48,
+   "type": "interim",
+   "text": "They're trained"
+  },
+  {
+   "t": 91.95,
+   "type": "interim",
+   "text": "They're trained on"
+  },
+  {
+   "t": 92.46,
+   "type": "interim",
+   "text": "They're trained on tons and tons"
+  },
+  {
+   "t": 92.91,
+   "type": "interim",
+   "text": "and tons"
+  },
+  {
+   "t": 92.91,
+   "type": "final",
+   "text": "They're trained on tons",
+   "src": "en",
+   "t0": 92.23,
+   "t1": 94.11,
+   "kind": "speech",
+   "tr": {
+    "es": "Están entrenados con toneladas",
+    "en": "They're trained on tons",
+    "pt": "Eles são treinados com toneladas"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 93.43,
+   "type": "interim",
+   "text": "and tons of data,"
+  },
+  {
+   "t": 93.88,
+   "type": "interim",
+   "text": "and tons of data, billions of"
+  },
+  {
+   "t": 94.35,
+   "type": "interim",
+   "text": "billions of examples"
+  },
+  {
+   "t": 94.35,
+   "type": "final",
+   "text": "and tons of data,",
+   "src": "en",
+   "t0": 94.11,
+   "t1": 94.83,
+   "kind": "speech",
+   "tr": {
+    "es": "y toneladas de datos,",
+    "en": "and tons of data,",
+    "pt": "e toneladas de dados,"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 94.82,
+   "type": "final",
+   "text": "billions of examples of data.",
+   "src": "en",
+   "t0": 94.83,
+   "t1": 94.83,
+   "kind": "speech",
+   "tr": {
+    "es": "miles de millones de ejemplos de datos.",
+    "en": "billions of examples of data.",
+    "pt": "bilhões de exemplos de dados."
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 97.85,
+   "type": "interim",
+   "text": "when that"
+  },
+  {
+   "t": 98.34,
+   "type": "interim",
+   "text": "when that training"
+  },
+  {
+   "t": 98.85,
+   "type": "interim",
+   "text": "when that training stops,"
+  },
+  {
+   "t": 99.22,
+   "type": "final",
+   "text": "when that training stops, they're",
+   "src": "en",
+   "t0": 94.83,
+   "t1": 99.9,
+   "kind": "speech",
+   "tr": {
+    "es": "cuando ese entrenamiento termina, ellos",
+    "en": "when that training stops, they're",
+    "pt": "quando esse treinamento termina, eles"
+   },
+   "mtMs": 1964
   }
  ]
 }

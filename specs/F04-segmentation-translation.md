@@ -24,7 +24,7 @@ As an attendee, I don't want to read the same phrase twice when the final arrive
 
 **Verify:** tests with finals that change punctuation, casing and one word.
 
-### [ ] F04.3 · Translation with vocabulary
+### [x] F04.3 · Translation with vocabulary
 As an attendee who doesn't speak the talk's language, I want each phrase translated with the technical terms right.
 
 - One `TRANSLATE_MODEL` call per commit, JSON output for all `targetLangs`, `thinkingBudget: 0`. The prompt is in `docs/architecture.md`.

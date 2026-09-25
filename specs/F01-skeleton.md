@@ -25,7 +25,7 @@ As a frontend developer, I want `FAKE_BACKEND=1` so I can see moving captions wi
 
 **Verify:** `npm run dev:fake` + `curl -N localhost:8080/api/stages/auditorium/stream` prints events.
 
-### [ ] F01.3 · Audio samples
+### [x] F01.3 · Audio samples
 As a judge without a key, I want sample audio to try the system right away.
 
 - `samples/es.mp3`, `samples/en.mp3` and `samples/mixed.mp3`, 1–2 min each, cut from public talks (`yt-dlp` + `ffmpeg -ss -t`). Note the source in `samples/README.md`.

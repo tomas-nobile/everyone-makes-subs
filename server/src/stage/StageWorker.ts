@@ -77,7 +77,8 @@ export class StageWorker implements Worker {
     });
     this.transcriber.on('interim', (text: string) => {
       this.segmenter.onInterim(text);
-      bus.publish({ type: 'live', text: this.mask(text) });
+      // interims are the whole utterance (can last minutes): the live line is only the unpublished tail
+      bus.publish({ type: 'live', text: this.mask(words(text).slice(this.segmenter.committedCount)) });
     });
     this.transcriber.on('final', (text: string, t0: number, t1: number) => {
       this.finalTimes = { t0, t1 };
@@ -131,8 +132,7 @@ export class StageWorker implements Worker {
   }
 
   /** `live` masking: the last 2 words only show once the previous interim agrees on them. */
-  private mask(text: string): string {
-    const ws = words(text);
+  private mask(ws: string[]): string {
     const prev = this.prevInterim;
     this.prevInterim = ws;
     let keep = Math.max(0, ws.length - 2);

@@ -412,7 +412,8 @@ export class StageManager {
         console.log(`[${rt.stage.id}] schedule: switching to "${next.title}" on its own`);
         this.switchTo(rt, next);
       }
-      if (rt.running && now - rt.summary.lastRun >= SUMMARY_EVERY_MS && rt.seq > rt.summary.seq) this.runSummary(rt);
+      // summary: every 60 s with new segments, only while someone is watching (it is a shared cache, never per request)
+      if (rt.running && rt.stage.viewers > 0 && now - rt.summary.lastRun >= SUMMARY_EVERY_MS && rt.seq > rt.summary.seq) this.runSummary(rt);
     }
   }
 
@@ -486,7 +487,7 @@ export class StageManager {
   // ── demo ──
 
   /** DEMO=1 / FAKE_BACKEND=1 / "Try with sample data": Auditorium (es) and Room 2 (en) on the samples. */
-  createDemoStages(samplesDir: string): StageRuntime[] {
+  async createDemoStages(samplesDir: string): Promise<StageRuntime[]> {
     const demo = [
       { name: 'Auditorium', file: 'es', next: { title: 'WebAssembly fuera del navegador: lo que nadie te cuenta', speaker: 'Martín Ibarra', lang: 'es' } },
       { name: 'Room 2', file: 'en', next: { title: 'Rust para devs de Go', speaker: 'Sofía Paz', lang: 'es' } },
@@ -497,10 +498,12 @@ export class StageManager {
       const transcript = loadTranscript(path.join(samplesDir, `${d.file}.transcript.json`));
       const rt = this.create({ name: d.name, source: { kind: 'file', path: path.join(samplesDir, `${d.file}.mp3`), loop: true } });
       const input: TalkInput = { title: transcript.title, speaker: transcript.speaker, lang: transcript.lang, abstract: transcript.events.filter((e) => e.type === 'final').map((e) => e.text).join(' ').slice(0, 600) };
-      void this.addTalk(rt.stage.id, input, fakeGlossary(input));
+      // with a key, Gemini builds the vocabulary (so the dashboard shows real hits); offline otherwise
+      const real = this.cfg.geminiApiKey && !this.cfg.fakeBackend;
+      await this.addTalk(rt.stage.id, input, real ? undefined : fakeGlossary(input));
       const at = new Date(Date.now() + 30 * 60_000);
       at.setMinutes(Math.ceil(at.getMinutes() / 15) * 15, 0, 0);
-      void this.addTalk(rt.stage.id, { ...d.next, startsAt: at.toISOString(), queue: true }, fakeGlossary(d.next));
+      await this.addTalk(rt.stage.id, { ...d.next, startsAt: at.toISOString(), queue: true }, fakeGlossary(d.next));
       this.start(rt.stage.id);
       out.push(rt);
     }

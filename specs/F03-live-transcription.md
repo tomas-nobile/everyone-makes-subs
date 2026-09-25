@@ -6,7 +6,7 @@
 
 ## Stories
 
-### [ ] F03.1 · Spike: how the Live API behaves
+### [x] F03.1 · Spike: how the Live API behaves
 As the team, we need to answer 3 questions with real audio before writing the segmenter, because everything else depends on them.
 
 - Script `server/scripts/spike-live.ts` that streams `samples/es.mp3` and logs every raw message with a timestamp.
@@ -18,7 +18,7 @@ As the team, we need to answer 3 questions with real audio before writing the se
 
 **Verify:** the 3 answers are written down. Timebox: 45 minutes.
 
-### [ ] F03.2 · Interims and finals
+### [x] F03.2 · Interims and finals
 As an attendee, I want to see text while the speaker talks, and have it settle afterwards.
 
 - `TranscribeSession` opens the session with `languageCodes` (empty = auto), `customVocabulary` = `glossary.asrVocabulary` and `mode: 'VERBATIM'`.

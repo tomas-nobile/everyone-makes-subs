@@ -27,7 +27,7 @@ export async function startServer(opts: { dataDir?: string; port?: number; host?
 
   const stages = new StageManager(config);
   stages.load();
-  if ((config.fakeBackend || config.demo) && stages.list().length === 0) stages.createDemoStages(samplesDir);
+  if ((config.fakeBackend || config.demo) && stages.list().length === 0) await stages.createDemoStages(samplesDir);
 
   const watch = new PublicWatch(config);
   watch.start();

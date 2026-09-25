@@ -18,10 +18,11 @@
     "app:dev": "npm run build && npm run app:build && electron app/dist/main.cjs",
     "app:dist": "npm run build && npm run app:build && electron-builder --config app/electron-builder.yml --publish never",
     "samples": "tsx server/scripts/transcribe-file.ts --sample=es --sample=en --sample=mixed --write",
-    "verify:live": "tsx server/scripts/spike-live.ts samples/es.mp3 --lang=es --quiet --log",
+    "verify:live": "tsx server/scripts/spike-live.ts samples/es.mp3 --lang=es --quiet",
     "release": "tsx scripts/release.ts",
     "clip": "tsx scripts/subtitle-clip.ts",
-    "load": "tsx scripts/load-sse.ts"
+    "load": "tsx scripts/load-sse.ts",
+    "demo-video": "tsx scripts/demo-video.ts"
   },
   "dependencies": {
     "@fastify/static": "^10.1.4",

@@ -52,6 +52,52 @@ describe('Segmenter', () => {
   });
 });
 
+describe('Segmenter with the real Live API shape (F03.1)', () => {
+  // cumulative interims of one long utterance, revising earlier words, as seen in samples/es.mp3
+  const script = [
+    'más cómodamente',
+    'más cómodamente con ellos, ¿no?',
+    'más cómodamente con ellos. No es necesario',
+    'más cómodamente con ellos. No es necesario necesario, pero sí que',
+    'más cómodamente con ellos. No es necesario necesario, pero sí que es una te da un',
+    'más cómodamente con ellos. No es necesario necesario, pero sí que es una Eh, te da una calidad de vida para los que trabajamos',
+    'más cómodamente con ellos. No es necesario necesario, pero sí que es una Eh, te da una calidad de vida para los que trabajamos con ellos y lo gestionamos.',
+    'más cómodamente con ellos. No es necesario necesario, pero sí que es una Eh, te da una calidad de vida para los que trabajamos con ellos y lo gestionamos. ¿Qué pasa entonces? Que normalmente vamos a hablar eso, de clústeres.',
+    // the ASR revises an already committed word and drops the repeated "necesario"
+    'más cómodamente con ellos. No es necesario, pero sí que es una Eh, te da una calidad de vida para los que trabajamos con ellos y lo gestionamos. ¿Qué pasa entonces? Que normalmente vamos a hablar eso, de clusters. Clusters en los que tendremos nodos,',
+    'más cómodamente con ellos. No es necesario, pero sí que es una Eh, te da una calidad de vida para los que trabajamos con ellos y lo gestionamos. ¿Qué pasa entonces? Que normalmente vamos a hablar eso, de clusters. Clusters en los que tendremos nodos, en los que tendremos las apps contenerizadas',
+    'más cómodamente con ellos. No es necesario, pero sí que es una Eh, te da una calidad de vida para los que trabajamos con ellos y lo gestionamos. ¿Qué pasa entonces? Que normalmente vamos a hablar eso, de clusters. Clusters en los que tendremos nodos, en los que tendremos las apps contenerizadas y el control plane.',
+  ];
+  const final = 'más cómodamente con ellos. No es necesario, pero sí que es una te da una calidad de de vida para los que trabajamos con ellos o lo gestionamos. ¿Qué pasa entonces? Que normalmente vamos a hablar eso, de clusters. Clusters en los que tendremos nodos, en los que tendremos las apps contenerizadas y el control plane. Hoy no vamos a entrar en el control plane porque es un tema enorme y además cambia con cada versión de Kubernetes, así que nos vamos a quedar con los nodos.';
+
+  function runScript() {
+    let t = 0;
+    const out: string[] = [];
+    const seg = new Segmenter({ forceCommitMs: 4500, onCommit: (c) => out.push(c.text), now: () => t });
+    for (const s of script) { seg.onInterim(s); t += 500; seg.onInterim(s); t += 500; }
+    const beforeFinal = out.length;
+    seg.onFinal(final);
+    return { out, beforeFinal };
+  }
+
+  it('keeps committing phrases while the ASR revises earlier words', () => {
+    const { out, beforeFinal } = runScript();
+    expect(beforeFinal).toBeGreaterThanOrEqual(4);
+    const live = out.slice(0, beforeFinal).join(' ');
+    expect(live).toContain('Clusters en los que tendremos nodos,');
+    expect(live).not.toContain('clusters. Clusters');   // the revised "clústeres." is not published again
+  });
+
+  it('publishes every word once and splits a long final into phrases', () => {
+    const { out } = runScript();
+    for (const p of out) expect(p.split(' ').length).toBeLessThanOrEqual(22);
+    const all = out.join(' ');
+    expect(all.match(/gestionamos/g)).toHaveLength(1);
+    expect(all.match(/control plane/g)).toHaveLength(2);   // "...y el control plane." + "Hoy no vamos a entrar en el control plane"
+    expect(all).toContain('nos vamos a quedar con los nodos.');
+  });
+});
+
 describe('align', () => {
   it('stripCommitted ignores punctuation and casing changes', () => {
     expect(stripCommitted('hola a todos gracias por venir', 'Hola a todos, gracias por venir tan temprano.')).toBe('tan temprano.');

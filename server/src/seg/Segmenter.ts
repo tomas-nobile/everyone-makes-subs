@@ -25,7 +25,7 @@ export interface SegmenterOptions {
  * onInterim receives the accumulated text of the current utterance; onFinal closes it.
  */
 export class Segmenter {
-  private prevNorm: string[] = [];
+  private prevTail: string[] = [];      // normalized uncommitted words of the previous interim
   private committed: string[] = [];     // original words committed in this utterance
   private lastCommitAt = 0;
   private recent: string[] = [];        // last published texts (noise: 3 identical in a row)
@@ -35,38 +35,62 @@ export class Segmenter {
     this.now = opts.now ?? Date.now;
   }
 
+  /**
+   * Where the uncommitted part starts in `cur`. The ASR keeps revising earlier words of a long
+   * utterance ("clústeres." → "clusters."), so the committed words are located by alignment, not by
+   * index: first by the last 3 committed words near the expected position, else by edit distance.
+   */
+  private tailStart(cur: string[]): number {
+    const n = this.committed.length;
+    if (n === 0) return 0;
+    const curNorm = cur.map(norm);
+    const anchor = this.committed.slice(-3).map(norm).filter(Boolean);
+    if (anchor.length) {
+      let best = -1;
+      for (let i = Math.max(0, n - 15); i <= Math.min(cur.length - anchor.length, n + 15); i++) {
+        if (anchor.every((w, k) => curNorm[i + k] === w) && (best < 0 || Math.abs(i + anchor.length - n) < Math.abs(best - n))) best = i + anchor.length;
+      }
+      if (best >= 0) return best;
+    }
+    return stripIndex(this.committed.slice(-40), cur.slice(Math.max(0, n - 60)), true) + Math.max(0, n - 60);
+  }
+
   onInterim(text: string): void {
     const cur = words(text);
-    const curNorm = cur.map(norm);
-    if (this.committed.length === 0 && this.prevNorm.length === 0) this.lastCommitAt = this.now();
-    // LocalAgreement-2: the common word prefix of the last two interims is stable.
+    if (this.committed.length === 0 && this.prevTail.length === 0) this.lastCommitAt = this.now();
+    const tail = cur.slice(this.tailStart(cur));
+    const tailNorm = tail.map(norm);
+    // LocalAgreement-2 on the uncommitted part: the common prefix of the last two interims is stable.
     let stable = 0;
-    while (stable < curNorm.length && stable < this.prevNorm.length && curNorm[stable] === this.prevNorm[stable]) stable++;
-    this.prevNorm = curNorm;
-    if (stable <= this.committed.length) return;
+    while (stable < tailNorm.length && stable < this.prevTail.length && tailNorm[stable] === this.prevTail[stable]) stable++;
+    this.prevTail = tailNorm;
+    if (stable === 0) return;
 
-    const pend = cur.slice(this.committed.length, stable);
-    let cut = 0;
-    // 1. ends a sentence with 5+ words (the last sentence end in the pending text)
-    for (let i = pend.length - 1; i >= 4; i--) if (SENTENCE_END.test(pend[i])) { cut = i + 1; break; }
-    // 2. 8+ words with a comma (cut after it) or a conjunction (cut before it)
-    if (!cut && pend.length >= 8) {
-      for (let i = pend.length - 1; i >= 3; i--) {
-        if (COMMA.test(pend[i]) && i < pend.length - 1) { cut = i + 1; break; }
-        if (CONJUNCTIONS.has(norm(pend[i]))) { cut = i; break; }
-      }
+    const pend = tail.slice(0, stable);
+    const cut = cutPoint(pend, this.now() - this.lastCommitAt > this.opts.forceCommitMs);
+    if (cut) {
+      this.commit(pend.slice(0, cut));
+      this.prevTail = this.prevTail.slice(cut);
     }
-    // 3. too long without a commit
-    if (!cut && pend.length >= 4 && this.now() - this.lastCommitAt > this.opts.forceCommitMs) cut = pend.length;
-    if (cut) this.commit(pend.slice(0, cut));
   }
 
   onFinal(text: string): void {
     const fw = words(text);
-    const rest = fw.slice(stripIndex(this.committed, fw));
+    let rest = this.committed.length ? fw.slice(this.tailStart(fw)) : fw;
     this.committed = [];
-    this.prevNorm = [];
+    this.prevTail = [];
+    // a long final (a speaker who never paused) is published as readable phrases, not one block
+    while (rest.length > MAX_PHRASE_WORDS) {
+      const cut = cutPoint(rest.slice(0, MAX_PHRASE_WORDS + 4), true, true) || MAX_PHRASE_WORDS;
+      this.publish(rest.slice(0, cut).join(' '));
+      rest = rest.slice(cut);
+    }
     if (rest.length) this.publish(rest.join(' '));
+  }
+
+  /** How many words of the current utterance are already published (the live line shows the rest). */
+  get committedCount(): number {
+    return this.committed.length;
   }
 
   /** Words committed but the utterance is still open (for tests and the overlap trim). */
@@ -90,6 +114,24 @@ export class Segmenter {
     const kind: SegmentKind = SOUND.test(text) ? (AUDIENCE.test(text) ? 'audience' : 'sound') : 'speech';
     this.opts.onCommit({ text, kind });
   }
+}
+
+const MAX_PHRASE_WORDS = 18;
+
+/**
+ * How many words of `pend` to commit (0 = wait): the last sentence end with 5+ words; else, with
+ * 8+ words, the last comma (cut after) or conjunction (cut before); else everything if `force`
+ * and 4+ words. `lenient` (splitting a long final) takes any sentence end or comma after word 4.
+ */
+function cutPoint(pend: string[], force: boolean, lenient = false): number {
+  for (let i = pend.length - 1; i >= 4; i--) if (SENTENCE_END.test(pend[i])) return i + 1;
+  if (pend.length >= 8 || lenient) {
+    for (let i = pend.length - 1; i >= 3; i--) {
+      if (COMMA.test(pend[i]) && i < pend.length - 1) return i + 1;
+      if (CONJUNCTIONS.has(norm(pend[i]))) return i;
+    }
+  }
+  return force && pend.length >= 4 ? pend.length : 0;
 }
 
 export function applyReplacements(text: string, replacements: Record<string, string>): string {

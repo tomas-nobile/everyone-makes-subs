@@ -94,7 +94,7 @@ export async function setupRoutes(app: FastifyInstance, cfg: Config, stages: Sta
   });
 
   app.post('/api/setup/demo', { preHandler: guard }, async () => ({
-    stages: stages.createDemoStages(samplesDir).map((rt) => stages.adminView(rt)),
+    stages: (await stages.createDemoStages(samplesDir)).map((rt) => stages.adminView(rt)),
   }));
 
   app.post('/api/setup/done', { preHandler: guard }, async () => {

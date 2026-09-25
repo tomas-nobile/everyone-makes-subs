@@ -48,9 +48,10 @@ function record(m: LiveServerMessage): void {
   };
   collect(m, '');
   const sc = m.serverContent;
-  const interim = sc?.interimInputTranscription?.text ?? (sc?.inputTranscription && !sc.inputTranscription.finished ? sc.inputTranscription.text : undefined);
+  const interim = sc?.interimInputTranscription?.text;
   if (interim) interims.push({ t: now(), text: interim });
-  if (sc?.inputTranscription?.finished || sc?.turnComplete) finals.push({ t: now(), text: sc?.inputTranscription?.text ?? '' });
+  // the utterance ends with inputTranscription (full text) + generationComplete / ACTIVITY_END, not `finished`
+  if (sc?.inputTranscription?.text) finals.push({ t: now(), text: sc.inputTranscription.text });
   if (resumedAt && (interim || sc?.inputTranscription?.text)) afterResume++;
 }
 

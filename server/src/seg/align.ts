@@ -19,15 +19,15 @@ export function normWords(ws: string[]): string[] {
  * Uses word edit distance on normalized words and accepts up to 20% of the committed length.
  * If nothing aligns, falls back to cutting by the committed word count.
  */
-export function stripIndex(committed: string[], final: string[]): number {
+export function stripIndex(committed: string[], final: string[], freeStart = false): number {
   // Map normalized positions back to original indices (punctuation-only tokens are skipped).
   const idx: number[] = [];
   const f: string[] = [];
   final.forEach((w, i) => { const n = norm(w); if (n) { f.push(n); idx.push(i); } });
   const c = normWords(committed);
   if (c.length === 0) return 0;
-  // DP: d[j] = edit distance between all of c and f[0..j)
-  let prev = Array.from({ length: f.length + 1 }, (_, j) => j);
+  // DP: d[j] = edit distance between all of c and f[0..j) (freeStart: and any f[k..j))
+  let prev = Array.from({ length: f.length + 1 }, (_, j) => (freeStart ? 0 : j));
   for (let i = 1; i <= c.length; i++) {
     const cur = [i];
     for (let j = 1; j <= f.length; j++) {
@@ -39,7 +39,7 @@ export function stripIndex(committed: string[], final: string[]): number {
   let best = -1;
   let bestD = Infinity;
   for (let j = 0; j <= f.length; j++) {
-    if (prev[j] < bestD) { bestD = prev[j]; best = j; }
+    if (prev[j] <= bestD) { bestD = prev[j]; best = j; }   // ties: consume a revised word
   }
   if (bestD > Math.max(1, Math.floor(c.length * 0.2))) best = Math.min(c.length, f.length);
   return best >= f.length ? final.length : idx[best];

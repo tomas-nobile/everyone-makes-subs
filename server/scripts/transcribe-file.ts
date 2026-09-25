@@ -86,9 +86,18 @@ for (const { job, r, glossary } of results) {
 
   if (write) {
     const out = write.includes('=') ? write.split('=')[1] : job.file.replace(/\.[a-z0-9]+$/i, '.transcript.json');
-    const lastT = r.events.at(-1)?.t ?? 0;
-    fs.writeFileSync(out, JSON.stringify({ lang: job.lang ?? '', title: job.title, speaker: job.speaker, durationSec: Math.ceil(lastT + 3), events: r.events }, null, 1));
+    fs.writeFileSync(out, JSON.stringify(toReplay(r.events, { lang: job.lang ?? '', title: job.title, speaker: job.speaker }), null, 1));
     console.log(`wrote ${out} (${r.events.length} events)`);
   }
 }
 process.exit(ok ? 0 : 1);
+
+/**
+ * The replay file (FAKE_BACKEND / DEMO without a key): starts at ~1 s whatever the connection took,
+ * and caps translation waits at 2.5 s — a free-tier quota wait is not what the replay should show.
+ */
+function toReplay(events: typeof results[number]['r']['events'], meta: { lang: string; title: string; speaker?: string }) {
+  const shift = Math.max(0, (events[0]?.t ?? 1) - 1);
+  const out = events.map((e) => ({ ...e, t: Math.round((e.t - shift) * 100) / 100, ...(e.type === 'final' && e.mtMs ? { mtMs: Math.min(e.mtMs, 2500) } : {}) }));
+  return { ...meta, durationSec: Math.ceil((out.at(-1)?.t ?? 0) + 3), events: out };
+}

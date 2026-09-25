@@ -1,368 +1,863 @@
 {
- "lang": "es",
- "title": "Panel: comunidades open source",
- "speaker": "Varios",
- "durationSec": 31.8,
+ "lang": "",
+ "title": "Panel: Kubernetes y MCP",
+ "speaker": "Almudena Vivanco, Nate Barbettini",
+ "durationSec": 62,
  "events": [
   {
    "t": 1,
    "type": "interim",
-   "text": "Bienvenidos al"
+   "text": "parte"
   },
   {
-   "t": 1.37,
+   "t": 1.55,
    "type": "interim",
-   "text": "Bienvenidos al panel"
+   "text": "que es"
   },
   {
-   "t": 1.81,
+   "t": 1.78,
    "type": "interim",
-   "text": "Bienvenidos al panel de"
+   "text": "que es el"
   },
   {
-   "t": 2.18,
+   "t": 1.99,
    "type": "interim",
-   "text": "Bienvenidos al panel de comunidades"
+   "text": "que es el volumen, el"
   },
   {
-   "t": 2.51,
+   "t": 2.73,
    "type": "interim",
-   "text": "Bienvenidos al panel de comunidades open"
+   "text": "que es el volumen, el volumen"
   },
   {
-   "t": 2.96,
-   "type": "interim",
-   "text": "Bienvenidos al panel de comunidades open source"
-  },
-  {
-   "t": 3.26,
+   "t": 3.12,
    "type": "final",
-   "text": "Bienvenidos al panel de comunidades open source.",
-   "t0": 0.6,
-   "t1": 2.96,
+   "text": "que es el volumen, el volumen persistente.",
+   "src": "",
+   "t0": 0.37,
+   "t1": 5.33,
    "kind": "speech",
-   "src": "es",
    "tr": {
-    "es": "Bienvenidos al panel de comunidades open source.",
-    "en": "Welcome to the open source communities panel.",
-    "pt": "Bem-vindos ao painel de comunidades open source."
+    "es": "que es el volumen, el volumen persistente.",
+    "en": "what is the volume, the persistent volume.",
+    "pt": "o que é o volume, o volume persistente."
    },
-   "mtMs": 599
+   "mtMs": 2202
   },
   {
-   "t": 4.19,
+   "t": 6.02,
    "type": "interim",
-   "text": "Tenemos"
+   "text": "Los persistent"
   },
   {
-   "t": 4.6,
+   "t": 7.23,
    "type": "interim",
-   "text": "Tenemos invitados"
+   "text": "Los persistent volumes y"
   },
   {
-   "t": 5.01,
-   "type": "interim",
-   "text": "Tenemos invitados de tres"
-  },
-  {
-   "t": 5.43,
-   "type": "interim",
-   "text": "Tenemos invitados de tres países"
-  },
-  {
-   "t": 5.74,
-   "type": "interim",
-   "text": "Tenemos invitados de tres países, así"
-  },
-  {
-   "t": 6.05,
-   "type": "interim",
-   "text": "Tenemos invitados de tres países, así que vamos"
-  },
-  {
-   "t": 6.47,
-   "type": "interim",
-   "text": "Tenemos invitados de tres países, así que vamos a mezclar"
-  },
-  {
-   "t": 6.89,
-   "type": "interim",
-   "text": "Tenemos invitados de tres países, así que vamos a mezclar idiomas"
-  },
-  {
-   "t": 7.19,
+   "t": 8.51,
    "type": "final",
-   "text": "Tenemos invitados de tres países, así que vamos a mezclar idiomas.",
-   "t0": 3.79,
-   "t1": 6.89,
+   "text": "Los persistent volumes y los",
+   "src": "",
+   "t0": 5.33,
+   "t1": 10.73,
    "kind": "speech",
-   "src": "es",
    "tr": {
-    "es": "Tenemos invitados de tres países, así que vamos a mezclar idiomas.",
-    "en": "We have guests from three countries, so we're going to mix languages.",
-    "pt": "Temos convidados de três países, então vamos misturar idiomas."
+    "es": "Los persistent volumes y los",
+    "en": "The persistent volumes and the",
+    "pt": "Os persistent volumes e os"
    },
-   "mtMs": 645
+   "mtMs": 2251
   },
   {
-   "t": 8.07,
+   "t": 9.07,
    "type": "interim",
-   "text": "Thanks"
+   "text": "PVCs, los claims"
   },
   {
-   "t": 8.36,
+   "t": 9.31,
    "type": "interim",
-   "text": "Thanks for having"
+   "text": "PVCs, los claims de esos"
   },
   {
-   "t": 8.73,
-   "type": "interim",
-   "text": "Thanks for having me"
+   "t": 9.55,
+   "type": "final",
+   "text": "PVCs, los claims de esos persistent volumes.",
+   "src": "",
+   "t0": 10.73,
+   "t1": 11.7,
+   "kind": "speech",
+   "tr": {}
   },
   {
-   "t": 9.15,
+   "t": 9.81,
    "type": "interim",
-   "text": "Thanks for having me, my Spanish"
+   "text": "Una"
   },
   {
-   "t": 9.53,
+   "t": 10.05,
    "type": "interim",
-   "text": "Thanks for having me, my Spanish is"
+   "text": "Una cosa que vamos"
   },
   {
-   "t": 9.99,
+   "t": 10.3,
    "type": "interim",
-   "text": "Thanks for having me, my Spanish is not great"
+   "text": "Una cosa que vamos a ver"
   },
   {
-   "t": 10.34,
+   "t": 10.57,
    "type": "interim",
-   "text": "Thanks for having me, my Spanish is not great, so I"
+   "text": "Una cosa que vamos a ver, la primera que"
   },
   {
-   "t": 10.66,
+   "t": 10.9,
    "type": "interim",
-   "text": "Thanks for having me, my Spanish is not great, so I will stick"
+   "text": "que vamos"
   },
   {
-   "t": 10.99,
-   "type": "interim",
-   "text": "Thanks for having me, my Spanish is not great, so I will stick to"
-  },
-  {
-   "t": 11.39,
-   "type": "interim",
-   "text": "Thanks for having me, my Spanish is not great, so I will stick to English"
+   "t": 10.9,
+   "type": "final",
+   "text": "Una cosa que vamos a ver, la primera",
+   "src": "",
+   "t0": 11.7,
+   "t1": 13.11,
+   "kind": "speech",
+   "tr": {
+    "es": "Una cosa que vamos a ver, la primera",
+    "en": "One thing we are going to see, the first",
+    "pt": "Uma coisa que vamos ver, a primeira"
+   },
+   "mtMs": 2500
   },
   {
    "t": 11.69,
-   "type": "final",
-   "text": "Thanks for having me, my Spanish is not great, so I will stick to English.",
-   "t0": 7.76,
-   "t1": 11.39,
-   "kind": "speech",
-   "src": "en",
-   "tr": {
-    "es": "Gracias por invitarme, mi español no es muy bueno, así que voy a seguir en inglés.",
-    "en": "Thanks for having me, my Spanish is not great, so I will stick to English.",
-    "pt": "Obrigado pelo convite, meu espanhol não é muito bom, então vou ficar no inglês."
-   },
-   "mtMs": 827
+   "type": "interim",
+   "text": "que vamos a encontrar"
   },
   {
-   "t": 12.96,
+   "t": 12.61,
    "type": "interim",
-   "text": "Our"
+   "text": "que vamos a"
   },
   {
-   "t": 13.26,
+   "t": 13.8,
    "type": "interim",
-   "text": "Our project"
+   "text": "que vamos a encontrar como cuello"
   },
   {
-   "t": 13.71,
+   "t": 14.45,
    "type": "interim",
-   "text": "Our project started"
-  },
-  {
-   "t": 14.11,
-   "type": "interim",
-   "text": "Our project started as"
-  },
-  {
-   "t": 14.46,
-   "type": "interim",
-   "text": "Our project started as a"
+   "text": "que vamos a encontrar como cuello de botella"
   },
   {
    "t": 14.74,
    "type": "interim",
-   "text": "Our project started as a weekend"
+   "text": "cuando estamos"
   },
   {
-   "t": 15.09,
-   "type": "interim",
-   "text": "Our project started as a weekend hack and"
-  },
-  {
-   "t": 15.57,
-   "type": "interim",
-   "text": "Our project started as a weekend hack and now"
-  },
-  {
-   "t": 15.97,
-   "type": "interim",
-   "text": "Our project started as a weekend hack and now has"
-  },
-  {
-   "t": 16.37,
-   "type": "interim",
-   "text": "Our project started as a weekend hack and now has two hundred"
-  },
-  {
-   "t": 16.69,
-   "type": "interim",
-   "text": "Our project started as a weekend hack and now has two hundred contributors"
-  },
-  {
-   "t": 16.99,
+   "t": 14.74,
    "type": "final",
-   "text": "Our project started as a weekend hack and now has two hundred contributors.",
-   "t0": 12.49,
-   "t1": 16.69,
+   "text": "que vamos a encontrar como cuello de botella",
+   "src": "",
+   "t0": 13.11,
+   "t1": 16.92,
    "kind": "speech",
-   "src": "en",
    "tr": {
-    "es": "Nuestro proyecto empezó como un hack de fin de semana y ahora tiene doscientos contribuidores.",
-    "en": "Our project started as a weekend hack and now has two hundred contributors.",
-    "pt": "Nosso projeto começou como um hack de fim de semana e agora tem duzentos contribuidores."
+    "es": "que vamos a encontrar como cuello de botella",
+    "en": "that we are going to find as a bottleneck",
+    "pt": "que vamos a encontrar como gargalo"
    },
-   "mtMs": 856
+   "mtMs": 1703
   },
   {
-   "t": 18.22,
+   "t": 14.96,
    "type": "interim",
-   "text": "No"
+   "text": "cuando estamos pasando a"
   },
   {
-   "t": 18.51,
+   "t": 15.2,
    "type": "interim",
-   "text": "No Brasil a"
+   "text": "cuando estamos pasando a"
   },
   {
-   "t": 18.9,
+   "t": 15.43,
    "type": "interim",
-   "text": "No Brasil a comunidade"
+   "text": "cuando estamos pasando a Kubernetes"
   },
   {
-   "t": 19.33,
+   "t": 15.68,
    "type": "interim",
-   "text": "No Brasil a comunidade cresceu"
+   "text": "cuando estamos pasando a Kubernetes será, por"
   },
   {
-   "t": 19.62,
+   "t": 15.92,
    "type": "interim",
-   "text": "No Brasil a comunidade cresceu muito"
+   "text": "por"
   },
   {
-   "t": 20.12,
-   "type": "interim",
-   "text": "No Brasil a comunidade cresceu muito com"
-  },
-  {
-   "t": 20.55,
-   "type": "interim",
-   "text": "No Brasil a comunidade cresceu muito com os"
-  },
-  {
-   "t": 20.87,
-   "type": "interim",
-   "text": "No Brasil a comunidade cresceu muito com os meetups"
-  },
-  {
-   "t": 21.28,
-   "type": "interim",
-   "text": "No Brasil a comunidade cresceu muito com os meetups presenciais"
-  },
-  {
-   "t": 21.58,
+   "t": 15.92,
    "type": "final",
-   "text": "No Brasil a comunidade cresceu muito com os meetups presenciais.",
-   "t0": 17.73,
-   "t1": 21.28,
+   "text": "cuando estamos pasando a Kubernetes será,",
+   "src": "",
+   "t0": 16.92,
+   "t1": 18.11,
    "kind": "speech",
-   "src": "pt",
    "tr": {
-    "es": "En Brasil la comunidad creció mucho con los meetups presenciales.",
-    "en": "In Brazil the community grew a lot with in-person meetups.",
-    "pt": "No Brasil a comunidade cresceu muito com os meetups presenciais."
+    "es": "cuando estamos pasando a Kubernetes será,",
+    "en": "when we are moving to Kubernetes it will be,",
+    "pt": "quando estamos migrando para Kubernetes será,"
    },
-   "mtMs": 670
+   "mtMs": 2500
   },
   {
-   "t": 22.41,
+   "t": 16.18,
    "type": "interim",
-   "text": "Y"
+   "text": "por ejemplo, el"
   },
   {
-   "t": 22.76,
+   "t": 16.46,
    "type": "interim",
-   "text": "Y acá"
+   "text": "por ejemplo, el acceso a"
   },
   {
-   "t": 23.25,
-   "type": "interim",
-   "text": "Y acá en"
-  },
-  {
-   "t": 23.67,
-   "type": "interim",
-   "text": "Y acá en Argentina"
-  },
-  {
-   "t": 24,
-   "type": "interim",
-   "text": "Y acá en Argentina pasó algo"
-  },
-  {
-   "t": 24.37,
-   "type": "interim",
-   "text": "Y acá en Argentina pasó algo parecido"
-  },
-  {
-   "t": 24.78,
-   "type": "interim",
-   "text": "Y acá en Argentina pasó algo parecido con Nerdearla"
-  },
-  {
-   "t": 25.08,
+   "t": 16.7,
    "type": "final",
-   "text": "Y acá en Argentina pasó algo parecido con Nerdearla.",
-   "t0": 21.99,
-   "t1": 24.78,
+   "text": "por ejemplo, el acceso a disco.",
+   "src": "",
+   "t0": 18.11,
+   "t1": 18.72,
    "kind": "speech",
-   "src": "es",
    "tr": {
-    "es": "Y acá en Argentina pasó algo parecido con Nerdearla.",
-    "en": "And here in Argentina something similar happened with Nerdearla.",
-    "pt": "E aqui na Argentina aconteceu algo parecido com a Nerdearla."
+    "es": "por ejemplo, el acceso a disco.",
+    "en": "for example, disk access.",
+    "pt": "por exemplo, o acesso ao disco."
    },
-   "mtMs": 840
+   "mtMs": 2500
   },
   {
-   "t": 28.7,
+   "t": 16.96,
+   "type": "interim",
+   "text": "¿Por"
+  },
+  {
+   "t": 17.21,
+   "type": "interim",
+   "text": "¿Por qué?"
+  },
+  {
+   "t": 17.63,
+   "type": "interim",
+   "text": "¿Por qué? Kubernetes"
+  },
+  {
+   "t": 18.09,
+   "type": "interim",
+   "text": "¿Por qué? Kubernetes en la mayoría"
+  },
+  {
+   "t": 18.55,
+   "type": "interim",
+   "text": "¿Por qué? Kubernetes en la mayoría de los"
+  },
+  {
+   "t": 19.08,
+   "type": "interim",
+   "text": "¿Por qué? Kubernetes en la mayoría de los casos,"
+  },
+  {
+   "t": 19.47,
+   "type": "interim",
+   "text": "no en"
+  },
+  {
+   "t": 19.47,
    "type": "final",
-   "text": "[aplausos]",
-   "t0": 25.9,
-   "t1": 28.4,
-   "kind": "sound",
-   "src": "es",
+   "text": "¿Por qué? Kubernetes en la mayoría de los casos,",
+   "src": "",
+   "t0": 18.72,
+   "t1": 21.6,
+   "kind": "speech",
    "tr": {
-    "es": "[aplausos]",
-    "en": "[applause]",
-    "pt": "[aplausos]"
+    "es": "¿Por qué? Kubernetes en la mayoría de los casos,",
+    "en": "Why? Kubernetes in most cases,",
+    "pt": "Por quê? Kubernetes na maioria dos casos,"
    },
-   "mtMs": 493
+   "mtMs": 2500
+  },
+  {
+   "t": 19.96,
+   "type": "interim",
+   "text": "no en todos, los"
+  },
+  {
+   "t": 20.48,
+   "type": "interim",
+   "text": "no en todos, los nodos"
+  },
+  {
+   "t": 20.98,
+   "type": "interim",
+   "text": "no en todos, los nodos serán"
+  },
+  {
+   "t": 21.52,
+   "type": "interim",
+   "text": "no en todos, los nodos serán serán"
+  },
+  {
+   "t": 21.89,
+   "type": "interim",
+   "text": "no en todos, los nodos serán Linux"
+  },
+  {
+   "t": 23.09,
+   "type": "final",
+   "text": "no en todos, los nodos serán Linux y,",
+   "src": "",
+   "t0": 21.6,
+   "t1": 25.31,
+   "kind": "speech",
+   "tr": {
+    "es": "no en todos, los nodos serán Linux y,",
+    "en": "not all, the nodes will be Linux and,",
+    "pt": "nem todos, os nós serão Linux e,"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 23.32,
+   "type": "interim",
+   "text": "como sabéis,"
+  },
+  {
+   "t": 23.58,
+   "type": "interim",
+   "text": "como sabéis,"
+  },
+  {
+   "t": 23.87,
+   "type": "interim",
+   "text": "como sabéis,"
+  },
+  {
+   "t": 24.3,
+   "type": "interim",
+   "text": "como sabéis, cualquier"
+  },
+  {
+   "t": 24.8,
+   "type": "interim",
+   "text": "como sabéis, cualquier"
+  },
+  {
+   "t": 25.32,
+   "type": "interim",
+   "text": "como sabéis, cualquier cualquier"
+  },
+  {
+   "t": 25.77,
+   "type": "interim",
+   "text": "como sabéis, cualquier cualquier"
+  },
+  {
+   "t": 26.3,
+   "type": "interim",
+   "text": "como sabéis, cualquier cualquier comando,"
+  },
+  {
+   "t": 26.69,
+   "type": "interim",
+   "text": "como sabéis, cualquier cualquier"
+  },
+  {
+   "t": 27.18,
+   "type": "interim",
+   "text": "como sabéis, cualquier comando,"
+  },
+  {
+   "t": 27.69,
+   "type": "final",
+   "text": "como sabéis, cualquier comando, cualquier cualquier",
+   "src": "",
+   "t0": 25.31,
+   "t1": 29.92,
+   "kind": "speech",
+   "tr": {
+    "es": "como sabéis, cualquier comando, cualquier cualquier",
+    "en": "as you know, any command, any any",
+    "pt": "como vocês sabem, qualquer comando, qualquer qualquer"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 28.79,
+   "type": "interim",
+   "text": "operación"
+  },
+  {
+   "t": 29.96,
+   "type": "interim",
+   "text": "operación en Linux"
+  },
+  {
+   "t": 30.29,
+   "type": "interim",
+   "text": "operación en Linux realmente"
+  },
+  {
+   "t": 30.5,
+   "type": "interim",
+   "text": "operación en Linux"
+  },
+  {
+   "t": 30.72,
+   "type": "interim",
+   "text": "operación en Linux realmente"
+  },
+  {
+   "t": 31.03,
+   "type": "interim",
+   "text": "operación en Linux realmente And when you"
+  },
+  {
+   "t": 31.23,
+   "type": "interim",
+   "text": "operación en Linux And when you open up"
+  },
+  {
+   "t": 31.48,
+   "type": "interim",
+   "text": "And when you open up"
+  },
+  {
+   "t": 31.48,
+   "type": "final",
+   "text": "operación en Linux",
+   "src": "",
+   "t0": 29.92,
+   "t1": 33.63,
+   "kind": "speech",
+   "tr": {
+    "es": "operación en Linux",
+    "en": "Linux operation",
+    "pt": "operação em Linux"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 31.99,
+   "type": "interim",
+   "text": "And when you open up something like"
+  },
+  {
+   "t": 32.47,
+   "type": "final",
+   "text": "And when you open up something like Claude",
+   "src": "",
+   "t0": 33.63,
+   "t1": 34.71,
+   "kind": "speech",
+   "tr": {
+    "es": "Y cuando abres algo como Claude",
+    "en": "And when you open up something like Claude",
+    "pt": "E quando você abre algo como Claude"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 32.93,
+   "type": "interim",
+   "text": "or"
+  },
+  {
+   "t": 33.48,
+   "type": "interim",
+   "text": "or ChatGPT or or"
+  },
+  {
+   "t": 33.91,
+   "type": "interim",
+   "text": "or ChatGPT or or maybe an agent"
+  },
+  {
+   "t": 34.4,
+   "type": "interim",
+   "text": "that"
+  },
+  {
+   "t": 34.4,
+   "type": "final",
+   "text": "or ChatGPT or or maybe an agent",
+   "src": "",
+   "t0": 34.71,
+   "t1": 36.61,
+   "kind": "speech",
+   "tr": {
+    "es": "o ChatGPT o tal vez un agente",
+    "en": "or ChatGPT or or maybe an agent",
+    "pt": "ou ChatGPT ou talvez um agente"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 34.91,
+   "type": "interim",
+   "text": "that you're building,"
+  },
+  {
+   "t": 35.37,
+   "type": "interim",
+   "text": "that you're building, under the"
+  },
+  {
+   "t": 35.87,
+   "type": "interim",
+   "text": "that you're building, under the hood,"
+  },
+  {
+   "t": 37.03,
+   "type": "interim",
+   "text": "that you're building, under the hood, there's"
+  },
+  {
+   "t": 37.91,
+   "type": "interim",
+   "text": "there's more"
+  },
+  {
+   "t": 37.91,
+   "type": "final",
+   "text": "that you're building, under the hood,",
+   "src": "",
+   "t0": 36.61,
+   "t1": 40.11,
+   "kind": "speech",
+   "tr": {
+    "es": "que estás construyendo, bajo el capó,",
+    "en": "that you're building, under the hood,",
+    "pt": "que você está construindo, por baixo do capô,"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 38.15,
+   "type": "interim",
+   "text": "there's more than one"
+  },
+  {
+   "t": 38.41,
+   "type": "interim",
+   "text": "there's more than one component that"
+  },
+  {
+   "t": 38.96,
+   "type": "interim",
+   "text": "that goes"
+  },
+  {
+   "t": 38.96,
+   "type": "final",
+   "text": "there's more than one component",
+   "src": "",
+   "t0": 40.11,
+   "t1": 41.11,
+   "kind": "speech",
+   "tr": {
+    "es": "hay más de un componente",
+    "en": "there's more than one component",
+    "pt": "há mais de um componente"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 39.69,
+   "type": "interim",
+   "text": "that goes into this."
+  },
+  {
+   "t": 40.74,
+   "type": "interim",
+   "text": "that goes into this. An"
+  },
+  {
+   "t": 41.67,
+   "type": "interim",
+   "text": "that goes into this. An AI"
+  },
+  {
+   "t": 42.53,
+   "type": "interim",
+   "text": "if you think"
+  },
+  {
+   "t": 42.53,
+   "type": "final",
+   "text": "that goes into this. An AI application,",
+   "src": "",
+   "t0": 41.11,
+   "t1": 44.71,
+   "kind": "speech",
+   "tr": {
+    "es": "que interviene en esto. Una aplicación de IA,",
+    "en": "that goes into this. An AI application,",
+    "pt": "que entra nisso. Uma aplicação de IA,"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 43.78,
+   "type": "interim",
+   "text": "if you think of it as kind"
+  },
+  {
+   "t": 45.12,
+   "type": "interim",
+   "text": "if you think of it as kind of like"
+  },
+  {
+   "t": 45.82,
+   "type": "interim",
+   "text": "if you think of it as kind of like the"
+  },
+  {
+   "t": 46.11,
+   "type": "interim",
+   "text": "if you think of it as kind of the the"
+  },
+  {
+   "t": 46.37,
+   "type": "interim",
+   "text": "if you think of it as kind of like the the larger"
+  },
+  {
+   "t": 46.58,
+   "type": "interim",
+   "text": "the thing"
+  },
+  {
+   "t": 46.58,
+   "type": "final",
+   "text": "if you think of it as kind of like the the larger surface,",
+   "src": "",
+   "t0": 44.71,
+   "t1": 48.82,
+   "kind": "speech",
+   "tr": {
+    "es": "si lo piensas como una especie de superficie más grande,",
+    "en": "if you think of it as kind of like the the larger surface,",
+    "pt": "se você pensar nisso como uma espécie de superfície maior,"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 47.49,
+   "type": "interim",
+   "text": "the thing that the"
+  },
+  {
+   "t": 48.51,
+   "type": "interim",
+   "text": "the thing that the"
+  },
+  {
+   "t": 48.76,
+   "type": "interim",
+   "text": "the thing that the user might"
+  },
+  {
+   "t": 48.99,
+   "type": "interim",
+   "text": "the thing that the user might interact with,"
+  },
+  {
+   "t": 49.23,
+   "type": "interim",
+   "text": "the thing that the user might interact with,"
+  },
+  {
+   "t": 49.44,
+   "type": "final",
+   "text": "the thing that the user might interact with,",
+   "src": "",
+   "t0": 48.82,
+   "t1": 51.63,
+   "kind": "speech",
+   "tr": {
+    "es": "lo que el usuario podría interactuar,",
+    "en": "the thing that the user might interact with,",
+    "pt": "a coisa com a qual o usuário pode interagir,"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 49.68,
+   "type": "interim",
+   "text": "underneath that,"
+  },
+  {
+   "t": 50.77,
+   "type": "interim",
+   "text": "underneath that, the"
+  },
+  {
+   "t": 51.04,
+   "type": "interim",
+   "text": "underneath that, the AI"
+  },
+  {
+   "t": 51.24,
+   "type": "interim",
+   "text": "underneath that, the AI model"
+  },
+  {
+   "t": 51.5,
+   "type": "interim",
+   "text": "underneath that, the AI model itself is"
+  },
+  {
+   "t": 51.7,
+   "type": "interim",
+   "text": "underneath that, the AI model itself is kind of"
+  },
+  {
+   "t": 51.94,
+   "type": "interim",
+   "text": "underneath that, the AI model itself is kind of like the"
+  },
+  {
+   "t": 52.17,
+   "type": "interim",
+   "text": "underneath that, the AI model itself is kind of like the"
+  },
+  {
+   "t": 52.41,
+   "type": "interim",
+   "text": "underneath that, the AI model itself is kind of like the brain"
+  },
+  {
+   "t": 52.65,
+   "type": "final",
+   "text": "underneath that, the AI model itself is kind of like the brain powering it.",
+   "src": "",
+   "t0": 51.63,
+   "t1": 54.83,
+   "kind": "speech",
+   "tr": {
+    "es": "debajo de eso, el propio modelo de inteligencia artificial es como el cerebro que lo impulsa.",
+    "en": "underneath that, the AI model itself is kind of like the brain powering it.",
+    "pt": "por baixo disso, o próprio modelo de inteligência artificial é como o cérebro que o alimenta."
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 52.93,
+   "type": "interim",
+   "text": "Obviously,"
+  },
+  {
+   "t": 53.2,
+   "type": "interim",
+   "text": "Obviously, it's not"
+  },
+  {
+   "t": 53.45,
+   "type": "interim",
+   "text": "Obviously, it's not actually a brain,"
+  },
+  {
+   "t": 54.39,
+   "type": "interim",
+   "text": "Obviously, it's not actually a brain, but it's"
+  },
+  {
+   "t": 54.61,
+   "type": "interim",
+   "text": "but it's kind of"
+  },
+  {
+   "t": 54.61,
+   "type": "final",
+   "text": "Obviously, it's not actually a brain,",
+   "src": "",
+   "t0": 54.83,
+   "t1": 56.81,
+   "kind": "speech",
+   "tr": {
+    "es": "Obviamente, en realidad no es un cerebro,",
+    "en": "Obviously, it's not actually a brain,",
+    "pt": "Obviamente, na verdade não é um cérebro,"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 54.87,
+   "type": "interim",
+   "text": "but it's kind of like a"
+  },
+  {
+   "t": 55.1,
+   "type": "interim",
+   "text": "but it's kind of like a"
+  },
+  {
+   "t": 55.35,
+   "type": "interim",
+   "text": "but it's kind of like a brain sitting"
+  },
+  {
+   "t": 55.58,
+   "type": "interim",
+   "text": "but it's kind of like a brain sitting behind some"
+  },
+  {
+   "t": 55.82,
+   "type": "interim",
+   "text": "but it's kind of like a brain sitting behind some API"
+  },
+  {
+   "t": 56.65,
+   "type": "final",
+   "text": "but it's kind of like a brain sitting behind some API somewhere.",
+   "src": "",
+   "t0": 56.81,
+   "t1": 58.83,
+   "kind": "speech",
+   "tr": {
+    "es": "pero es como un cerebro detrás de alguna API en algún lugar.",
+    "en": "but it's kind of like a brain sitting behind some API somewhere.",
+    "pt": "mas é como um cérebro por trás de alguma API em algum lugar."
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 57.66,
+   "type": "interim",
+   "text": "Whether"
+  },
+  {
+   "t": 57.92,
+   "type": "interim",
+   "text": "Whether that's"
+  },
+  {
+   "t": 58.19,
+   "type": "interim",
+   "text": "Whether that's hosted by"
+  },
+  {
+   "t": 58.92,
+   "type": "final",
+   "text": "Whether that's hosted by OpenAI,",
+   "src": "",
+   "t0": 58.83,
+   "t1": 60,
+   "kind": "speech",
+   "tr": {
+    "es": "Ya sea que esté alojado por OpenAI,",
+    "en": "Whether that's hosted by OpenAI,",
+    "pt": "Seja hospedado pela OpenAI,"
+   },
+   "mtMs": 2500
   }
  ]
 }

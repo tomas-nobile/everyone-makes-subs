@@ -22,9 +22,9 @@ export interface AsrOptions { apiKey: string; model: string; lang?: string; voca
 let nextId = 1;
 
 /**
- * Gemini Live transcription session. Interims arrive in `interimInputTranscription` and finals in
- * `inputTranscription` (`finished: true`). Until F03.1 confirms it with real audio, interims are
- * accepted both cumulative (new text extends the previous one) and as deltas (concatenated).
+ * Gemini Live transcription session. Interims arrive in `interimInputTranscription` (cumulative);
+ * the utterance ends with `inputTranscription` + `generationComplete` / ACTIVITY_END (F03.1).
+ * Deltas would also work: `mergeInterim` appends text that does not extend the previous one.
  */
 export class LiveSession extends EventEmitter implements AsrSession {
   readonly id = nextId++;
@@ -67,32 +67,33 @@ export class LiveSession extends EventEmitter implements AsrSession {
 
   private onMessage(m: LiveServerMessage): void {
     if (m.goAway) this.emit('goaway');
+    // Verified in F03.1: interims are cumulative (the whole utterance so far); the final is an
+    // `inputTranscription` with the full text but no `finished`, followed by `generationComplete`
+    // and `voiceActivity` ACTIVITY_END. The raw message says `voiceActivity.type`; the SDK types
+    // say `voiceActivityType`: accept both.
+    const va = m.voiceActivity as { type?: string; voiceActivityType?: string } | undefined;
+    const activity = va?.type ?? va?.voiceActivityType;
     const sc = m.serverContent;
-    if (!sc) return;
-    const interim = sc.interimInputTranscription?.text;
+    if (activity === 'ACTIVITY_START') this.flushFinal();   // never merge two utterances
+    const interim = sc?.interimInputTranscription?.text;
     if (interim) {
-      this.utterance = mergeInterim(this.utterance, interim);
+      this.utterance = interim;   // cumulative: each interim is the whole utterance so far
       this.emit('interim', this.utterance);
     }
-    const fin = sc.inputTranscription;
+    const fin = sc?.inputTranscription;
     if (fin?.text) this.finalBuf = mergeInterim(this.finalBuf, fin.text);
-    if (fin && (fin.finished || sc.turnComplete) && (this.finalBuf || this.utterance)) {
-      const text = (this.finalBuf || this.utterance).trim();
-      this.finalBuf = '';
-      this.utterance = '';
-      if (text) this.emit('final', text);
-    } else if (sc.turnComplete && this.utterance) {
-      const text = this.utterance.trim();
-      this.utterance = '';
-      this.emit('final', text);
-    }
+    if (fin?.finished || sc?.turnComplete || sc?.generationComplete || activity === 'ACTIVITY_END') this.flushFinal();
+  }
+
+  private flushFinal(): void {
+    const text = (this.finalBuf || this.utterance).trim();
+    this.finalBuf = '';
+    this.utterance = '';
+    if (text) this.emit('final', text);
   }
 
   private onClose(reason: string): void {
-    if (this.utterance || this.finalBuf) {
-      this.emit('final', (this.finalBuf || this.utterance).trim());
-      this.utterance = this.finalBuf = '';
-    }
+    this.flushFinal();
     this.emit('close', reason, !this.closedByUs);
   }
 

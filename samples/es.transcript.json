@@ -1,773 +1,1213 @@
 {
  "lang": "es",
- "title": "Observabilidad sin dolor",
- "speaker": "Lucía Fernández",
- "durationSec": 64.8,
+ "title": "Una guía de navegación: rendimiento en Kubernetes",
+ "speaker": "Almudena Vivanco",
+ "durationSec": 80,
  "events": [
   {
-   "t": 1.08,
+   "t": 1,
    "type": "interim",
-   "text": "Hola a"
+   "text": "más cómodamente con"
   },
   {
-   "t": 1.41,
-   "type": "interim",
-   "text": "Hola a todos, gracias"
-  },
-  {
-   "t": 1.81,
-   "type": "interim",
-   "text": "Hola a todos, gracias por"
-  },
-  {
-   "t": 2.25,
-   "type": "interim",
-   "text": "Hola a todos, gracias por venir tan"
-  },
-  {
-   "t": 2.65,
-   "type": "interim",
-   "text": "Hola a todos, gracias por venir tan temprano"
-  },
-  {
-   "t": 2.95,
+   "t": 3.29,
    "type": "final",
-   "text": "Hola a todos, gracias por venir tan temprano.",
-   "t0": 0.6,
-   "t1": 2.65,
-   "kind": "speech",
+   "text": "más cómodamente con ellos. No",
    "src": "es",
+   "t0": 0.37,
+   "t1": 18.33,
+   "kind": "speech",
    "tr": {
-    "es": "Hola a todos, gracias por venir tan temprano.",
-    "en": "Hi everyone, thanks for coming so early.",
-    "pt": "Olá a todos, obrigada por virem tão cedo."
+    "es": "más cómodamente con ellos. No",
+    "en": "more comfortably with them. No",
+    "pt": "mais confortavelmente com eles. N'o"
    },
-   "mtMs": 792
+   "mtMs": 1304
   },
   {
-   "t": 4,
+   "t": 5.54,
    "type": "interim",
-   "text": "Hoy"
+   "text": "es necesario"
   },
   {
-   "t": 4.44,
+   "t": 7.77,
    "type": "interim",
-   "text": "Hoy vamos"
+   "text": "es necesario pero"
   },
   {
-   "t": 4.73,
+   "t": 8.06,
    "type": "interim",
-   "text": "Hoy vamos a"
+   "text": "es necesario necesario, pero sí que"
   },
   {
-   "t": 5.11,
+   "t": 8.34,
    "type": "interim",
-   "text": "Hoy vamos a hablar"
+   "text": "es necesario pero sí que"
   },
   {
-   "t": 5.57,
-   "type": "interim",
-   "text": "Hoy vamos a hablar de"
-  },
-  {
-   "t": 5.96,
-   "type": "interim",
-   "text": "Hoy vamos a hablar de observabilidad sin"
-  },
-  {
-   "t": 6.39,
-   "type": "interim",
-   "text": "Hoy vamos a hablar de observabilidad sin dolor"
-  },
-  {
-   "t": 6.69,
+   "t": 8.62,
    "type": "final",
-   "text": "Hoy vamos a hablar de observabilidad sin dolor.",
-   "t0": 3.67,
-   "t1": 6.39,
-   "kind": "speech",
+   "text": "es necesario pero sí que es una",
    "src": "es",
+   "t0": 18.33,
+   "t1": 23.62,
+   "kind": "speech",
    "tr": {
-    "es": "Hoy vamos a hablar de observabilidad sin dolor.",
-    "en": "Today we're going to talk about painless observability.",
-    "pt": "Hoje vamos falar de observabilidade sem dor."
+    "es": "es necesario pero sí que es una",
+    "en": "not strictly necessary, but it is",
+    "pt": "não é estritamente necessário, mas é"
    },
-   "mtMs": 772
-  },
-  {
-   "t": 7.86,
-   "type": "interim",
-   "text": "Empecemos"
-  },
-  {
-   "t": 8.22,
-   "type": "interim",
-   "text": "Empecemos con"
-  },
-  {
-   "t": 8.57,
-   "type": "interim",
-   "text": "Empecemos con una"
+   "mtMs": 858
   },
   {
    "t": 8.92,
    "type": "interim",
-   "text": "Empecemos con una pregunta: ¿quién"
+   "text": "te"
   },
   {
-   "t": 9.26,
+   "t": 9.19,
    "type": "interim",
-   "text": "Empecemos con una pregunta: ¿quién tuvo"
+   "text": "Eh, te"
   },
   {
-   "t": 9.66,
+   "t": 9.47,
    "type": "interim",
-   "text": "Empecemos con una pregunta: ¿quién tuvo una"
+   "text": "Te da una"
   },
   {
-   "t": 10.14,
+   "t": 9.75,
    "type": "interim",
-   "text": "Empecemos con una pregunta: ¿quién tuvo una alerta"
+   "text": "Te da una calidad de"
   },
   {
-   "t": 10.48,
+   "t": 10.02,
    "type": "interim",
-   "text": "Empecemos con una pregunta: ¿quién tuvo una alerta a las"
+   "text": "Te da una calidad de"
   },
   {
-   "t": 10.87,
+   "t": 10.29,
    "type": "interim",
-   "text": "Empecemos con una pregunta: ¿quién tuvo una alerta a las tres"
+   "text": "Te da una calidad de vida"
   },
   {
-   "t": 11.19,
+   "t": 10.58,
    "type": "interim",
-   "text": "Empecemos con una pregunta: ¿quién tuvo una alerta a las tres de"
+   "text": "Te da una calidad de vida para los"
   },
   {
-   "t": 11.48,
+   "t": 10.89,
    "type": "interim",
-   "text": "Empecemos con una pregunta: ¿quién tuvo una alerta a las tres de la"
+   "text": "que trabajamos con ellos"
   },
   {
-   "t": 11.84,
-   "type": "interim",
-   "text": "Empecemos con una pregunta: ¿quién tuvo una alerta a las tres de la mañana"
-  },
-  {
-   "t": 12.32,
-   "type": "interim",
-   "text": "Empecemos con una pregunta: ¿quién tuvo una alerta a las tres de la mañana este"
-  },
-  {
-   "t": 12.64,
-   "type": "interim",
-   "text": "Empecemos con una pregunta: ¿quién tuvo una alerta a las tres de la mañana este mes"
-  },
-  {
-   "t": 12.94,
+   "t": 10.89,
    "type": "final",
-   "text": "Empecemos con una pregunta: ¿quién tuvo una alerta a las tres de la mañana este mes?",
-   "t0": 7.38,
-   "t1": 12.64,
+   "text": "Te da una calidad de vida para los",
+   "src": "es",
+   "t0": 23.62,
+   "t1": 25.92,
    "kind": "speech",
-   "src": "es",
    "tr": {
-    "es": "Empecemos con una pregunta: ¿quién tuvo una alerta a las tres de la mañana este mes?",
-    "en": "Let's start with a question: who got an alert at three in the morning this month?",
-    "pt": "Vamos começar com uma pergunta: quem recebeu um alerta às três da manhã este mês?"
+    "es": "Te da una calidad de vida para los",
+    "en": "It gives you a quality of life for",
+    "pt": "Isso te dá uma qualidade de vida para"
    },
-   "mtMs": 653
+   "mtMs": 2500
   },
   {
-   "t": 16.28,
+   "t": 11.18,
+   "type": "interim",
+   "text": "que trabajamos con ellos y"
+  },
+  {
+   "t": 11.42,
    "type": "final",
-   "text": "[risas]",
-   "t0": 13.48,
-   "t1": 15.98,
-   "kind": "sound",
+   "text": "que trabajamos con ellos y lo gestionamos.",
    "src": "es",
+   "t0": 25.92,
+   "t1": 26.43,
+   "kind": "speech",
    "tr": {
-    "es": "[risas]",
-    "en": "[laughter]",
-    "pt": "[risos]"
+    "es": "que trabajamos con ellos y lo gestionamos.",
+    "en": "that we work with them and manage it.",
+    "pt": "que trabalhamos com eles e o gerenciamos."
    },
-   "mtMs": 632
+   "mtMs": 1806
+  },
+  {
+   "t": 11.99,
+   "type": "interim",
+   "text": "¿Qué"
+  },
+  {
+   "t": 12.27,
+   "type": "interim",
+   "text": "¿Qué pasa"
+  },
+  {
+   "t": 12.52,
+   "type": "interim",
+   "text": "¿Qué pasa entonces? Que"
+  },
+  {
+   "t": 12.79,
+   "type": "interim",
+   "text": "¿Qué pasa entonces? Que normalmente vamos"
+  },
+  {
+   "t": 13.07,
+   "type": "interim",
+   "text": "Que normalmente vamos a hablar"
+  },
+  {
+   "t": 13.07,
+   "type": "final",
+   "text": "¿Qué pasa entonces?",
+   "src": "es",
+   "t0": 26.43,
+   "t1": 28.12,
+   "kind": "speech",
+   "tr": {
+    "es": "¿Qué pasa entonces?",
+    "en": "What happens then?",
+    "pt": "O que acontece então?"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 13.3,
+   "type": "interim",
+   "text": "Que normalmente vamos a hablar, eso, de"
+  },
+  {
+   "t": 13.57,
+   "type": "interim",
+   "text": "Que normalmente vamos a hablar, eso, de"
+  },
+  {
+   "t": 13.81,
+   "type": "final",
+   "text": "Que normalmente vamos a hablar, eso, de clusters.",
+   "src": "es",
+   "t0": 28.12,
+   "t1": 28.8,
+   "kind": "speech",
+   "tr": {
+    "es": "Que normalmente vamos a hablar, eso, de clusters.",
+    "en": "That normally we will talk, well, about clusters.",
+    "pt": "Que normalmente vamos a falar, isso, de clusters."
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 14.07,
+   "type": "interim",
+   "text": "Clusters en"
+  },
+  {
+   "t": 14.31,
+   "type": "interim",
+   "text": "Clusters en los que"
+  },
+  {
+   "t": 14.57,
+   "type": "interim",
+   "text": "Clusters en los que tendremos nodos, en"
+  },
+  {
+   "t": 14.87,
+   "type": "interim",
+   "text": "que"
+  },
+  {
+   "t": 14.87,
+   "type": "final",
+   "text": "Clusters en los que tendremos nodos, en los",
+   "src": "es",
+   "t0": 28.8,
+   "t1": 29.31,
+   "kind": "speech",
+   "tr": {
+    "es": "Clusters en los que tendremos nodos, en los",
+    "en": "Clusters in which we will have nodes, in",
+    "pt": "Clusters nos quais teremos nós, em"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 15.11,
+   "type": "interim",
+   "text": "que tendremos las"
+  },
+  {
+   "t": 15.38,
+   "type": "interim",
+   "text": "que tendremos las apps"
+  },
+  {
+   "t": 15.64,
+   "type": "interim",
+   "text": "que tendremos las apps"
+  },
+  {
+   "t": 15.92,
+   "type": "interim",
+   "text": "que tendremos las apps contenerizadas y"
+  },
+  {
+   "t": 16.18,
+   "type": "interim",
+   "text": "y tendremos el despliegue"
+  },
+  {
+   "t": 16.18,
+   "type": "final",
+   "text": "que tendremos las apps contenerizadas",
+   "src": "es",
+   "t0": 29.31,
+   "t1": 31.21,
+   "kind": "speech",
+   "tr": {
+    "es": "que tendremos las apps contenerizadas",
+    "en": "which we will have the containerized apps",
+    "pt": "que teremos as apps containerizadas"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 16.46,
+   "type": "interim",
+   "text": "y tendremos el despliegue y el"
+  },
+  {
+   "t": 16.74,
+   "type": "interim",
+   "text": "y tendremos el despliegue y el"
+  },
+  {
+   "t": 17.02,
+   "type": "interim",
+   "text": "y tendremos el despliegue y el control plane. Hoy"
   },
   {
    "t": 17.29,
    "type": "interim",
-   "text": "Exacto, casi"
+   "text": "Hoy no vamos a entrar"
   },
   {
-   "t": 17.62,
-   "type": "interim",
-   "text": "Exacto, casi todos"
-  },
-  {
-   "t": 17.92,
+   "t": 17.29,
    "type": "final",
-   "text": "Exacto, casi todos.",
-   "t0": 16.89,
-   "t1": 17.62,
-   "kind": "speech",
+   "text": "y tendremos el despliegue y el control plane.",
    "src": "es",
+   "t0": 31.21,
+   "t1": 32.33,
+   "kind": "speech",
    "tr": {
-    "es": "Exacto, casi todos.",
-    "en": "Exactly, almost everyone.",
-    "pt": "Exatamente, quase todos."
+    "es": "y tendremos el despliegue y el control plane.",
+    "en": "and we will have the deployment and the control plane.",
+    "pt": "e teremos o deployment e o control plane."
    },
-   "mtMs": 903
+   "mtMs": 2500
   },
   {
-   "t": 18.97,
+   "t": 17.57,
    "type": "interim",
-   "text": "El"
+   "text": "Hoy no vamos a entrar en el"
   },
   {
-   "t": 19.36,
+   "t": 17.85,
    "type": "interim",
-   "text": "El problema"
+   "text": "Hoy no vamos a entrar en el control plane porque"
   },
   {
-   "t": 19.79,
+   "t": 18.14,
    "type": "interim",
-   "text": "El problema no"
+   "text": "porque es una parte"
   },
   {
-   "t": 20.16,
-   "type": "interim",
-   "text": "El problema no es"
-  },
-  {
-   "t": 20.5,
-   "type": "interim",
-   "text": "El problema no es la"
-  },
-  {
-   "t": 20.85,
-   "type": "interim",
-   "text": "El problema no es la falta"
-  },
-  {
-   "t": 21.22,
-   "type": "interim",
-   "text": "El problema no es la falta de datos"
-  },
-  {
-   "t": 21.69,
-   "type": "interim",
-   "text": "El problema no es la falta de datos, sino"
-  },
-  {
-   "t": 22.15,
-   "type": "interim",
-   "text": "El problema no es la falta de datos, sino que tenemos"
-  },
-  {
-   "t": 22.52,
-   "type": "interim",
-   "text": "El problema no es la falta de datos, sino que tenemos demasiados y"
-  },
-  {
-   "t": 22.82,
-   "type": "interim",
-   "text": "El problema no es la falta de datos, sino que tenemos demasiados y ninguno responde"
-  },
-  {
-   "t": 23.15,
-   "type": "interim",
-   "text": "El problema no es la falta de datos, sino que tenemos demasiados y ninguno responde la"
-  },
-  {
-   "t": 23.46,
-   "type": "interim",
-   "text": "El problema no es la falta de datos, sino que tenemos demasiados y ninguno responde la pregunta"
-  },
-  {
-   "t": 23.87,
-   "type": "interim",
-   "text": "El problema no es la falta de datos, sino que tenemos demasiados y ninguno responde la pregunta correcta"
-  },
-  {
-   "t": 24.17,
+   "t": 18.14,
    "type": "final",
-   "text": "El problema no es la falta de datos, sino que tenemos demasiados y ninguno responde la pregunta correcta.",
-   "t0": 18.55,
-   "t1": 23.87,
-   "kind": "speech",
+   "text": "Hoy no vamos a entrar en el control plane",
    "src": "es",
+   "t0": 32.33,
+   "t1": 33.12,
+   "kind": "speech",
    "tr": {
-    "es": "El problema no es la falta de datos, sino que tenemos demasiados y ninguno responde la pregunta correcta.",
-    "en": "The problem is not a lack of data, but that we have too much and none of it answers the right question.",
-    "pt": "O problema não é a falta de dados, mas que temos dados demais e nenhum responde à pergunta certa."
+    "es": "Hoy no vamos a entrar en el control plane",
+    "en": "Today we are not going to get into the control plane",
+    "pt": "Hoje não vamos entrar no control plane"
    },
-   "mtMs": 519
+   "mtMs": 2500
   },
   {
-   "t": 25.51,
+   "t": 18.42,
    "type": "interim",
-   "text": "Con"
+   "text": "porque es una parte un poco"
   },
   {
-   "t": 25.99,
+   "t": 18.72,
    "type": "interim",
-   "text": "Con OpenTelemetry"
+   "text": "porque es una parte un poco más"
   },
   {
-   "t": 26.33,
+   "t": 18.99,
    "type": "interim",
-   "text": "Con OpenTelemetry podemos"
+   "text": "porque es una parte un poco más"
   },
   {
-   "t": 26.66,
-   "type": "interim",
-   "text": "Con OpenTelemetry podemos instrumentar una"
-  },
-  {
-   "t": 26.94,
-   "type": "interim",
-   "text": "Con OpenTelemetry podemos instrumentar una vez y"
-  },
-  {
-   "t": 27.27,
-   "type": "interim",
-   "text": "Con OpenTelemetry podemos instrumentar una vez y enviar"
-  },
-  {
-   "t": 27.66,
-   "type": "interim",
-   "text": "Con OpenTelemetry podemos instrumentar una vez y enviar las"
-  },
-  {
-   "t": 27.99,
-   "type": "interim",
-   "text": "Con OpenTelemetry podemos instrumentar una vez y enviar las trazas"
-  },
-  {
-   "t": 28.33,
-   "type": "interim",
-   "text": "Con OpenTelemetry podemos instrumentar una vez y enviar las trazas a"
-  },
-  {
-   "t": 28.8,
-   "type": "interim",
-   "text": "Con OpenTelemetry podemos instrumentar una vez y enviar las trazas a donde"
-  },
-  {
-   "t": 29.19,
-   "type": "interim",
-   "text": "Con OpenTelemetry podemos instrumentar una vez y enviar las trazas a donde queramos"
-  },
-  {
-   "t": 29.49,
+   "t": 19.28,
    "type": "final",
-   "text": "Con OpenTelemetry podemos instrumentar una vez y enviar las trazas a donde queramos.",
-   "t0": 25.03,
-   "t1": 29.19,
-   "kind": "speech",
+   "text": "porque es una parte un poco más",
    "src": "es",
+   "t0": 33.12,
+   "t1": 34.31,
+   "kind": "speech",
    "tr": {
-    "es": "Con OpenTelemetry podemos instrumentar una vez y enviar las trazas a donde queramos.",
-    "en": "With OpenTelemetry we can instrument once and send the traces wherever we want.",
-    "pt": "Com OpenTelemetry podemos instrumentar uma vez e enviar os traces para onde quisermos."
+    "es": "porque es una parte un poco más",
+    "en": "because it is a part a bit more",
+    "pt": "porque é uma parte um pouco mais"
    },
-   "mtMs": 451
+   "mtMs": 2500
   },
   {
-   "t": 30.83,
+   "t": 19.57,
    "type": "interim",
-   "text": "La"
+   "text": "más"
   },
   {
-   "t": 31.31,
+   "t": 19.86,
    "type": "interim",
-   "text": "La clave está"
+   "text": "difícil"
   },
   {
-   "t": 31.8,
+   "t": 20.15,
    "type": "interim",
-   "text": "La clave está en definir"
+   "text": "difícil de"
   },
   {
-   "t": 32.23,
+   "t": 20.42,
    "type": "interim",
-   "text": "La clave está en definir pocos"
+   "text": "difícil de entender, pero sí que"
   },
   {
-   "t": 32.56,
+   "t": 20.68,
    "type": "interim",
-   "text": "La clave está en definir pocos indicadores de"
+   "text": "que vamos"
   },
   {
-   "t": 32.96,
-   "type": "interim",
-   "text": "La clave está en definir pocos indicadores de servicio que"
-  },
-  {
-   "t": 33.41,
-   "type": "interim",
-   "text": "La clave está en definir pocos indicadores de servicio que le importen"
-  },
-  {
-   "t": 33.85,
-   "type": "interim",
-   "text": "La clave está en definir pocos indicadores de servicio que le importen al"
-  },
-  {
-   "t": 34.14,
-   "type": "interim",
-   "text": "La clave está en definir pocos indicadores de servicio que le importen al usuario"
-  },
-  {
-   "t": 34.44,
+   "t": 20.68,
    "type": "final",
-   "text": "La clave está en definir pocos indicadores de servicio que le importen al usuario.",
-   "t0": 30.35,
-   "t1": 34.14,
-   "kind": "speech",
+   "text": "difícil de entender, pero sí",
    "src": "es",
+   "t0": 34.31,
+   "t1": 35.71,
+   "kind": "speech",
    "tr": {
-    "es": "La clave está en definir pocos indicadores de servicio que le importen al usuario.",
-    "en": "The key is to define a few service level indicators that matter to the user.",
-    "pt": "A chave está em definir poucos indicadores de serviço que importem ao usuário."
+    "es": "difícil de entender, pero sí",
+    "en": "difficult to understand, but yes",
+    "pt": "difícil de entender, mas sim"
    },
-   "mtMs": 505
+   "mtMs": 2500
   },
   {
-   "t": 35.73,
+   "t": 20.96,
    "type": "interim",
-   "text": "Por ejemplo"
+   "text": "que vamos a entrar,"
   },
   {
-   "t": 36.02,
+   "t": 21.25,
    "type": "interim",
-   "text": "Por ejemplo, la"
+   "text": "que vamos a entrar, por ejemplo,"
   },
   {
-   "t": 36.48,
+   "t": 21.57,
    "type": "interim",
-   "text": "Por ejemplo, la latencia"
+   "text": "que vamos a entrar, por ejemplo, sobre todo en"
   },
   {
-   "t": 36.97,
+   "t": 22.88,
    "type": "interim",
-   "text": "Por ejemplo, la latencia del"
+   "text": "sobre todo en la"
   },
   {
-   "t": 37.35,
-   "type": "interim",
-   "text": "Por ejemplo, la latencia del checkout"
-  },
-  {
-   "t": 37.79,
-   "type": "interim",
-   "text": "Por ejemplo, la latencia del checkout en el"
-  },
-  {
-   "t": 38.15,
-   "type": "interim",
-   "text": "Por ejemplo, la latencia del checkout en el percentil"
-  },
-  {
-   "t": 38.52,
-   "type": "interim",
-   "text": "Por ejemplo, la latencia del checkout en el percentil noventa y"
-  },
-  {
-   "t": 38.93,
-   "type": "interim",
-   "text": "Por ejemplo, la latencia del checkout en el percentil noventa y nueve"
-  },
-  {
-   "t": 39.23,
+   "t": 22.88,
    "type": "final",
-   "text": "Por ejemplo, la latencia del checkout en el percentil noventa y nueve.",
-   "t0": 35.3,
-   "t1": 38.93,
-   "kind": "speech",
+   "text": "que vamos a entrar, por ejemplo,",
    "src": "es",
+   "t0": 35.71,
+   "t1": 37.91,
+   "kind": "speech",
    "tr": {
-    "es": "Por ejemplo, la latencia del checkout en el percentil noventa y nueve.",
-    "en": "For example, checkout latency at the ninety-ninth percentile.",
-    "pt": "Por exemplo, a latência do checkout no percentil noventa e nove."
+    "es": "que vamos a entrar, por ejemplo,",
+    "en": "that we are going to enter, for example,",
+    "pt": "que vamos entrar, por exemplo,"
    },
-   "mtMs": 626
+   "mtMs": 2500
   },
   {
-   "t": 40.29,
+   "t": 49.94,
    "type": "interim",
-   "text": "Si"
+   "text": "cómo"
   },
   {
-   "t": 40.66,
-   "type": "interim",
-   "text": "Si ese"
-  },
-  {
-   "t": 41.01,
-   "type": "interim",
-   "text": "Si ese número está"
-  },
-  {
-   "t": 41.51,
-   "type": "interim",
-   "text": "Si ese número está bien"
-  },
-  {
-   "t": 41.98,
-   "type": "interim",
-   "text": "Si ese número está bien, el"
-  },
-  {
-   "t": 42.31,
-   "type": "interim",
-   "text": "Si ese número está bien, el resto"
-  },
-  {
-   "t": 42.62,
-   "type": "interim",
-   "text": "Si ese número está bien, el resto puede"
-  },
-  {
-   "t": 43.02,
-   "type": "interim",
-   "text": "Si ese número está bien, el resto puede esperar"
-  },
-  {
-   "t": 43.51,
-   "type": "interim",
-   "text": "Si ese número está bien, el resto puede esperar hasta"
-  },
-  {
-   "t": 43.83,
-   "type": "interim",
-   "text": "Si ese número está bien, el resto puede esperar hasta el"
-  },
-  {
-   "t": 44.15,
-   "type": "interim",
-   "text": "Si ese número está bien, el resto puede esperar hasta el lunes"
-  },
-  {
-   "t": 44.45,
+   "t": 49.94,
    "type": "final",
-   "text": "Si ese número está bien, el resto puede esperar hasta el lunes.",
-   "t0": 39.94,
-   "t1": 44.15,
-   "kind": "speech",
+   "text": "sobre todo en la parte de",
    "src": "es",
+   "t0": 37.91,
+   "t1": 64.91,
+   "kind": "speech",
    "tr": {
-    "es": "Si ese número está bien, el resto puede esperar hasta el lunes.",
-    "en": "If that number is fine, the rest can wait until Monday.",
-    "pt": "Se esse número estiver bem, o resto pode esperar até segunda-feira."
+    "es": "sobre todo en la parte de",
+    "en": "especially in the part of",
+    "pt": "acima de tudo na parte de"
    },
-   "mtMs": 781
+   "mtMs": 960
   },
   {
-   "t": 45.5,
+   "t": 50.16,
    "type": "interim",
-   "text": "Vamos"
+   "text": "cómo contenerizamos las"
   },
   {
-   "t": 45.86,
+   "t": 50.41,
    "type": "interim",
-   "text": "Vamos a"
+   "text": "cómo contenerizamos las aplicaciones."
   },
   {
-   "t": 46.14,
+   "t": 50.64,
    "type": "interim",
-   "text": "Vamos a ver"
+   "text": "cómo contenerizamos las aplicaciones."
   },
   {
-   "t": 46.54,
+   "t": 50.9,
    "type": "interim",
-   "text": "Vamos a ver una demo"
+   "text": "cómo contenerizamos las aplicaciones."
   },
   {
-   "t": 46.98,
+   "t": 51.12,
    "type": "interim",
-   "text": "Vamos a ver una demo en Kubernetes"
+   "text": "cómo contenerizamos las aplicaciones."
   },
   {
-   "t": 47.31,
+   "t": 51.32,
    "type": "interim",
-   "text": "Vamos a ver una demo en Kubernetes con tres"
+   "text": "cómo contenerizamos las aplicaciones."
   },
   {
-   "t": 47.69,
+   "t": 51.52,
    "type": "interim",
-   "text": "Vamos a ver una demo en Kubernetes con tres servicios"
+   "text": "cómo contenerizamos las aplicaciones."
   },
   {
-   "t": 48.14,
+   "t": 51.77,
    "type": "interim",
-   "text": "Vamos a ver una demo en Kubernetes con tres servicios y un"
+   "text": "cómo contenerizamos las aplicaciones. Vale,"
   },
   {
-   "t": 48.62,
+   "t": 51.99,
    "type": "interim",
-   "text": "Vamos a ver una demo en Kubernetes con tres servicios y un colector"
+   "text": "cómo contenerizamos las aplicaciones. Vale, otra cosa que"
   },
   {
-   "t": 48.92,
+   "t": 52.23,
+   "type": "interim",
+   "text": "que tenemos que"
+  },
+  {
+   "t": 52.23,
    "type": "final",
-   "text": "Vamos a ver una demo en Kubernetes con tres servicios y un colector.",
-   "t0": 45.11,
-   "t1": 48.62,
-   "kind": "speech",
+   "text": "cómo contenerizamos las aplicaciones. Vale, otra cosa que sí",
    "src": "es",
+   "t0": 64.91,
+   "t1": 67.21,
+   "kind": "speech",
    "tr": {
-    "es": "Vamos a ver una demo en Kubernetes con tres servicios y un colector.",
-    "en": "Let's see a demo on Kubernetes with three services and a collector.",
-    "pt": "Vamos ver uma demo no Kubernetes com três serviços e um coletor."
+    "es": "cómo contenerizamos las aplicaciones. Vale, otra cosa que sí",
+    "en": "how we containerize applications. Okay, another thing that",
+    "pt": "como conteirizamos as aplicações. Certo, outra coisa que sim"
    },
-   "mtMs": 905
+   "mtMs": 758
   },
   {
-   "t": 49.95,
+   "t": 52.47,
    "type": "interim",
-   "text": "Acá"
+   "text": "que tenemos que tener en"
   },
   {
-   "t": 50.36,
+   "t": 52.71,
    "type": "interim",
-   "text": "Acá pueden"
-  },
-  {
-   "t": 50.84,
-   "type": "interim",
-   "text": "Acá pueden ver"
-  },
-  {
-   "t": 51.14,
-   "type": "interim",
-   "text": "Acá pueden ver cómo una"
-  },
-  {
-   "t": 51.45,
-   "type": "interim",
-   "text": "Acá pueden ver cómo una sola traza"
-  },
-  {
-   "t": 51.73,
-   "type": "interim",
-   "text": "Acá pueden ver cómo una sola traza cruza los"
-  },
-  {
-   "t": 52.22,
-   "type": "interim",
-   "text": "Acá pueden ver cómo una sola traza cruza los tres"
-  },
-  {
-   "t": 52.53,
-   "type": "interim",
-   "text": "Acá pueden ver cómo una sola traza cruza los tres servicios en"
+   "text": "que tenemos que tener en cuenta"
   },
   {
    "t": 52.96,
    "type": "interim",
-   "text": "Acá pueden ver cómo una sola traza cruza los tres servicios en menos de"
+   "text": "que tenemos que tener en cuenta de los"
   },
   {
-   "t": 53.34,
+   "t": 53.39,
    "type": "interim",
-   "text": "Acá pueden ver cómo una sola traza cruza los tres servicios en menos de doscientos milisegundos"
+   "text": "aparte"
+  },
+  {
+   "t": 53.39,
+   "type": "final",
+   "text": "que tenemos que tener en cuenta de los cluster,",
+   "src": "es",
+   "t0": 67.21,
+   "t1": 68.44,
+   "kind": "speech",
+   "tr": {
+    "es": "que tenemos que tener en cuenta de los cluster,",
+    "en": "that we must take into account in the clusters,",
+    "pt": "que temos de ter em conta nos clusters,"
+   },
+   "mtMs": 2037
+  },
+  {
+   "t": 53.4,
+   "type": "interim",
+   "text": "aparte de los"
   },
   {
    "t": 53.64,
+   "type": "interim",
+   "text": "aparte de los contenedores, es"
+  },
+  {
+   "t": 53.91,
+   "type": "interim",
+   "text": "aparte de los contenedores, es que esos"
+  },
+  {
+   "t": 54.14,
+   "type": "interim",
+   "text": "que"
+  },
+  {
+   "t": 54.14,
    "type": "final",
-   "text": "Acá pueden ver cómo una sola traza cruza los tres servicios en menos de doscientos milisegundos.",
-   "t0": 49.66,
-   "t1": 53.34,
+   "text": "aparte de los contenedores, es",
+   "src": "es",
+   "t0": 68.44,
+   "t1": 69.12,
    "kind": "speech",
-   "src": "es",
    "tr": {
-    "es": "Acá pueden ver cómo una sola traza cruza los tres servicios en menos de doscientos milisegundos.",
-    "en": "Here you can see how a single trace crosses the three services in under two hundred milliseconds.",
-    "pt": "Aqui vocês podem ver como um único trace atravessa os três serviços em menos de duzentos milissegundos."
+    "es": "aparte de los contenedores, es",
+    "en": "apart from containers, is",
+    "pt": "além dos containers, é"
    },
-   "mtMs": 947
+   "mtMs": 879
   },
   {
-   "t": 54.7,
+   "t": 54.37,
    "type": "interim",
-   "text": "Y"
+   "text": "que esos contenedores van"
   },
   {
-   "t": 55.07,
+   "t": 54.63,
    "type": "interim",
-   "text": "Y cuando"
+   "text": "que esos contenedores van a tener"
   },
   {
-   "t": 55.4,
+   "t": 54.88,
    "type": "interim",
-   "text": "Y cuando algo falla"
+   "text": "que esos contenedores van a tener a lo"
   },
   {
-   "t": 55.9,
+   "t": 55.13,
    "type": "interim",
-   "text": "Y cuando algo falla, el"
+   "text": "que esos contenedores van a tener a lo van"
   },
   {
-   "t": 56.38,
+   "t": 55.38,
    "type": "interim",
-   "text": "Y cuando algo falla, el error queda"
+   "text": "que esos contenedores van a tener a lo van a tener"
   },
   {
-   "t": 56.69,
+   "t": 55.62,
    "type": "interim",
-   "text": "Y cuando algo falla, el error queda pegado"
+   "text": "que esos contenedores van a tener a lo van a tener"
   },
   {
-   "t": 57.1,
+   "t": 55.87,
    "type": "interim",
-   "text": "Y cuando algo falla, el error queda pegado a la"
+   "text": "que esos contenedores van a tener a lo van a tener una parte"
   },
   {
-   "t": 57.4,
+   "t": 56.1,
    "type": "interim",
-   "text": "Y cuando algo falla, el error queda pegado a la traza con"
+   "text": "que esos contenedores van a tener a lo van a tener una parte"
   },
   {
-   "t": 57.82,
+   "t": 56.34,
    "type": "interim",
-   "text": "Y cuando algo falla, el error queda pegado a la traza con todo su"
+   "text": "que"
   },
   {
-   "t": 58.2,
-   "type": "interim",
-   "text": "Y cuando algo falla, el error queda pegado a la traza con todo su contexto"
-  },
-  {
-   "t": 58.5,
+   "t": 56.34,
    "type": "final",
-   "text": "Y cuando algo falla, el error queda pegado a la traza con todo su contexto.",
-   "t0": 54.25,
-   "t1": 58.2,
+   "text": "que esos contenedores van a tener a lo van a tener una parte",
+   "src": "es",
+   "t0": 69.12,
+   "t1": 70.92,
    "kind": "speech",
-   "src": "es",
    "tr": {
-    "es": "Y cuando algo falla, el error queda pegado a la traza con todo su contexto.",
-    "en": "And when something fails, the error sticks to the trace with all its context.",
-    "pt": "E quando algo falha, o erro fica grudado no trace com todo o seu contexto."
+    "es": "que esos contenedores van a tener a lo van a tener una parte",
+    "en": "that those containers are going to have to will have a part",
+    "pt": "que esses contentores vão ter vão ter uma parte"
    },
-   "mtMs": 947
+   "mtMs": 891
   },
   {
-   "t": 61.74,
+   "t": 56.57,
+   "type": "interim",
+   "text": "que es el"
+  },
+  {
+   "t": 56.8,
+   "type": "interim",
+   "text": "que es el volumen."
+  },
+  {
+   "t": 57.06,
+   "type": "interim",
+   "text": "que es el volumen,"
+  },
+  {
+   "t": 57.28,
+   "type": "interim",
+   "text": "que es el volumen, el volumen"
+  },
+  {
+   "t": 57.49,
    "type": "final",
-   "text": "[aplausos]",
-   "t0": 58.94,
-   "t1": 61.44,
-   "kind": "sound",
+   "text": "que es el volumen, el volumen persistente.",
    "src": "es",
+   "t0": 70.92,
+   "t1": 72.51,
+   "kind": "speech",
    "tr": {
-    "es": "[aplausos]",
-    "en": "[applause]",
-    "pt": "[aplausos]"
+    "es": "que es el volumen, el volumen persistente.",
+    "en": "which is the volume, the persistent volume.",
+    "pt": "que é o volume, o volume persistente."
    },
-   "mtMs": 657
+   "mtMs": 819
+  },
+  {
+   "t": 58.21,
+   "type": "interim",
+   "text": "Los"
+  },
+  {
+   "t": 58.42,
+   "type": "interim",
+   "text": "Los"
+  },
+  {
+   "t": 58.69,
+   "type": "interim",
+   "text": "Los persistent volumes"
+  },
+  {
+   "t": 58.94,
+   "type": "interim",
+   "text": "Los"
+  },
+  {
+   "t": 59.17,
+   "type": "interim",
+   "text": "Los persistent volumes y los"
+  },
+  {
+   "t": 59.42,
+   "type": "interim",
+   "text": "Los persistent volumes y los PVCs, los claims"
+  },
+  {
+   "t": 59.68,
+   "type": "interim",
+   "text": "los claims de"
+  },
+  {
+   "t": 59.68,
+   "type": "final",
+   "text": "Los persistent volumes y los PVCs,",
+   "src": "es",
+   "t0": 72.51,
+   "t1": 74.7,
+   "kind": "speech",
+   "tr": {
+    "es": "Los persistent volumes y los PVCs,",
+    "en": "The persistent volumes and the PVCs,",
+    "pt": "Os persistent volumes e os PVCs,"
+   },
+   "mtMs": 858
+  },
+  {
+   "t": 59.93,
+   "type": "interim",
+   "text": "los claims de esos persistent"
+  },
+  {
+   "t": 60.16,
+   "type": "final",
+   "text": "los claims de esos persistent volumes.",
+   "src": "es",
+   "t0": 74.7,
+   "t1": 75.21,
+   "kind": "speech",
+   "tr": {
+    "es": "los claims de esos persistent volumes.",
+    "en": "the claims of those persistent volumes.",
+    "pt": "os claims desses persistent volumes."
+   },
+   "mtMs": 1650
+  },
+  {
+   "t": 60.42,
+   "type": "interim",
+   "text": "Una cosa que"
+  },
+  {
+   "t": 60.65,
+   "type": "interim",
+   "text": "Una cosa que vamos a"
+  },
+  {
+   "t": 60.9,
+   "type": "interim",
+   "text": "Una cosa que vamos a ver, la primera"
+  },
+  {
+   "t": 61.14,
+   "type": "interim",
+   "text": "que vamos"
+  },
+  {
+   "t": 61.14,
+   "type": "final",
+   "text": "Una cosa que vamos a ver, la primera",
+   "src": "es",
+   "t0": 75.21,
+   "t1": 76.11,
+   "kind": "speech",
+   "tr": {
+    "es": "Una cosa que vamos a ver, la primera",
+    "en": "One thing we are going to see, the first",
+    "pt": "Uma coisa que vamos ver, a primeira"
+   },
+   "mtMs": 838
+  },
+  {
+   "t": 61.41,
+   "type": "interim",
+   "text": "que vamos a"
+  },
+  {
+   "t": 61.65,
+   "type": "interim",
+   "text": "que vamos a encontrar como"
+  },
+  {
+   "t": 61.87,
+   "type": "interim",
+   "text": "que vamos a encontrar como"
+  },
+  {
+   "t": 62.11,
+   "type": "interim",
+   "text": "que vamos a encontrar como cuello de"
+  },
+  {
+   "t": 62.35,
+   "type": "final",
+   "text": "que vamos a encontrar como cuello de botella",
+   "src": "es",
+   "t0": 76.11,
+   "t1": 77.33,
+   "kind": "speech",
+   "tr": {
+    "es": "que vamos a encontrar como cuello de botella",
+    "en": "that we are going to find as a bottleneck",
+    "pt": "que vamos a encontrar como gargalo"
+   },
+   "mtMs": 631
+  },
+  {
+   "t": 62.58,
+   "type": "interim",
+   "text": "cuando estamos"
+  },
+  {
+   "t": 62.83,
+   "type": "interim",
+   "text": "cuando estamos pasando a"
+  },
+  {
+   "t": 63.06,
+   "type": "interim",
+   "text": "cuando estamos pasando a Kubernetes,"
+  },
+  {
+   "t": 63.31,
+   "type": "interim",
+   "text": "cuando estamos pasando a Kubernetes, será, por"
+  },
+  {
+   "t": 63.53,
+   "type": "interim",
+   "text": "por"
+  },
+  {
+   "t": 63.53,
+   "type": "final",
+   "text": "cuando estamos pasando a Kubernetes, será,",
+   "src": "es",
+   "t0": 77.33,
+   "t1": 78.52,
+   "kind": "speech",
+   "tr": {
+    "es": "cuando estamos pasando a Kubernetes, será,",
+    "en": "when we are moving to Kubernetes, will be,",
+    "pt": "quando estamos migrando para o Kubernetes, será,"
+   },
+   "mtMs": 749
+  },
+  {
+   "t": 63.77,
+   "type": "interim",
+   "text": "por ejemplo, el"
+  },
+  {
+   "t": 64.02,
+   "type": "interim",
+   "text": "por ejemplo, el acceso a"
+  },
+  {
+   "t": 64.26,
+   "type": "final",
+   "text": "por ejemplo, el acceso a disco.",
+   "src": "es",
+   "t0": 78.52,
+   "t1": 79.31,
+   "kind": "speech",
+   "tr": {
+    "es": "por ejemplo, el acceso a disco.",
+    "en": "for example, disk access.",
+    "pt": "por exemplo, o acesso a disco."
+   },
+   "mtMs": 793
+  },
+  {
+   "t": 64.5,
+   "type": "interim",
+   "text": "¿Por qué?"
+  },
+  {
+   "t": 64.76,
+   "type": "interim",
+   "text": "¿Por qué?"
+  },
+  {
+   "t": 65.01,
+   "type": "interim",
+   "text": "¿Por qué? Kubernetes"
+  },
+  {
+   "t": 65.25,
+   "type": "interim",
+   "text": "¿Por qué? Kubernetes, en"
+  },
+  {
+   "t": 65.49,
+   "type": "interim",
+   "text": "¿Por qué? Kubernetes, en la mayoría de"
+  },
+  {
+   "t": 65.73,
+   "type": "interim",
+   "text": "¿Por qué? Kubernetes, en la mayoría de los casos,"
+  },
+  {
+   "t": 65.97,
+   "type": "interim",
+   "text": "no en"
+  },
+  {
+   "t": 65.97,
+   "type": "final",
+   "text": "¿Por qué? Kubernetes, en la mayoría de los casos,",
+   "src": "es",
+   "t0": 79.31,
+   "t1": 81,
+   "kind": "speech",
+   "tr": {
+    "es": "¿Por qué? Kubernetes, en la mayoría de los casos,",
+    "en": "Why? Kubernetes, in most cases,",
+    "pt": "Por quê? O Kubernetes, na maioria dos casos,"
+   },
+   "mtMs": 790
+  },
+  {
+   "t": 66.2,
+   "type": "interim",
+   "text": "no en todos, los"
+  },
+  {
+   "t": 66.41,
+   "type": "interim",
+   "text": "no en todos, los nodos serán"
+  },
+  {
+   "t": 66.63,
+   "type": "interim",
+   "text": "no en todos, los nodos serán"
+  },
+  {
+   "t": 66.87,
+   "type": "interim",
+   "text": "no en todos, los nodos serán"
+  },
+  {
+   "t": 67.12,
+   "type": "interim",
+   "text": "no en todos, los nodos serán serán"
+  },
+  {
+   "t": 67.36,
+   "type": "interim",
+   "text": "y,"
+  },
+  {
+   "t": 67.36,
+   "type": "final",
+   "text": "no en todos, los nodos serán serán Linux",
+   "src": "es",
+   "t0": 81,
+   "t1": 82.41,
+   "kind": "speech",
+   "tr": {
+    "es": "no en todos, los nodos serán serán Linux",
+    "en": "not in all, the nodes will be Linux",
+    "pt": "nem em todos, os nós serão Linux"
+   },
+   "mtMs": 741
+  },
+  {
+   "t": 67.61,
+   "type": "interim",
+   "text": "y, como sabéis,"
+  },
+  {
+   "t": 67.86,
+   "type": "interim",
+   "text": "y como sabéis,"
+  },
+  {
+   "t": 68.11,
+   "type": "interim",
+   "text": "y como sabéis, cualquier"
+  },
+  {
+   "t": 68.32,
+   "type": "interim",
+   "text": "y como sabéis, cualquier"
+  },
+  {
+   "t": 68.56,
+   "type": "interim",
+   "text": "y como sabéis, cualquier"
+  },
+  {
+   "t": 68.77,
+   "type": "interim",
+   "text": "y como sabéis, cualquier cualquier"
+  },
+  {
+   "t": 69,
+   "type": "interim",
+   "text": "y como sabéis, cualquier cualquier"
+  },
+  {
+   "t": 69.24,
+   "type": "interim",
+   "text": "y como sabéis, cualquier cualquier comando,"
+  },
+  {
+   "t": 69.48,
+   "type": "interim",
+   "text": "y como sabéis, cualquier cualquier comando, cualquier"
+  },
+  {
+   "t": 69.92,
+   "type": "interim",
+   "text": "y como sabéis, cualquier cualquier comando, cualquier"
+  },
+  {
+   "t": 70.18,
+   "type": "interim",
+   "text": "cualquier cualquier"
+  },
+  {
+   "t": 70.18,
+   "type": "final",
+   "text": "y como sabéis, cualquier cualquier comando,",
+   "src": "es",
+   "t0": 82.41,
+   "t1": 85.21,
+   "kind": "speech",
+   "tr": {
+    "es": "y como sabéis, cualquier cualquier comando,",
+    "en": "and as you know, any command,",
+    "pt": "e como sabem, qualquer comando,"
+   },
+   "mtMs": 761
+  },
+  {
+   "t": 70.4,
+   "type": "interim",
+   "text": "cualquier cualquier operación en"
+  },
+  {
+   "t": 70.63,
+   "type": "interim",
+   "text": "cualquier cualquier operación en Linux"
+  },
+  {
+   "t": 70.88,
+   "type": "interim",
+   "text": "cualquier cualquier operación en Linux realmente acaba"
+  },
+  {
+   "t": 71.14,
+   "type": "interim",
+   "text": "cualquier cualquier operación en Linux realmente acaba siendo un"
+  },
+  {
+   "t": 71.4,
+   "type": "interim",
+   "text": "Con lo"
+  },
+  {
+   "t": 71.4,
+   "type": "final",
+   "text": "cualquier cualquier operación en Linux realmente acaba siendo un fichero.",
+   "src": "es",
+   "t0": 85.21,
+   "t1": 86.4,
+   "kind": "speech",
+   "tr": {
+    "es": "cualquier cualquier operación en Linux realmente acaba siendo un fichero.",
+    "en": "any any operation in Linux actually ends up being a file.",
+    "pt": "qualquer qualquer operação no Linux na verdade acaba sendo um arquivo."
+   },
+   "mtMs": 2433
+  },
+  {
+   "t": 71.65,
+   "type": "interim",
+   "text": "Con lo cual, el"
+  },
+  {
+   "t": 71.89,
+   "type": "interim",
+   "text": "Con lo cual, el volumen"
+  },
+  {
+   "t": 72.13,
+   "type": "interim",
+   "text": "Con lo cual, el volumen y el"
+  },
+  {
+   "t": 72.37,
+   "type": "interim",
+   "text": "y el"
+  },
+  {
+   "t": 72.37,
+   "type": "final",
+   "text": "Con lo cual, el volumen",
+   "src": "es",
+   "t0": 86.4,
+   "t1": 87.41,
+   "kind": "speech",
+   "tr": {
+    "es": "Con lo cual, el volumen",
+    "en": "So, the volume",
+    "pt": "Portanto, o volume"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 73.19,
+   "type": "interim",
+   "text": "y el file system"
+  },
+  {
+   "t": 75.04,
+   "type": "interim",
+   "text": "y el file system tiene"
+  },
+  {
+   "t": 76.2,
+   "type": "final",
+   "text": "y el file system eh tiene que estar asociado de alguna manera al nodo, en este caso puede ser los PVCs",
+   "src": "es",
+   "t0": 87.41,
+   "t1": 90,
+   "kind": "speech",
+   "tr": {
+    "es": "y el file system eh tiene que estar asociado de alguna manera al nodo, en este caso puede ser los PVCs",
+    "en": "and the file system uh has to be associated in some way to the node, in this case it can be the PVCs",
+    "pt": "e o file system uh tem que estar associado de alguma maneira ao nó, neste caso podem ser os PVCs"
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 76.2,
+   "type": "final",
+   "text": "y siempre será el primer cuello de botella.",
+   "src": "es",
+   "t0": 90,
+   "t1": 90,
+   "kind": "speech",
+   "tr": {
+    "es": "y siempre será el primer cuello de botella.",
+    "en": "and it will always be the first bottleneck.",
+    "pt": "e será sempre o primeiro gargalo."
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 76.2,
+   "type": "final",
+   "text": "Cuando tienes un disco que es muy lento, el acceso a disco, tendrás problemas de performance en cuanto al cluster.",
+   "src": "es",
+   "t0": 90,
+   "t1": 90,
+   "kind": "speech",
+   "tr": {
+    "es": "Cuando tienes un disco que es muy lento, el acceso a disco, tendrás problemas de performance en cuanto al cluster.",
+    "en": "When you have a disk that is very slow, disk access, you will have performance problems regarding the cluster.",
+    "pt": "Quando você tem um disco que é muito lento, o acesso ao disco, você terá problemas de performance em relação ao cluster."
+   },
+   "mtMs": 2500
+  },
+  {
+   "t": 76.2,
+   "type": "final",
+   "text": "Pero estábamos hablando de los contenedores. El contenedor es",
+   "src": "es",
+   "t0": 90,
+   "t1": 90,
+   "kind": "speech",
+   "tr": {
+    "es": "Pero estábamos hablando de los contenedores. El contenedor es",
+    "en": "But we were talking about containers. The container is",
+    "pt": "Mas estávamos falando sobre os containers. O container é"
+   },
+   "mtMs": 2500
   }
  ]
 }
