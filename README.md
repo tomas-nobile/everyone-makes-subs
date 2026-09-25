@@ -1,4 +1,4 @@
-<p align="center"><img src="app/icons/logo-dark.png" width="200" alt="Everyone Makes Subs"></p>
+<p align="center"><img src="everyone-makes-subs/app/icons/logo-dark.png" width="200" alt="Everyone Makes Subs"></p>
 
 # Everyone Makes Subs
 
@@ -14,14 +14,22 @@ Built for the **Nerdearla Vibeathon 2026**.
 
 | Phone (attendee) | Dashboard (operator) |
 |---|---|
-| <img src="docs/screenshots/phone-en.png" width="260" alt="Phone view: English translation of a Spanish talk"> | <img src="docs/screenshots/admin.png" width="560" alt="Dashboard: one card per room"> |
+| <img src="everyone-makes-subs/docs/screenshots/phone-en.png" width="260" alt="Phone view: English translation of a Spanish talk"> | <img src="everyone-makes-subs/docs/screenshots/admin.png" width="560" alt="Dashboard: one card per room"> |
 
-<img src="docs/screenshots/tv.png" width="820" alt="Room screen: two giant caption lines and a QR code">
+<img src="everyone-makes-subs/docs/screenshots/tv.png" width="820" alt="Room screen: two giant caption lines and a QR code">
+
+## What is in this repository
+
+| | |
+|---|---|
+| [`everyone-makes-subs/`](everyone-makes-subs/) | The whole project: server, web, desktop app, specs, docs, benchmarks. Every command below runs inside it. |
+| [`installers/`](installers/) | The Windows installer (Git LFS) and the links to the release assets, including the pitch video. |
+| `README.md` | This file. |
 
 ## Try it in 1 minute (no key needed)
 
 ```bash
-git clone https://github.com/tomas-nobile/everyone-makes-subs && cd everyone-makes-subs
+git clone https://github.com/tomas-nobile/everyone-makes-subs && cd everyone-makes-subs/everyone-makes-subs
 npm install
 npm run dev:fake          # http://localhost:5173 — 2 rooms replaying the samples (DEMO_STAGES=8 for a whole conference)
 ```
@@ -32,9 +40,9 @@ Open `/` (live now), `/s/auditorium?lang=es` (phone view: an English talk, Spani
 
 | Option | For | How |
 |---|---|---|
-| **Desktop app** | The production operator | Download the installer from the [latest release](https://github.com/tomas-nobile/everyone-makes-subs/releases/latest) and open it (Windows; build Mac/Linux with `npm run app:dist` on that OS). It is unsigned: on **Windows** click *More info → Run anyway*; on **Mac** right-click the app → *Open*. The app opens the setup wizard |
-| **Docker** | A server, or judges | `GEMINI_API_KEY=… docker compose up --build` → http://localhost:8080. Without a key, the wizard asks for it. `DEMO=1` creates 2 sample rooms |
-| **From source** | Developers | `npm install && npm run dev` (needs a key in `.env` or via `/setup`) |
+| **Desktop app** | The production operator | Download the installer from [`installers/`](installers/) or the [latest release](https://github.com/tomas-nobile/everyone-makes-subs/releases/latest) and open it (Windows; build Mac/Linux with `npm run app:dist` on that OS). It is unsigned: on **Windows** click *More info → Run anyway*; on **Mac** right-click the app → *Open*. The app opens the setup wizard |
+| **Docker** | A server, or judges | `cd everyone-makes-subs && GEMINI_API_KEY=… docker compose up --build` → http://localhost:8080. Without a key, the wizard asks for it. `DEMO=1` creates 2 sample rooms |
+| **From source** | Developers | `cd everyone-makes-subs && npm install && npm run dev` (needs a key in `.env` or via `/setup`) |
 
 `docker compose --profile advanced up` also starts **MediaMTX**, so OBS or a mixing console can push RTMP/SRT.
 
@@ -91,7 +99,7 @@ Source ─► AudioSource ─PCM16 16k 100ms─► Meter/VAD ─► Transcriber 
 - **Vocabulary per talk:** Gemini builds an ASR vocabulary, do-not-translate list and auto-corrections from the title and abstract; the dashboard shows each term's hit count ("Kubernetes ✓ 9").
 - **Honest latency:** the dashboard shows the measured delay (p50/p95) for original and translation.
 
-Stack: Node 22 + TypeScript + Fastify · `@google/genai` · ffmpeg-static + yt-dlp · Vite + React · JSON/JSONL files · Electron. Details in [`docs/architecture.md`](docs/architecture.md).
+Stack: Node 22 + TypeScript + Fastify · `@google/genai` · ffmpeg-static + yt-dlp · Vite + React · JSON/JSONL files · Electron. Details in [`docs/architecture.md`](everyone-makes-subs/docs/architecture.md).
 
 ## Latency, measured
 
@@ -116,7 +124,7 @@ What moved the Spanish number: the translation is one streamed call with `es` fi
 1. **Up to ~10–15 rooms:** one laptop running the app, or a 2 vCPU container. The work is I/O-bound.
 2. **More rooms or more reliability:** a server with Docker instead of a laptop; split `worker` and `web` roles with Redis pub/sub in place of the in-process EventBus (same publish/subscribe interface).
 3. **Bigger audience:** SSE fan-out is cheap (a few hundred bytes per phrase); put `web` replicas behind a proxy/CDN. The AI cost does not change with the audience.
-   Measured with `npm run load -- --stages=8 --clients=2000` (server and viewers on the same desktop, Ryzen 5 3600): **8 rooms × 250 viewers = 2,000 viewers, every phrase delivered to every viewer within 7 ms (p50) / 11 ms (p95) of each other, 44 % of one core, 103 → 157 MB of RAM**. Details and the raw JSON in [`docs/scale.md`](docs/scale.md).
+   Measured with `npm run load -- --stages=8 --clients=2000` (server and viewers on the same desktop, Ryzen 5 3600): **8 rooms × 250 viewers = 2,000 viewers, every phrase delivered to every viewer within 7 ms (p50) / 11 ms (p95) of each other, 44 % of one core, 103 → 157 MB of RAM**. Details and the raw JSON in [`docs/scale.md`](everyone-makes-subs/docs/scale.md).
 4. **Quotas:** use a billed (Tier 1+) project. Each room holds up to 2 Live sessions during a rotation. One speech session per room — not per language, not per viewer.
 
 ## Costs
@@ -164,7 +172,7 @@ On Gemini's **free tier, Google may use the audio and text you send to improve i
 
 ## How it was built
 
-Vibe-coded in one night with Claude Code: the specs live in [`specs/`](specs/) (one file per feature, with user stories and acceptance criteria), the rules for the agents in [`CLAUDE.md`](CLAUDE.md) and [`.claude/`](.claude/), and every decision taken on the way in [`docs/decisions.md`](docs/decisions.md). A backend agent and a frontend agent worked in parallel on `main`, with the SSE contract in [`shared/contract.ts`](shared/contract.ts) as the interface and a fake backend replaying the samples so the UI never waited for the pipeline.
+Vibe-coded in one night with Claude Code: the specs live in [`specs/`](everyone-makes-subs/specs/) (one file per feature, with user stories and acceptance criteria), the rules for the agents in [`CLAUDE.md`](everyone-makes-subs/CLAUDE.md) and [`.claude/`](everyone-makes-subs/.claude/), and every decision taken on the way in [`docs/decisions.md`](everyone-makes-subs/docs/decisions.md). A backend agent and a frontend agent worked in parallel on `main`, with the SSE contract in [`shared/contract.ts`](everyone-makes-subs/shared/contract.ts) as the interface and a fake backend replaying the samples so the UI never waited for the pipeline.
 
 ## License
 
