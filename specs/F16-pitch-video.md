@@ -25,7 +25,9 @@ As the team, we want every chapter to share one look, so the video reads like a 
 
 **Verify:** `npm run demo-video -- --replay` produces an mp4 with the chapters in the order above, each panel over moving footage.
 
-### [ ] F16.2 · The talk: English in, Spanish out
+### [x] F16.2 · The talk: English in, Spanish out
+
+> **Done 2026-09-25:** `demo/talk.mp4` (FOSDEM 2025, CC BY, 40 s) → `demo/talk.es.vtt` / `talk.es.mp4` by `npm run clip` (14 phrases, translation p50 912 ms), plus `talk.transcript.json` for the replay. See the licence note in `docs/decisions.md`.
 As a judge, I want to see a real talk subtitled by the system from English into Spanish.
 
 - A real English talk (a Nerdearla talk in English, or a public English tech talk whose license allows it) cut to 30–40 s: `npm run clip -- <url> --from=… --to=… --src-lang=en --lang=es`. The Spanish VTT the pipeline produced is burned in.

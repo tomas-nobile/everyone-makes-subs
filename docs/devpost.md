@@ -6,8 +6,8 @@
 
 **Links**
 - Repo: https://github.com/tomas-nobile/everyone-makes-subs
-- Installer (Windows) and demo video: https://github.com/tomas-nobile/everyone-makes-subs/releases/tag/v1.0.0
-- Video: _YouTube link here_ (file: `EveryoneMakesSubs-demo.mp4` in the release)
+- Installer (Windows) and videos: https://github.com/tomas-nobile/everyone-makes-subs/releases/tag/v1.0.0
+- Video: https://github.com/tomas-nobile/everyone-makes-subs/releases/download/v1.0.0/EveryoneMakesSubs-pitch.mp4 (2:30, one chapter per judging criterion: Deploy → Quality → Latency → Scalability → Innovation → Price; English talk, Spanish captions). The earlier `EveryoneMakesSubs-demo.mp4` (1:52) stays in the release as a fallback.
 
 ## Inspiration
 

@@ -6,7 +6,7 @@ Attendees scan the room's QR code and read what the speaker is saying on their p
 
 Built for the **Nerdearla Vibeathon 2026**.
 
-> 🎬 **[Demo video (1:52)](https://github.com/tomas-nobile/everyone-makes-subs/releases/download/v1.0.0/EveryoneMakesSubs-demo.mp4)** — it opens with a real Nerdearla talk in Spanish whose English subtitles were generated live by Everyone Makes Subs ([the VTT](https://github.com/tomas-nobile/everyone-makes-subs/releases/download/v1.0.0/nerdearla-kubernetes-clip.en.vtt)).
+> 🎬 **[Pitch video (2:30, one chapter per judging criterion)](https://github.com/tomas-nobile/everyone-makes-subs/releases/download/v1.0.0/EveryoneMakesSubs-pitch.mp4)** — English talk in, Spanish captions out: a FOSDEM 2025 talk (CC BY) subtitled by the pipeline ([the Spanish VTT it produced](https://github.com/tomas-nobile/everyone-makes-subs/releases/download/v1.0.0/fosdem-2025-kubernetes-emissions-clip.es.vtt)), then Deploy → Quality → Latency → Scalability → Innovation → Price, every number from `bench/` and `docs/pricing.md`. The earlier [demo video (1:52)](https://github.com/tomas-nobile/everyone-makes-subs/releases/download/v1.0.0/EveryoneMakesSubs-demo.mp4) (a Nerdearla talk, Spanish → English) is still there.
 >
 > ⬇️ **[Download the Windows installer](https://github.com/tomas-nobile/everyone-makes-subs/releases/latest)** · or `docker compose up` (below).
 

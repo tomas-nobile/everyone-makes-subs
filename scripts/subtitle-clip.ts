@@ -4,7 +4,7 @@
 //
 // Usage:
 //   npx tsx scripts/subtitle-clip.ts <youtube-url|video-file> --from=03:00 --to=04:30 [--lang=en] [--src-lang=es]
-//        [--title="…"] [--speaker="…"] [--out=demo/clip] [--vtt=existing.vtt]
+//        [--title="…"] [--speaker="…"] [--abstract="…"] [--out=demo/clip] [--vtt=existing.vtt]   (input and --out must differ)
 //   Output: <out>.mp4 (the cut), <out>.<lang>.vtt, <out>.<lang>.mp4 (burned-in subtitles), plus .srt/.txt.
 //   --vtt skips the pipeline and only burns an existing VTT (no key needed).
 import { spawn } from 'node:child_process';
@@ -71,7 +71,7 @@ if (opt('vtt')) {
   fs.copyFileSync(opt('vtt')!, vtt);
 } else {
   if (!cfg.geminiApiKey) { console.log('No Gemini key: put GEMINI_API_KEY in .env (or pass --vtt=file to only burn).'); process.exit(2); }
-  const talk = { title: opt('title') ?? path.basename(out), speaker: opt('speaker'), lang: srcLang };
+  const talk = { title: opt('title') ?? path.basename(out), speaker: opt('speaker'), abstract: opt('abstract'), lang: srcLang };
   const glossary = await generateGlossary(cfg, talk);
   console.log(`[clip] vocabulary: ${glossary.asrVocabulary.slice(0, 15).join(', ')}`);
   console.log(`[clip] running the pipeline in real time over ${Math.round(to - from) || '?'} s of audio…`);

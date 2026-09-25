@@ -15,7 +15,9 @@ Where we are (`docs/architecture.md` §2–5, `docs/decisions.md`):
 
 ## Stories
 
-### [ ] F17.1 · Latency benchmark (baseline first)
+### [x] F17.1 · Latency benchmark (baseline first)
+
+> **Done 2026-09-25.** `npm run bench:latency`, JSONs in `bench/`. Verify caveat: the two consecutive 3-run benchmarks never happened on identical code — the free-tier daily quota (500 requests/model) ran out after the third benchmark; run-to-run agreement inside one benchmark is ~10% on heard → original (0.52–0.82 s across five runs) and the tail is the quota, see `docs/decisions.md`.
 As the team, we want one command that measures real end-to-end latency, so each optimization is measured, not guessed.
 
 - `npm run bench:latency [-- --file=samples/en.mp3 --runs=3]`: boots the real server (`server/src/index.ts`, like `scripts/load-sse.ts` does) with one file-source stage, connects one SSE client, and times every phrase at four points: **heard** → `segment` published → `tr.es` published → received by the client. Reports p50/p95/max over the pooled runs (one run of `en.mp3` is ~40 phrases: its p95 is the second-worst sample) and writes `bench/latency-<timestamp>.json`.
@@ -53,7 +55,7 @@ As an attendee, I want shorter waits on long sentences.
 
 **Verify:** before → after in `docs/decisions.md`, with phrases/min next to the p50.
 
-### [ ] F17.4 · Spanish first
+### [x] F17.4 · Spanish first
 As a Spanish-speaking attendee, I want my language not to wait for the others.
 
 - **One call, streamed, `es` first** — not a second call. The translation request keeps every target language but puts `es` first in the schema (`propertyOrdering`) and uses `generateContentStream`; as soon as the `"es":"…"` value closes in the streamed JSON, publish `tr { es }`; when the response completes, publish the rest. The `es` tokens are generated first either way, so Spanish latency equals a dedicated call, while RPM and cost stay flat (two calls per phrase would kill the free tier's 15 RPM and double the F19 cost number). Fallback if partial-JSON parsing eats the timebox: a dedicated `es` call in plain text (no JSON, fewer tokens), the other languages in the current call, in parallel.
@@ -67,7 +69,7 @@ As a Spanish-speaking attendee, I want my language not to wait for the others.
 
 **Verify:** Spanish p50 improves; `en`/`pt` still fill on the phone; an exported `.srt` of the run has no `null` languages.
 
-### [ ] F17.5 · Faster calls
+### [x] F17.5 · Faster calls
 As the team, we want no time lost between us and Gemini.
 
 - **Keep the socket alive.** Node's `fetch` (undici) closes idle keep-alive sockets after 4 s unless the server sends a `Keep-Alive` hint; phrases arrive every 2–5 s and silences are longer, so calls re-do TLS to Google. Install a global dispatcher — `setGlobalDispatcher(new Agent({ keepAliveTimeout: 30_000, keepAliveMaxTimeout: 30_000 }))` from `undici` (Node's built-in fetch reads the same global) — plus one tiny warm request when the stage starts. A pre-warm alone helps only the first phrase.
@@ -77,7 +79,9 @@ As the team, we want no time lost between us and Gemini.
 
 **Verify:** `bench-mt` and `bench:latency` before → after lines, including the keep-alive change on its own.
 
-### [ ] F17.6 · Delivery without buffering (verification only)
+### [x] F17.6 · Delivery without buffering (verification only)
+
+> **Verified:** delivery p50 0–1 ms, p95 2 ms in every benchmark (n up to 161). The phone badge now shows pause → caption only (F17.6 `lag` semantics).
 As an attendee, I want the phone to show a caption the moment the server has it.
 
 - Already the case, as far as the code says: Node's HTTP server defaults `noDelay: true`, no compression plugin is registered, the SSE route writes every event synchronously, and the phone renders `tr` on arrival (the `.cap` colour transition is a fade, not a delay).
