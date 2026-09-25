@@ -9,6 +9,7 @@ export function Home() {
 
   return (
     <main className="home">
+      <img src="/logo.png" alt="Everyone Makes Subs" width={96} height={96} style={{ borderRadius: 20, marginBottom: 12 }} />
       <h1>{event?.name ?? 'Everyone Makes Subs'}</h1>
       <p className="muted">Live captions and translation for every stage.</p>
 

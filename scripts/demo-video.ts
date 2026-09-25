@@ -92,7 +92,7 @@ function panelHtml(p: Panel): string {
     : p.style === 'side'
     ? `<div style="position:absolute;left:0;top:0;bottom:0;width:540px;background:rgba(11,12,14,.93);padding:56px 48px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;gap:16px">${inner}</div>`
     : p.style === 'center'
-      ? `<div style="position:absolute;inset:0;background:rgba(11,12,14,.78);display:flex;flex-direction:column;justify-content:center;padding:0 140px;gap:18px"><style>.t{font-size:60px}.b{font-size:27px}</style>${inner}</div>`
+      ? `<div style="position:absolute;inset:0;background:rgba(11,12,14,.78);display:flex;align-items:center;padding:0 110px;gap:56px"><img src="${pathToFileURL(path.resolve('app/icons/logo-dark.png')).href}" style="width:250px;height:250px;border-radius:36px;flex:none"><div style="display:flex;flex-direction:column;gap:18px"><style>.t{font-size:56px}.b{font-size:26px}</style>${inner}</div></div>`
       : `<div style="position:absolute;left:0;right:0;bottom:0;height:96px;background:rgba(11,12,14,.9);display:flex;align-items:center;padding:0 48px;gap:22px;box-sizing:border-box"><style>.t{font-size:26px}.b{font-size:20px}</style>${inner}</div>`;
   const file = path.join(work, `panel-${++panels}.html`);
   fs.writeFileSync(file, `<!doctype html><html><head><meta charset="utf-8"><style>${BASE_CSS}</style></head><body>${box}</body></html>`);

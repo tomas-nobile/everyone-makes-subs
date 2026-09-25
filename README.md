@@ -1,3 +1,5 @@
+<p align="center"><img src="app/icons/logo-dark.png" width="200" alt="Everyone Makes Subs"></p>
+
 # Everyone Makes Subs
 
 **Live captions and translation for every stage of your conference, with a single Gemini API key.**
