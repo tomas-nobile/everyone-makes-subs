@@ -6,6 +6,7 @@ import fastifyStatic from '@fastify/static';
 import websocket from '@fastify/websocket';
 import type { EventInfo, StageEvent, StageState } from '../../shared/contract.js';
 import { loadConfig, type Config } from './config.js';
+import { Jobs } from './jobs/Jobs.js';
 import { PublicWatch, publicUrl, startCloudflared } from './public/access.js';
 import { adminRoutes } from './routes/admin.js';
 import { setupRoutes } from './routes/setup.js';
@@ -109,6 +110,24 @@ export async function startServer(opts: { dataDir?: string; port?: number; host?
     return { ok: true, stage: req.query.stage, state: state ?? 'auto' };
   });
 
+  // F19.2: this process's CPU (% of one core since the previous call) and RSS, for `npm run load`. Fake mode only.
+  let cpuPrev = process.cpuUsage();
+  let cpuPrevAt = process.hrtime.bigint();
+  app.get('/api/dev/stats', async (_req, reply) => {
+    if (!config.fakeBackend) return reply.code(404).send({ error: 'NOT_FOUND', message: 'Only in fake mode' });
+    const cpu = process.cpuUsage(cpuPrev);
+    const now = process.hrtime.bigint();
+    const wallUs = Number(now - cpuPrevAt) / 1000;
+    cpuPrev = process.cpuUsage();
+    cpuPrevAt = now;
+    const list = stages.list();
+    return {
+      cpuPct: wallUs > 0 ? Math.round(((cpu.user + cpu.system) / wallUs) * 1000) / 10 : 0,
+      rssMb: Math.round(process.memoryUsage().rss / 1048576),
+      stages: list.length, viewers: list.reduce((n, rt) => n + rt.stage.viewers, 0), uptimeSec: Math.round(process.uptime()),
+    };
+  });
+
   // F08.2: room station audio (PCM s16le mono 16 kHz, binary frames).
   app.get<{ Params: { id: string }; Querystring: { key?: string } }>('/api/stages/:id/ingest', { websocket: true }, (socket, req) => {
     const id = req.params.id;
@@ -126,7 +145,9 @@ export async function startServer(opts: { dataDir?: string; port?: number; host?
     socket.on('close', () => console.log(`[${id}] station disconnected`));
   });
 
-  await adminRoutes(app, config, stages, watch);
+  const jobs = new Jobs(config, samplesDir);
+  jobs.load();
+  await adminRoutes(app, config, stages, watch, jobs);
   await setupRoutes(app, config, stages, samplesDir);
 
   // Built web (npm run build). In dev, Vite serves web/ and proxies /api here.

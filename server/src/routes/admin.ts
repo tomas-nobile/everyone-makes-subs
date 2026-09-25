@@ -5,6 +5,7 @@ import type { AgendaProposal, Glossary, SourceSpec, StageInput, TalkInput } from
 import { parseAgenda } from '../ai/auxModel.js';
 import { checkPassword, clearAdminCookie, hasPassword, isAdmin, setAdminCookie } from '../auth.js';
 import type { Config } from '../config.js';
+import type { JobInput, Jobs } from '../jobs/Jobs.js';
 import { publicUrl, type PublicWatch } from '../public/access.js';
 import type { StageManager } from '../stage/StageManager.js';
 
@@ -33,7 +34,19 @@ function validTalk(b: unknown): b is TalkInput {
     && (t.lang === undefined || t.lang === '' || LANG.test(t.lang));
 }
 
-export async function adminRoutes(app: FastifyInstance, cfg: Config, stages: StageManager, watch: PublicWatch): Promise<void> {
+/** Streams a file honouring `Range` (the dashboard's <video> seeks with it). */
+function sendFile(req: FastifyRequest, reply: FastifyReply, file: string, type: string, download?: string) {
+  const size = fs.statSync(file).size;
+  if (download) reply.header('Content-Disposition', `attachment; filename="${download}"`);
+  const m = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range ?? '');
+  if (!m) return reply.headers({ 'Content-Type': type, 'Content-Length': size, 'Accept-Ranges': 'bytes' }).send(fs.createReadStream(file));
+  const start = m[1] ? Number(m[1]) : Math.max(0, size - Number(m[2]));
+  const end = m[1] && m[2] ? Math.min(Number(m[2]), size - 1) : size - 1;
+  if (start > end || start >= size) return reply.code(416).header('Content-Range', `bytes */${size}`).send();
+  return reply.code(206).headers({ 'Content-Type': type, 'Content-Range': `bytes ${start}-${end}/${size}`, 'Content-Length': end - start + 1, 'Accept-Ranges': 'bytes' }).send(fs.createReadStream(file, { start, end }));
+}
+
+export async function adminRoutes(app: FastifyInstance, cfg: Config, stages: StageManager, watch: PublicWatch, jobs: Jobs): Promise<void> {
   const guard = async (req: FastifyRequest, reply: FastifyReply) => {
     if (!isAdmin(cfg, req)) return reply.code(401).send({ error: 'UNAUTHENTICATED', message: 'Log in to the dashboard' });
   };
@@ -154,5 +167,43 @@ export async function adminRoutes(app: FastifyInstance, cfg: Config, stages: Sta
     fs.writeFileSync(file, body);
     console.log(`[uploads] ${path.basename(file)} (${Math.round(body.length / 1024)} KB)`);
     return { path: file };
+  });
+
+  // ── video jobs (F18.1): raw upload with the metadata in the query, or JSON { url, … } ──
+
+  const jobNotFound = (reply: FastifyReply, id: string) => reply.code(404).send({ error: 'JOB_NOT_FOUND', message: `Job ${id} does not exist` });
+  const validLangs = (i: JobInput) => [i.lang, i.srcLang].every((l) => !l || LANG.test(l));
+
+  app.post<{ Querystring: JobInput & { name?: string }; Body: unknown }>('/api/jobs', { preHandler: guard, bodyLimit: 1024 * 1024 * 1024 }, async (req, reply) => {
+    if (Buffer.isBuffer(req.body)) {
+      const q = req.query;
+      const meta: JobInput = { lang: q.lang, srcLang: q.srcLang, title: q.title, speaker: q.speaker, abstract: q.abstract };
+      if (req.body.length === 0) return bad(reply, 'The file is empty');
+      if (!validLangs(meta)) return bad(reply, 'Languages must be 2-letter codes');
+      return reply.code(201).send(jobs.createFromUpload((q.name ?? 'video.mp4').replace(/[^\w.-]+/g, '_').slice(-80), req.body, meta));
+    }
+    const b = (req.body ?? {}) as JobInput & { url?: string };
+    if (typeof b.url !== 'string' || !/^https?:\/\//.test(b.url)) return bad(reply, 'Paste a video link or upload a file');
+    if (!validLangs(b)) return bad(reply, 'Languages must be 2-letter codes');
+    return reply.code(201).send(jobs.createFromUrl(b.url.trim(), b));
+  });
+
+  app.get('/api/jobs', { preHandler: guard }, async () => jobs.list());
+
+  app.get<{ Params: { id: string } }>('/api/jobs/:id', { preHandler: guard }, async (req, reply) => jobs.get(req.params.id) ?? jobNotFound(reply, req.params.id));
+
+  app.delete<{ Params: { id: string } }>('/api/jobs/:id', { preHandler: guard }, async (req, reply) =>
+    jobs.remove(req.params.id) ? { ok: true } : jobNotFound(reply, req.params.id));
+
+  app.get<{ Params: { id: string; name: string } }>('/api/jobs/:id/:name', { preHandler: guard }, async (req, reply) => {
+    const { id, name } = req.params;
+    if (name !== 'video.mp4' && name !== 'video.vtt' && name !== 'video.srt') return reply.code(404).send({ error: 'NOT_FOUND', message: 'Use video.mp4, video.vtt or video.srt' });
+    const file = jobs.output(id, name);
+    if (!file) return jobNotFound(reply, id);
+    const job = jobs.get(id)!;
+    const base = `${job.title.replace(/[^\w.-]+/g, '_').slice(0, 60) || id}.${job.lang}`;
+    if (name === 'video.mp4') return sendFile(req, reply, file, 'video/mp4', req.query && 'download' in (req.query as object) ? `${base}.mp4` : undefined);
+    const type = name === 'video.vtt' ? 'text/vtt' : 'application/x-subrip';
+    return sendFile(req, reply, file, `${type}; charset=utf-8`, `${base}.${name.slice(-3)}`);
   });
 }

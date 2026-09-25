@@ -29,9 +29,15 @@ export class AudioSource extends EventEmitter {
   private lastDataAt = 0;
   private watchdog?: NodeJS.Timeout;
   private restartTimer?: NodeJS.Timeout;
+  // F18.1: a file fed at N× real time — ffmpeg decodes without -re, chunks are emitted by a pacer
+  private speed: number;
+  private paced: Buffer[] = [];
+  private pacer?: NodeJS.Timeout;
+  private pacedEnd?: () => void;
 
-  constructor(private spec: SourceSpec, private label: string, private dataDir = './data') {
+  constructor(private spec: SourceSpec, private label: string, private dataDir = './data', opts: { speed?: number } = {}) {
     super();
+    this.speed = spec.kind === 'file' && (opts.speed ?? 1) > 1 ? Math.round(opts.speed ?? 1) : 1;
   }
 
   get clock(): number {
@@ -47,14 +53,28 @@ export class AudioSource extends EventEmitter {
     this.running = true;
     this.setState('connecting');
     this.watchdog = setInterval(() => this.checkData(), 1000);
+    if (this.speed > 1) this.pacer = setInterval(() => this.tickPaced(), 100);
     this.spawnFfmpeg();
   }
 
   stop(): void {
     this.running = false;
     clearInterval(this.watchdog);
+    clearInterval(this.pacer);
     clearTimeout(this.restartTimer);
     this.kill();
+  }
+
+  /** Every 100 ms of wall time, `speed` chunks (= speed × 100 ms of audio); ffmpeg is paused when far ahead. */
+  private tickPaced(): void {
+    for (let n = 0; n < this.speed && this.paced.length; n++) {
+      const chunk = this.paced.shift()!;
+      this.bytesRead += chunk.length;
+      this.lastDataAt = Date.now();
+      this.emit('chunk', chunk);
+    }
+    if (this.paced.length < 500) this.proc?.stdout?.resume();
+    if (!this.paced.length && this.pacedEnd) { const end = this.pacedEnd; this.pacedEnd = undefined; end(); }
   }
 
   private setState(s: SourceState): void {
@@ -75,7 +95,7 @@ export class AudioSource extends EventEmitter {
     const spec = this.spec;
     switch (spec.kind) {
       case 'file':
-        return ['-re', '-i', spec.path];
+        return [...(this.speed > 1 ? [] : ['-re']), '-i', spec.path];
       case 'url': {
         if (isYouTube(spec.url)) {
           const { input, isLive } = await resolveYouTube(spec.url, this.dataDir);
@@ -117,6 +137,11 @@ export class AudioSource extends EventEmitter {
       this.lastDataAt = Date.now();
       this.attempt = 0;
       this.setState('live');
+      if (this.speed > 1) {
+        this.paced.push(...this.chunker.push(data));
+        if (this.paced.length > 2000) proc.stdout!.pause();
+        return;
+      }
       this.bytesRead += data.length;
       for (const chunk of this.chunker.push(data)) this.emit('chunk', chunk);
     });
@@ -126,13 +151,18 @@ export class AudioSource extends EventEmitter {
       if (this.proc !== proc || !this.running) return;
       this.proc = undefined;
       if (this.spec.kind === 'file' && code === 0) {
-        if (this.spec.loop) {
-          console.log(`[${this.label}] file ended, looping`);
-          this.spawnFfmpeg();
-        } else {
-          this.stop();
-          this.emit('end');
-        }
+        const loop = this.spec.loop;
+        const finish = () => {
+          if (loop) {
+            console.log(`[${this.label}] file ended, looping`);
+            this.spawnFfmpeg();
+          } else {
+            this.stop();
+            this.emit('end');
+          }
+        };
+        // paced: the queue still holds audio; finish once the pacer has emitted it all
+        if (this.speed > 1 && this.paced.length) this.pacedEnd = finish; else finish();
         return;
       }
       console.log(`[${this.label}] ffmpeg exited (code ${code ?? signal})`);

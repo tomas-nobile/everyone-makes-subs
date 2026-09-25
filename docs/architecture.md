@@ -361,6 +361,8 @@ JSON: {"src":"<iso>", "es":"...", "en":"...", "pt":"..."}
 | `PUT /api/talks/:id/glossary` | admin | Edits it and requests a rotation |
 | `WS /api/stages/:id/ingest?key=` | stationKey | Station audio |
 | `GET /api/admin/metrics` | admin | SSE every 1 s |
+| `POST /api/jobs` · `GET /api/jobs[/:id]` · `DELETE /api/jobs/:id` · `GET /api/jobs/:id/video.{mp4,vtt,srt}` | admin | Subtitle a video (F18): raw upload with the metadata in the query, or `{ url }`; one job at a time, files in `data/jobs/<id>/` |
+| `GET /api/dev/state?stage=&state=` · `GET /api/dev/stats` | — (fake mode only) | Force a stage state (F07.5); CPU % and RSS of the process for `npm run load` (F19.2) |
 | `GET /api/health` | — | |
 
 Admin auth: password → signed `httpOnly` cookie. `/api/setup` only responds without auth from `127.0.0.1` or while no password exists.
