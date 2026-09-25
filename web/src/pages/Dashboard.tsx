@@ -4,7 +4,10 @@ import { useAdminStages } from '../hooks/useAdminStages';
 import { StageCard } from '../components/StageCard';
 import { StageDrawer } from '../components/StageDrawer';
 import { StageFormModal } from '../components/StageFormModal';
+import { SubtitleVideoModal } from '../components/SubtitleVideoModal';
+import { JobsPanel } from '../components/JobsPanel';
 import { Qr } from '../components/Qr';
+import { useJobs } from '../hooks/useJobs';
 import { api } from '../lib/api';
 import type { Alert } from '../../../shared/contract';
 
@@ -41,7 +44,9 @@ export function Dashboard() {
   const [copied, setCopied] = useState(false);
   const [printing, setPrinting] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showSubtitle, setShowSubtitle] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const { jobs, refetch: refetchJobs } = useJobs();
 
   if (!metrics) {
     return (
@@ -88,6 +93,9 @@ export function Dashboard() {
           <button className="btn" onClick={() => setPrinting(true)}>
             Print QR codes for all stages
           </button>
+          <button className="btn" onClick={() => setShowSubtitle(true)}>
+            Subtitle a video
+          </button>
           <button className="btn primary" onClick={() => setShowAddForm(true)}>
             Add stage
           </button>
@@ -111,6 +119,8 @@ export function Dashboard() {
           </div>
         )}
 
+        <JobsPanel jobs={jobs} onChanged={refetchJobs} />
+
         <div className="grid">
           {metrics.stages.map((m) => (
             <StageCard key={m.id} m={m} selected={selected === m.id} techVisible={techVisible} onOpen={() => setSelected(m.id)} />
@@ -118,6 +128,8 @@ export function Dashboard() {
         </div>
 
       </div>
+
+      {showSubtitle && <SubtitleVideoModal onClose={() => setShowSubtitle(false)} onCreated={refetchJobs} />}
 
       {selected &&
         (() => {
