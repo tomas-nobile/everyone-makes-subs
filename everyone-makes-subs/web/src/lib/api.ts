@@ -16,9 +16,11 @@ function isErrorBody(v: unknown): v is { error?: string; message?: string } {
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  // Only declare a JSON body when there is one: Fastify answers 400 to `Content-Type: application/json`
+  // with an empty body, which is what a body-less POST (start/stop/next-talk/snooze/logout) would send.
   const res = await fetch(path, {
     credentials: 'include',
-    headers: { 'Content-Type': 'application/json' },
+    ...(init?.body !== undefined ? { headers: { 'Content-Type': 'application/json' } } : {}),
     ...init,
   });
   if (!res.ok) {

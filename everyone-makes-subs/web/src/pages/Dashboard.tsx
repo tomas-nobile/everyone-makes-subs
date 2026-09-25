@@ -5,6 +5,7 @@ import { StageCard } from '../components/StageCard';
 import { StageDrawer } from '../components/StageDrawer';
 import { StageFormModal } from '../components/StageFormModal';
 import { SubtitleVideoModal } from '../components/SubtitleVideoModal';
+import { WhyUsModal } from '../components/WhyUsModal';
 import { JobsPanel } from '../components/JobsPanel';
 import { Qr } from '../components/Qr';
 import { useJobs } from '../hooks/useJobs';
@@ -45,6 +46,7 @@ export function Dashboard() {
   const [printing, setPrinting] = useState(false);
   const [showAddForm, setShowAddForm] = useState(false);
   const [showSubtitle, setShowSubtitle] = useState(false);
+  const [showWhyUs, setShowWhyUs] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const { jobs, refetch: refetchJobs } = useJobs();
 
@@ -68,8 +70,8 @@ export function Dashboard() {
     <div className={`admin-page${techVisible ? ' show-tech' : ''}`}>
       <div className="admin" id="admin">
         <div className="ad-head">
+          <img src="/logo-dark.png" alt={metrics.eventName} width={120} height={120} style={{ borderRadius: 24, flex: 'none' }} />
           <div>
-            <h1>{metrics.eventName}</h1>
             <div className="meta">
               <b style={{ color: 'var(--text)' }}>{metrics.totalViewers.toLocaleString()}</b> people reading · {metrics.stagesLive} of {metrics.stages.length}{' '}
               stages live
@@ -103,6 +105,9 @@ export function Dashboard() {
             <input type="checkbox" className="switch" checked={techVisible} onChange={(e) => setTechVisible(e.target.checked)} />
             Technical details
           </label>
+          <button className="btn ghost" onClick={() => setShowWhyUs(true)}>
+            Why choose us
+          </button>
         </div>
 
         {metrics.alerts.length > 0 && (
@@ -130,6 +135,7 @@ export function Dashboard() {
       </div>
 
       {showSubtitle && <SubtitleVideoModal onClose={() => setShowSubtitle(false)} onCreated={refetchJobs} />}
+      {showWhyUs && <WhyUsModal onClose={() => setShowWhyUs(false)} />}
 
       {selected &&
         (() => {
