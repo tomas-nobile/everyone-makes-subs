@@ -34,6 +34,7 @@ export function StageDrawer({
   publicUrl,
   onClose,
   onChanged,
+  onEdit,
   initialTab,
 }: {
   stage: AdminStage;
@@ -41,6 +42,7 @@ export function StageDrawer({
   publicUrl: string;
   onClose: () => void;
   onChanged: () => void;
+  onEdit: () => void;
   initialTab?: Tab;
 }) {
   const [tab, setTab] = useState<Tab>(initialTab ?? 'talk');
@@ -71,12 +73,33 @@ export function StageDrawer({
     onChanged();
   };
 
+  const running = metrics ? metrics.state !== 'idle' : false;
+  const toggleRunning = async () => {
+    await api.post(`/api/stages/${stage.id}/${running ? 'stop' : 'start'}`).catch(() => {});
+    onChanged();
+  };
+  const deleteStage = async () => {
+    if (!window.confirm(`Delete "${stage.name}"? This cannot be undone.`)) return;
+    await api.del(`/api/stages/${stage.id}`).catch(() => {});
+    onChanged();
+    onClose();
+  };
+
   return (
     <>
       <div className="drawer-scrim show" onClick={onClose} />
       <aside className="drawer show" aria-label="Stage details">
         <div className="dr-head">
           <h2>{stage.name}</h2>
+          <button className="btn sm" onClick={toggleRunning}>
+            {running ? 'Stop' : 'Start'}
+          </button>
+          <button className="btn sm" onClick={onEdit}>
+            Edit
+          </button>
+          <button className="btn sm danger" onClick={deleteStage}>
+            Delete
+          </button>
           <button className="icon-btn" aria-label="Close" onClick={onClose}>
             ✕
           </button>

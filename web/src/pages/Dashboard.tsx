@@ -3,6 +3,7 @@ import { useAdminMetrics } from '../hooks/useAdminMetrics';
 import { useAdminStages } from '../hooks/useAdminStages';
 import { StageCard } from '../components/StageCard';
 import { StageDrawer } from '../components/StageDrawer';
+import { StageFormModal } from '../components/StageFormModal';
 import { Qr } from '../components/Qr';
 import { api } from '../lib/api';
 import type { Alert } from '../../../shared/contract';
@@ -39,6 +40,8 @@ export function Dashboard() {
   const [selected, setSelected] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [printing, setPrinting] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   if (!metrics) {
     return (
@@ -83,6 +86,9 @@ export function Dashboard() {
           <button className="btn" onClick={() => setPrinting(true)}>
             Print QR codes for all stages
           </button>
+          <button className="btn primary" onClick={() => setShowAddForm(true)}>
+            Add stage
+          </button>
           <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: 'var(--muted)' }}>
             <input type="checkbox" className="switch" checked={techVisible} onChange={(e) => setTechVisible(e.target.checked)} />
             Technical details
@@ -123,8 +129,21 @@ export function Dashboard() {
               publicUrl={metrics.publicUrl}
               onClose={() => setSelected(null)}
               onChanged={refetchStages}
+              onEdit={() => {
+                setEditingId(adminStage.id);
+                setSelected(null);
+              }}
             />
           );
+        })()}
+
+      {showAddForm && <StageFormModal onClose={() => setShowAddForm(false)} onSaved={refetchStages} />}
+      {editingId &&
+        (() => {
+          const editStage = adminStages.find((s) => s.id === editingId);
+          return editStage ? (
+            <StageFormModal initial={editStage} onClose={() => setEditingId(null)} onSaved={refetchStages} />
+          ) : null;
         })()}
 
       {printing && (
