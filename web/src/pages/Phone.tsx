@@ -4,6 +4,7 @@ import { useEventInfo } from '../hooks/useEventInfo';
 import { detectLang, isLang, LANG_META, STRINGS, SUPPORTED_LANGS, subLabel, type Lang } from '../i18n';
 import { formatTime, maskLive } from '../lib/captionText';
 import { readPref, writePref } from '../lib/prefs';
+import { useWakeLock } from '../hooks/useWakeLock';
 import type { Segment, Talk } from '../../../shared/contract';
 
 type AttendeeState = 'live' | 'paused' | 'no_signal' | 'break' | 'ended' | 'reconnecting';
@@ -147,31 +148,6 @@ function StateCard({ attendeeState, lang, next, talk, onSummary }: { attendeeSta
     );
   }
   return null;
-}
-
-function useWakeLock(enabled: boolean) {
-  useEffect(() => {
-    if (!enabled || !('wakeLock' in navigator)) return;
-    let sentinel: WakeLockSentinel | null = null;
-    let cancelled = false;
-    const request = async () => {
-      try {
-        sentinel = await navigator.wakeLock.request('screen');
-      } catch {
-        // ignored: e.g. tab not visible, or unsupported — captions still work without it
-      }
-    };
-    const onVisible = () => {
-      if (document.visibilityState === 'visible' && !cancelled) request();
-    };
-    request();
-    document.addEventListener('visibilitychange', onVisible);
-    return () => {
-      cancelled = true;
-      document.removeEventListener('visibilitychange', onVisible);
-      sentinel?.release().catch(() => {});
-    };
-  }, [enabled]);
 }
 
 export function Phone({ stageId }: { stageId: string }) {

@@ -6,7 +6,7 @@
 
 ## Stories
 
-### [ ] F08.1 · Pick the input and see the level
+### [x] F08.1 · Pick the input and see the level
 As a room tech, I want to choose the audio input and see that sound is coming in.
 
 - `/station/:id?key=<stationKey>` asks for microphone permission and lists inputs (`enumerateDevices`).
