@@ -27,7 +27,7 @@ As a room tech, I want the audio to get through even if the network hiccups.
 
 **Verify:** speak into the mic and see captions on `/s/:id`. Cut Wi-Fi for 5 s: those seconds of audio still arrive.
 
-### [ ] F08.3 · Confirm it's the right input
+### [x] F08.3 · Confirm it's the right input
 As a room tech, I want to see what the system is writing, to know the right room is coming in.
 
 - "What's being written" box with the live line or the last phrase (from the stage's SSE).
