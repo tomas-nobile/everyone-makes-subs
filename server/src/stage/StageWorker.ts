@@ -15,6 +15,7 @@ export interface WorkerDeps {
   getTalk: () => Talk | null;
   nextSeq: () => number;
   onError: (status: number) => void;
+  onSourceEnd?: () => void;          // a non-looping file finished (offline runs)
 }
 
 /** Common surface of the real pipeline and the fake replay, as the StageManager sees it. */
@@ -87,6 +88,7 @@ export class StageWorker implements Worker {
       bus.publish({ type: 'live', text: '' });
     });
     this.transcriber.on('asr-error', () => deps.onError(0));
+    this.source.on('end', () => deps.onSourceEnd?.());
   }
 
   get sourceState(): SourceState { return this.source.state; }
@@ -109,6 +111,15 @@ export class StageWorker implements Worker {
 
   requestRotation(): void {
     this.transcriber.requestRotation();
+  }
+
+  /** End of input: audioStreamEnd so the ASR closes the last utterance. */
+  endInput(): void {
+    this.transcriber.endInput();
+  }
+
+  get asrStats() {
+    return this.transcriber;
   }
 
   markTalkStart(): void {

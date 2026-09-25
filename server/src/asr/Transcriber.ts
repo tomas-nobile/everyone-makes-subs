@@ -83,6 +83,11 @@ export class Transcriber extends EventEmitter {
     this.rotateRequested = true;
   }
 
+  /** No more audio is coming: ask the current session to finish the utterance in progress. */
+  endInput(): void {
+    this.cur?.s.end();
+  }
+
   /** Audio clock where the current utterance started (null between utterances). */
   get utteranceStart(): number | null {
     return this.uttStart;

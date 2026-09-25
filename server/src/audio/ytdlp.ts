@@ -46,10 +46,16 @@ export function isYouTube(url: string): boolean {
   }
 }
 
+/**
+ * YouTube also serves AI-dubbed audio tracks (e.g. an automatic English dub of a Spanish talk), often
+ * at a higher bitrate than the original: prefer the track marked "original", then the default one.
+ */
+export const ORIGINAL_AUDIO = 'ba[format_note*=original]/ba[format_note*=default]/bestaudio/best';
+
 /** Resolves a YouTube link to a direct audio URL. `isLive` decides whether ffmpeg uses -re. */
 export async function resolveYouTube(url: string, dataDir: string): Promise<{ input: string; isLive: boolean }> {
   const bin = await findYtDlp(dataDir);
-  const { stdout } = await run(bin, ['-f', 'bestaudio/best', '--no-playlist', '--no-warnings',
+  const { stdout } = await run(bin, ['-f', ORIGINAL_AUDIO, '--no-playlist', '--no-warnings',
     '--print', 'is_live', '--print', 'urls', url], { timeout: 60_000, maxBuffer: 1 << 20 });
   const [isLive, direct] = stdout.trim().split(/\r?\n/);
   if (!direct?.startsWith('http')) throw new Error(`yt-dlp returned no URL for ${url}`);

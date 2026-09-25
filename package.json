@@ -1,6 +1,6 @@
 {
   "name": "everyone-makes-subs",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Live captions and translation for every stage of a conference, with a single Gemini API key.",
   "author": "Everyone Makes Subs",
   "license": "MIT",
@@ -16,7 +16,12 @@
     "start": "node server/dist/index.js",
     "app:build": "esbuild app/main.ts --bundle --platform=node --format=cjs --external:electron --outfile=app/dist/main.cjs",
     "app:dev": "npm run build && npm run app:build && electron app/dist/main.cjs",
-    "app:dist": "npm run build && npm run app:build && electron-builder --config app/electron-builder.yml --publish never"
+    "app:dist": "npm run build && npm run app:build && electron-builder --config app/electron-builder.yml --publish never",
+    "samples": "tsx server/scripts/transcribe-file.ts --sample=es --sample=en --sample=mixed --write",
+    "verify:live": "tsx server/scripts/spike-live.ts samples/es.mp3 --lang=es --quiet --log",
+    "release": "tsx scripts/release.ts",
+    "clip": "tsx scripts/subtitle-clip.ts",
+    "load": "tsx scripts/load-sse.ts"
   },
   "dependencies": {
     "@fastify/static": "^10.1.4",

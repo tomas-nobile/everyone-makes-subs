@@ -6,3 +6,4 @@ server/dist
 app/dist
 app/release
 *.log
+demo/
