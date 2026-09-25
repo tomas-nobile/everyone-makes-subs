@@ -155,6 +155,7 @@ On Gemini's **free tier, Google may use the audio and text you send to improve i
 | `npm run bench:latency -- --runs=3` | End-to-end latency benchmark on `samples/en.mp3`: pause → caption, heard → caption, delivery (`bench/latency-*.json`) |
 | `npm run cost -- --rooms=2 --minutes=10` | Measured cost per room-hour from audio minutes and translation tokens (`docs/pricing.md`) |
 | `npm run ab` | Same clip with and without the generated vocabulary; the lines where a term differs go to `demo/ab/` |
+| `npx tsx server/scripts/check-speed.ts <video> --speeds=1,2,4` | How fast a video job can feed the Live API: transcript at each speed diffed against 1× (`JOB_SPEED`) |
 | `npm run rec:desktop` | Desktop capture of the real install (Windows), timed with key presses, for the video's Deploy chapter |
 | `npm run release` | Uploads the installers in `app/release/` to the GitHub Release `v<version>` |
 

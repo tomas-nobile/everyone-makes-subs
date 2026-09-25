@@ -167,8 +167,19 @@ AUX_MODEL=gemini-3.5-flash   # glossary, agenda and summary (verify the current 
 SESSION_ROTATE_SEC=510
 SESSION_HARD_CUT_SEC=580
 FORCE_COMMIT_MS=4500
-DEMO=0                       # 1: 2 rooms with the samples at startup
+SENTENCE_MIN_WORDS=5         # F17.3 segmenter thresholds (3 / 6 / 2500 / 12 on a billed project)
+COMMA_MIN_WORDS=8
+MAX_PHRASE_WORDS=18
+VAD_END_MS=0                 # F17.2 hybrid VAD: measured to stall the session, keep 0
+ASR_SILENCE_MS=              # server-side VAD silenceDurationMs (empty = model default)
+TRANSLATE_STREAM=1           # F17.4: publish `es` as soon as it closes in the streamed JSON
+TRANSLATE_CONCURRENCY=2      # F17.5: 4 on a billed project
+KEEP_ALIVE=1                 # F17.5: keep the HTTPS connection to Gemini open between phrases
+JOB_SPEED=1                  # F18.1: feed a video job's audio at N× real time
+DEMO=0                       # 1: demo rooms with the samples at startup
+DEMO_STAGES=2                # F19.1: how many (Auditorium, Room 2 … Room N, cycling en/es/mixed)
 FAKE_BACKEND=0
+BENCH=0                      # F17.1: stamp segment/tr events with wall-clock times
 DATA_DIR=/data
 ```
 
