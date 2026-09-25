@@ -156,3 +156,51 @@ export class AudioSource extends EventEmitter {
     this.restartTimer = setTimeout(() => this.spawnFfmpeg(), delay);
   }
 }
+
+/**
+ * Room station (F08.2): audio arrives over WS from /station/:id as PCM s16le mono 16 kHz frames.
+ * Same events and clock as AudioSource. 'no_signal' after 5 s without frames.
+ */
+export class StationSource extends EventEmitter {
+  state: SourceState = 'connecting';
+  private bytesRead = 0;
+  private chunker = new Chunker();
+  private lastDataAt = 0;
+  private watchdog?: NodeJS.Timeout;
+  connected = 0;
+
+  constructor(private label: string) {
+    super();
+  }
+
+  get clock(): number {
+    return this.bytesRead / BYTES_PER_SEC;
+  }
+
+  start(): void {
+    this.setState('no_signal');
+    clearInterval(this.watchdog);
+    this.watchdog = setInterval(() => {
+      if (this.state === 'live' && Date.now() - this.lastDataAt > NO_DATA_MS) this.setState('no_signal');
+    }, 1000);
+  }
+
+  stop(): void {
+    clearInterval(this.watchdog);
+  }
+
+  ingest(data: Buffer): void {
+    if (!data.length) return;
+    this.lastDataAt = Date.now();
+    this.setState('live');
+    this.bytesRead += data.length - (data.length % 2);
+    for (const chunk of this.chunker.push(data)) this.emit('chunk', chunk);
+  }
+
+  private setState(s: SourceState): void {
+    if (this.state === s) return;
+    this.state = s;
+    console.log(`[${this.label}] station → ${s}`);
+    this.emit('state', s);
+  }
+}

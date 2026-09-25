@@ -6,7 +6,7 @@
 
 ## Stories
 
-### [ ] F05.1 · Several stages at once
+### [x] F05.1 · Several stages at once
 As an operator, I want several stages running in parallel, each with its own source.
 
 - `StageManager` creates, starts, stops and deletes `StageWorker`s. One worker = source + meter + transcription + segmenter + translator.
@@ -16,7 +16,7 @@ As an operator, I want several stages running in parallel, each with its own sou
 
 **Verify:** 2 stages with `es.mp3` and `en.mp3` in parallel; the logs show both advancing.
 
-### [ ] F05.2 · Stream per stage
+### [x] F05.2 · Stream per stage
 As an attendee, I want my stage's captions in real time, without losing anything if my connection drops.
 
 - `GET /api/stages/:id/stream`: SSE with every language (`hello`, `live`, `segment`, `tr`, `state` and `level`).
@@ -26,7 +26,7 @@ As an attendee, I want my stage's captions in real time, without losing anything
 
 **Verify:** `npm run smoke` passes, and disconnecting/reconnecting with `Last-Event-ID` loses no segments.
 
-### [ ] F05.3 · Persistence and restart
+### [x] F05.3 · Persistence and restart
 As an operator, I don't want a restart to wipe the stages or the transcript.
 
 - `data/stages.json` and `data/talks.json` are written on every change. On boot, stages are recreated (those that were live start again).

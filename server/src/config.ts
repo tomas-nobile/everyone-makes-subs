@@ -20,9 +20,17 @@ export interface Config {
   forceCommitMs: number;
   demo: boolean;
   fakeBackend: boolean;
+  // only in config.json (written by the setup wizard)
+  adminPasswordHash?: string;
+  cookieSecret?: string;
+  cloudflareToken?: string;
+  setupDone?: boolean;
+  keyFromEnv?: boolean;
 }
 
-const DEFAULTS: Omit<Config, 'dataDir'> = {
+type EnvConfig = Omit<Config, 'dataDir' | 'adminPasswordHash' | 'cookieSecret' | 'cloudflareToken' | 'setupDone' | 'keyFromEnv'>;
+
+const DEFAULTS: EnvConfig = {
   port: 8080,
   geminiApiKey: '',
   adminPassword: '',
@@ -84,5 +92,18 @@ export function loadConfig(opts: { dataDir?: string; port?: number } = {}): Conf
     if (raw !== undefined && raw.trim() !== '') (cfg as unknown as Record<string, unknown>)[key] = parseEnv(key, raw.trim());
   }
   if (opts.port !== undefined) cfg.port = opts.port;
+  cfg.keyFromEnv = !!process.env.GEMINI_API_KEY?.trim();
   return cfg;
+}
+
+/** Merges `patch` into <dataDir>/config.json (mode 0600) and into the live config object. */
+export function saveConfig(cfg: Config, patch: Partial<Config>): void {
+  const file = configPath(cfg.dataDir);
+  let current: Record<string, unknown> = {};
+  try { current = JSON.parse(fs.readFileSync(file, 'utf8')); } catch { /* first write */ }
+  Object.assign(current, patch);
+  fs.mkdirSync(cfg.dataDir, { recursive: true });
+  fs.writeFileSync(file, JSON.stringify(current, null, 2), { mode: 0o600 });
+  try { fs.chmodSync(file, 0o600); } catch { /* windows */ }
+  Object.assign(cfg, patch);
 }
