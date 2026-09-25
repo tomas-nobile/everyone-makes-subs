@@ -25,6 +25,7 @@ export interface Config {
   commaMinWords: number;
   maxPhraseWords: number;
   translateStream: boolean;       // F17.4: stream the translation and publish `es` as soon as it closes
+  translateConcurrency: number;   // F17.5: parallel translation calls per stage
   jobSpeed: number;               // F18.1: feed a video job's audio at N× real time
   demo: boolean;
   demoStages: number;
@@ -60,6 +61,7 @@ const DEFAULTS: EnvConfig = {
   commaMinWords: 8,
   maxPhraseWords: 18,
   translateStream: true,
+  translateConcurrency: 2,
   jobSpeed: 1,
   demo: false,
   demoStages: 2,
@@ -87,6 +89,7 @@ const ENV_KEYS: Record<keyof typeof DEFAULTS, string> = {
   commaMinWords: 'COMMA_MIN_WORDS',
   maxPhraseWords: 'MAX_PHRASE_WORDS',
   translateStream: 'TRANSLATE_STREAM',
+  translateConcurrency: 'TRANSLATE_CONCURRENCY',
   jobSpeed: 'JOB_SPEED',
   demo: 'DEMO',
   demoStages: 'DEMO_STAGES',

@@ -5,6 +5,7 @@ import { AudioSource, StationSource, type SourceState } from '../audio/sources.j
 import { Meter } from '../audio/meter.js';
 import type { EventBus } from '../bus/EventBus.js';
 import type { Config } from '../config.js';
+import { warmGemini } from '../gemini.js';
 import { Translator } from '../mt/Translator.js';
 import { Segmenter, type Commit } from '../seg/Segmenter.js';
 import { words } from '../seg/align.js';
@@ -120,7 +121,10 @@ export class StageWorker implements Worker {
   start(): void {
     if (!this.deps.cfg.geminiApiKey) console.log(`[${this.label}] no Gemini key: audio runs but nothing is transcribed`);
     this.source.start();
-    if (this.deps.cfg.geminiApiKey) this.transcriber.start();
+    if (this.deps.cfg.geminiApiKey) {
+      this.transcriber.start();
+      void warmGemini(this.deps.cfg.geminiApiKey);   // F17.5: the first translation finds an open socket
+    }
   }
 
   stop(): void {

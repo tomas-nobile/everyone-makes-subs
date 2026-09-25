@@ -1,4 +1,26 @@
 import { GoogleGenAI, ThinkingLevel } from '@google/genai';
+import { Agent, setGlobalDispatcher } from 'undici';
+
+// F17.5: Node's fetch drops an idle keep-alive socket after 4 s unless the server hints otherwise, and
+// phrases arrive every 2–5 s — so every translation call was redoing TCP + TLS to Google. Node's
+// built-in fetch reads the same global dispatcher the `undici` package sets. KEEP_ALIVE=0 turns it off
+// (for the before/after benchmark).
+export const KEEP_ALIVE = process.env.KEEP_ALIVE !== '0';
+if (KEEP_ALIVE) setGlobalDispatcher(new Agent({ keepAliveTimeout: 30_000, keepAliveMaxTimeout: 30_000, connections: 8 }));
+
+const API_HOST = 'https://generativelanguage.googleapis.com';
+
+/** Opens (and keeps) a warm connection to the API host so the first phrase does not pay for TLS. */
+export async function warmGemini(apiKey: string): Promise<void> {
+  if (!apiKey || !KEEP_ALIVE) return;
+  const t = Date.now();
+  try {
+    await fetch(`${API_HOST}/v1beta/models?pageSize=1`, { headers: { 'x-goog-api-key': apiKey } });
+    console.log(`[gemini] connection warmed in ${Date.now() - t} ms`);
+  } catch (err) {
+    console.log(`[gemini] warm-up failed: ${(err as Error).message}`);
+  }
+}
 
 // One client per key: the key can change at runtime from the setup wizard.
 let client: GoogleGenAI | undefined;

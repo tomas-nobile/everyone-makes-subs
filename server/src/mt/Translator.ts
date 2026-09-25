@@ -4,7 +4,6 @@ import type { Config } from '../config.js';
 import { errorStatus, generateJsonWithFallback } from '../gemini.js';
 
 const LANG_NAMES: Record<string, string> = { es: 'Spanish', en: 'English', pt: 'Portuguese', fr: 'French', de: 'German', it: 'Italian' };
-const CONCURRENCY = 2;
 const MAX_BATCH = 6;
 const QUOTA_WAIT_MS = 10_000;
 
@@ -50,7 +49,8 @@ export class Translator {
   }
 
   private pump(): void {
-    while (this.running < CONCURRENCY && this.queue.length) {
+    // TRANSLATE_CONCURRENCY (F17.5): 2 on the free tier, 4 on a billed project; batching only past it
+    while (this.running < this.cfg.translateConcurrency && this.queue.length) {
       const batch = this.queue.splice(0, MAX_BATCH);
       this.running++;
       this.run(batch)
