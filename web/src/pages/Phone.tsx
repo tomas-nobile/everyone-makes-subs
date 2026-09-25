@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useStageStream } from '../hooks/useStageStream';
 import { useEventInfo } from '../hooks/useEventInfo';
 import { detectLang, isLang, LANG_META, STRINGS, SUPPORTED_LANGS, subLabel, type Lang } from '../i18n';
@@ -140,7 +140,7 @@ export function Phone({ stageId }: { stageId: string }) {
       return next;
     });
 
-  const { talk, state, segments, live, level, lastLag } = useStageStream(stageId);
+  const { talk, state, segments, live, level, lastLag, loadOlder } = useStageStream(stageId);
   const { data: event } = useEventInfo();
   const stage = event?.stages.find((s) => s.id === stageId);
   const stageName = stage?.name ?? stageId;
@@ -152,6 +152,45 @@ export function Phone({ stageId }: { stageId: string }) {
     const t = setTimeout(() => setShowToast(false), 6000);
     return () => clearTimeout(t);
   }, [showToast]);
+
+  // F07.4: pause autoscroll once the attendee scrolls up more than 40px; "back to live" resumes it.
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const [atBottom, setAtBottom] = useState(true);
+  const [unread, setUnread] = useState(0);
+  const prevSegCount = useRef(0);
+
+  useEffect(() => {
+    const grew = segments.length > prevSegCount.current;
+    prevSegCount.current = segments.length;
+    const el = bodyRef.current;
+    if (!el) return;
+    if (atBottom) {
+      requestAnimationFrame(() => {
+        el.scrollTop = el.scrollHeight;
+      });
+    } else if (grew) {
+      setUnread((n) => n + 1);
+    }
+  }, [segments, live, atBottom]);
+
+  const onScroll = () => {
+    const el = bodyRef.current;
+    if (!el) return;
+    const fromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+    setAtBottom((was) => {
+      const nowBottom = fromBottom < 40;
+      if (nowBottom) setUnread(0);
+      return nowBottom;
+    });
+    if (el.scrollTop < 20) loadOlder();
+  };
+
+  const jumpToLive = () => {
+    const el = bodyRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+    setAtBottom(true);
+    setUnread(0);
+  };
 
   const srcLang = talk?.lang;
   const isOriginal = lang === srcLang || (!srcLang && lang === 'es');
@@ -194,7 +233,7 @@ export function Phone({ stageId }: { stageId: string }) {
           </div>
         </div>
 
-        <div className="ph-body" id="phBody" style={{ fontSize: prefs.size }}>
+        <div className="ph-body" id="phBody" style={{ fontSize: prefs.size }} ref={bodyRef} onScroll={onScroll}>
           <div aria-live="polite" aria-relevant="additions">
             {segments.slice(-30).map((s, idx, list) => (
               <Caption
@@ -210,6 +249,11 @@ export function Phone({ stageId }: { stageId: string }) {
           </div>
           {state === 'live' && <LiveLine lang={lang} isOriginal={isOriginal} live={live} level={level} showLiveOrig={prefs.liveOrig} />}
         </div>
+
+        <button className={`jump${!atBottom ? ' show' : ''}`} onClick={jumpToLive}>
+          {T.jumpToLive}
+          {unread > 0 ? ` · ${unread} new` : ''}
+        </button>
 
         {showToast && (
           <div className="toast" role="status">

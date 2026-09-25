@@ -38,7 +38,7 @@ As an attendee, I want to adjust how I read without losing the thread.
 
 **Verify:** change language and size, reload, and they persist.
 
-### [ ] F07.4 · History and back to live
+### [x] F07.4 · History and back to live
 As an attendee, I want to re-read something without the screen yanking it away.
 
 - Scrolling up more than 40 px pauses autoscroll and shows "↓ Back to live · N new".
