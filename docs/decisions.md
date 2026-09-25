@@ -2,6 +2,8 @@
 
 One line per entry, newest first. Prefixes: `DECISION:`, `TODO:`, `CONTRACT:` (change requested to `shared/contract.ts`), `LIVE-API:` (findings from F03.1).
 
+- 2026-09-24 · DECISION: segmenter cuts at the LAST sentence end in the pending text (≥5 words), else at the last comma/conjunction when ≥8 words; stripCommitted picks the prefix with minimum word edit distance (≤20%, else cuts by committed word count); trimOverlap needs ≥2 matching words (F04.1/F04.2).
+- 2026-09-24 · TODO: F03.1 — spike not run: no Gemini key and no sample audio on the build machine. `server/scripts/spike-live.ts` is ready. Until then, from the SDK 2.24 types: interims = `serverContent.interimInputTranscription`, finals = `serverContent.inputTranscription` (`finished`), `goAway` exists; `LiveSession` accepts interims both cumulative and as deltas, and treats `turnComplete` as a final too.
 - 2026-09-24 · TODO: meter threshold can climb to its 0.05 RMS cap during loud intro music, so quiet speech right after reads as "silent" (seen on a Nerdearla YouTube talk). Tune the cap/percentile when F03 uses it for rotation.
 - 2026-09-24 · DECISION: YouTube works with yt-dlp 2026.08.19 standalone and no deno (resolves in ~3.5 s). The direct URL is re-resolved on every ffmpeg restart because it expires. Non-YouTube URLs get `-re` only if the path ends in a media extension; http inputs get ffmpeg `-reconnect` flags (F02.2).
 - 2026-09-24 · DECISION: `AudioSource` owns the retry loop (exit or 5 s without data → `no_signal`, backoff 1-2-4…30 s, reset on data) and emits its own `connecting|live|no_signal`; the StageWorker (F05) maps that to the stage state. `clock` keeps counting across restarts and loops (F02.4).
