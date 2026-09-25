@@ -175,7 +175,7 @@ ASR_SILENCE_MS=              # server-side VAD silenceDurationMs (empty = model 
 TRANSLATE_STREAM=1           # F17.4: publish `es` as soon as it closes in the streamed JSON
 TRANSLATE_CONCURRENCY=2      # F17.5: 4 on a billed project
 KEEP_ALIVE=1                 # F17.5: keep the HTTPS connection to Gemini open between phrases
-JOB_SPEED=1                  # F18.1: feed a video job's audio at N× real time
+JOB_SPEED=4                  # F18.1: feed a video job's audio at N× real time (4× measured to match 1×)
 DEMO=0                       # 1: demo rooms with the samples at startup
 DEMO_STAGES=2                # F19.1: how many (Auditorium, Room 2 … Room N, cycling en/es/mixed)
 FAKE_BACKEND=0

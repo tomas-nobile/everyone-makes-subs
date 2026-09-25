@@ -62,7 +62,7 @@ const DEFAULTS: EnvConfig = {
   maxPhraseWords: 18,
   translateStream: true,
   translateConcurrency: 2,
-  jobSpeed: 1,
+  jobSpeed: 4,                    // measured: same words as 1× (docs/decisions.md, F18.1), 100 s of audio in 32 s
   demo: false,
   demoStages: 2,
   fakeBackend: false,

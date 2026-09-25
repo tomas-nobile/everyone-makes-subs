@@ -8,7 +8,7 @@ As an organizer, I want to upload a talk video (or paste a YouTube link) and get
 
 ### [x] F18.1 · Video jobs (server)
 
-> **Shipped 2026-09-25.** Verified offline (fake job: 40 segments burned, progress reaches 1) and the UI end to end; the real-key run at 1× is the same `runFile` as `npm run clip`. The 2×/4× speed comparison is a `TODO` in `docs/decisions.md` (free-tier quota ran out); `JOB_SPEED` defaults to 1.
+> **Shipped 2026-09-25.** Verified offline (fake job: 40 segments burned, progress reaches 1) and the UI end to end; the real-key run is the same `runFile` as `npm run clip`. Speed measured with `server/scripts/check-speed.ts`: 4× gives the same words as 1× (5 of 288 differ, the ASR's own run-to-run noise) and does 100 s of audio in 32 s, so `JOB_SPEED` defaults to 4.
 As the operator, I want the server to turn a video into a subtitled one without the terminal.
 
 - `POST /api/jobs` (admin): raw upload like `/api/uploads`, or `{ url }` (YouTube via yt-dlp), plus `{ lang = 'es', srcLang?, title?, speaker?, abstract? }` → `{ id }`.
