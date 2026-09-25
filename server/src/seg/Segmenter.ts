@@ -15,10 +15,17 @@ export interface Commit { text: string; kind: SegmentKind }
 
 export interface SegmenterOptions {
   forceCommitMs: number;
+  /** F17.3: commit thresholds (defaults: sentence end with 5+ words, comma/conjunction with 8+, phrases ≤ 18 words). */
+  sentenceMinWords?: number;
+  commaMinWords?: number;
+  maxPhraseWords?: number;
   onCommit: (c: Commit) => void;
   replacements?: () => Record<string, string>;
   now?: () => number;
 }
+
+export interface CutThresholds { sentenceMinWords: number; commaMinWords: number }
+export const DEFAULT_THRESHOLDS = { sentenceMinWords: 5, commaMinWords: 8, maxPhraseWords: 18 };
 
 /**
  * Cuts the ASR stream into readable phrases (docs/architecture.md → "4. Segmenter").
@@ -30,9 +37,13 @@ export class Segmenter {
   private lastCommitAt = 0;
   private recent: string[] = [];        // last published texts (noise: 3 identical in a row)
   private now: () => number;
+  private th: CutThresholds;
+  private maxPhraseWords: number;
 
   constructor(private opts: SegmenterOptions) {
     this.now = opts.now ?? Date.now;
+    this.th = { sentenceMinWords: opts.sentenceMinWords ?? DEFAULT_THRESHOLDS.sentenceMinWords, commaMinWords: opts.commaMinWords ?? DEFAULT_THRESHOLDS.commaMinWords };
+    this.maxPhraseWords = opts.maxPhraseWords ?? DEFAULT_THRESHOLDS.maxPhraseWords;
   }
 
   /**
@@ -67,7 +78,7 @@ export class Segmenter {
     if (stable === 0) return;
 
     const pend = tail.slice(0, stable);
-    const cut = cutPoint(pend, this.now() - this.lastCommitAt > this.opts.forceCommitMs);
+    const cut = cutPoint(pend, this.now() - this.lastCommitAt > this.opts.forceCommitMs, false, this.th);
     if (cut) {
       this.commit(pend.slice(0, cut));
       this.prevTail = this.prevTail.slice(cut);
@@ -80,8 +91,9 @@ export class Segmenter {
     this.committed = [];
     this.prevTail = [];
     // a long final (a speaker who never paused) is published as readable phrases, not one block
-    while (rest.length > MAX_PHRASE_WORDS) {
-      const cut = cutPoint(rest.slice(0, MAX_PHRASE_WORDS + 4), true, true) || MAX_PHRASE_WORDS;
+    const max = this.maxPhraseWords;
+    while (rest.length > max) {
+      const cut = cutPoint(rest.slice(0, max + 4), true, true, this.th) || max;
       this.publish(rest.slice(0, cut).join(' '));
       rest = rest.slice(cut);
     }
@@ -116,22 +128,22 @@ export class Segmenter {
   }
 }
 
-const MAX_PHRASE_WORDS = 18;
-
 /**
- * How many words of `pend` to commit (0 = wait): the last sentence end with 5+ words; else, with
- * 8+ words, the last comma (cut after) or conjunction (cut before); else everything if `force`
- * and 4+ words. `lenient` (splitting a long final) takes any sentence end or comma after word 4.
+ * How many words of `pend` to commit (0 = wait): the last sentence end with `sentenceMinWords`+ words;
+ * else, with `commaMinWords`+ words, the last comma (cut after) or conjunction (cut before); else
+ * everything if `force` and 4+ words. `lenient` (splitting a long final) takes any sentence end or
+ * comma after word 4.
  */
-function cutPoint(pend: string[], force: boolean, lenient = false): number {
-  for (let i = pend.length - 1; i >= 4; i--) if (SENTENCE_END.test(pend[i])) return i + 1;
-  if (pend.length >= 8 || lenient) {
+function cutPoint(pend: string[], force: boolean, lenient: boolean, th: CutThresholds): number {
+  for (let i = pend.length - 1; i >= th.sentenceMinWords - 1; i--) if (SENTENCE_END.test(pend[i])) return i + 1;
+  if (pend.length >= th.commaMinWords || lenient) {
     for (let i = pend.length - 1; i >= 3; i--) {
       if (COMMA.test(pend[i]) && i < pend.length - 1) return i + 1;
       if (CONJUNCTIONS.has(norm(pend[i]))) return i;
     }
   }
-  return force && pend.length >= 4 ? pend.length : 0;
+  // splitting a long final: no natural cut in the window → the caller cuts at exactly maxPhraseWords
+  return force && !lenient && pend.length >= 4 ? pend.length : 0;
 }
 
 export function applyReplacements(text: string, replacements: Record<string, string>): string {

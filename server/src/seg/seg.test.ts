@@ -2,10 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { stripCommitted, trimOverlap } from './align.js';
 import { Segmenter, type Commit } from './Segmenter.js';
 
-function run(steps: Array<['i' | 'f', string] | ['wait', number]>, opts: { replacements?: Record<string, string> } = {}) {
+function run(steps: Array<['i' | 'f', string] | ['wait', number]>, opts: { replacements?: Record<string, string>; sentenceMinWords?: number; commaMinWords?: number; maxPhraseWords?: number; forceCommitMs?: number } = {}) {
   let t = 0;
   const out: Commit[] = [];
-  const seg = new Segmenter({ forceCommitMs: 4500, onCommit: (c) => out.push(c), now: () => t, replacements: () => opts.replacements ?? {} });
+  const seg = new Segmenter({ forceCommitMs: opts.forceCommitMs ?? 4500, sentenceMinWords: opts.sentenceMinWords, commaMinWords: opts.commaMinWords, maxPhraseWords: opts.maxPhraseWords, onCommit: (c) => out.push(c), now: () => t, replacements: () => opts.replacements ?? {} });
   for (const s of steps) {
     if (s[0] === 'wait') t += s[1];
     else if (s[0] === 'i') { seg.onInterim(s[1]); t += 300; }
@@ -49,6 +49,29 @@ describe('Segmenter', () => {
   it('filters noise: punctuation only and the same text 3 times in a row', () => {
     const out = run([['f', '...'], ['f', 'Gracias.'], ['f', 'gracias'], ['f', 'Gracias!']]);
     expect(out.map((c) => c.text)).toEqual(['Gracias.', 'gracias']);
+  });
+
+  // F17.3: thresholds are options (env SENTENCE_MIN_WORDS / COMMA_MIN_WORDS / MAX_PHRASE_WORDS / FORCE_COMMIT_MS)
+  it('sentenceMinWords: a 3-word sentence commits before the final when the threshold is 3', () => {
+    const steps = grow('That is it. Now let us');
+    expect(run(steps)[0]).toBeUndefined();
+    expect(run(steps, { sentenceMinWords: 3 })[0].text).toBe('That is it.');
+  });
+
+  it('commaMinWords: cuts at a comma after 6 words when the threshold is 6', () => {
+    const steps = grow('First we measure it, then we cut');
+    expect(run(steps)[0]).toBeUndefined();
+    expect(run(steps, { commaMinWords: 6 })[0].text).toBe('First we measure it,');
+  });
+
+  it('maxPhraseWords: a long final is split into phrases of at most that many words', () => {
+    const long = Array.from({ length: 30 }, (_, i) => `w${i + 1}`).join(' ');
+    for (const c of run([['f', long]], { maxPhraseWords: 12 })) expect(c.text.split(' ').length).toBeLessThanOrEqual(12);
+  });
+
+  it('forceCommitMs: forces the commit sooner when lowered', () => {
+    const out = run([['i', 'esto es un'], ['i', 'esto es un texto'], ['wait', 2600], ['i', 'esto es un texto largo']], { forceCommitMs: 2500 });
+    expect(out.map((c) => c.text)).toEqual(['esto es un texto']);
   });
 });
 
