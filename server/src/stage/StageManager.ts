@@ -206,9 +206,10 @@ export class StageManager {
       nextSeq: () => ++rt.seq,
       onError: (status: number) => rt.stats.onError(status),
     };
-    // Replay instead of real audio: FAKE_BACKEND=1, or a sample file that only has its transcript.
+    // Replay instead of real audio: FAKE_BACKEND=1, or a sample file with a transcript when its audio
+    // is missing or there is no key yet (DEMO=1 must show captions before the wizard gets a key).
     let transcript: string | undefined;
-    if (src.kind === 'file' && !fs.existsSync(src.path)) {
+    if (src.kind === 'file' && (!fs.existsSync(src.path) || !this.cfg.geminiApiKey)) {
       const t = src.path.replace(/\.[a-z0-9]+$/i, '.transcript.json');
       if (fs.existsSync(t)) transcript = t;
     }
