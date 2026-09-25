@@ -145,14 +145,15 @@ try {
   }
   const stages = await api<Array<{ id: string; stationKey: string }>>('GET', '/api/stages');
   const stationKey = stages[0]?.stationKey ?? '';
-  // the clip as a room of its own: in --replay it replays demo/clip.transcript.json with the recorded timing (F16.5)
-  let clipStage: string | null = null;
-  if (fs.existsSync(RAW_CLIP)) {
+  // the clip as a room of its own (created after the main recording, so it is not a ninth card on the dashboard):
+  // in --replay it replays demo/talk.transcript.json with the recorded timing (F16.5)
+  const clipStage = fs.existsSync(RAW_CLIP) ? 'talk-clip' : null;
+  const makeClipStage = async () => {
     const meta = fs.existsSync(RAW_CLIP.replace(/\.mp4$/, '.transcript.json')) ? JSON.parse(fs.readFileSync(RAW_CLIP.replace(/\.mp4$/, '.transcript.json'), 'utf8')) as { title: string; speaker?: string; lang: string } : { title: 'Talk clip', lang: 'en' };
     const st = await api<{ id: string }>('POST', '/api/stages', { name: 'Talk clip', source: { kind: 'file', path: RAW_CLIP, loop: false }, targetLangs: ['es', 'en', 'pt'] });
     await api('POST', `/api/stages/${st.id}/talk`, { title: meta.title, speaker: meta.speaker, lang: meta.lang || 'en' });
-    clipStage = st.id;
-  }
+    return st.id;
+  };
   await sleep(WARM * 1000);
   // a talk due now on Room 3 → the "Move to the next talk?" alert; no audio on Room 2 → the alert with its button (replay only)
   await api('POST', '/api/stages/room-3/talk', { title: 'Observability on a budget: OpenTelemetry end to end', speaker: 'Priya Raman', lang: 'en', startsAt: new Date().toISOString(), queue: true }).catch(() => null);
@@ -239,11 +240,12 @@ try {
   let splitFile: string | null = null;
   if (split && clipStage) {
     // start the clip's room and record the phone from the same clock; the clip's audio is offset by the measured delay
+    const id = await makeClipStage();
     const dir = path.join(work, 'split-phone');
     const plan2 = path.join(work, 'plan-split.json');
-    fs.writeFileSync(plan2, JSON.stringify({ width: 440, height: 720, scenes: [{ url: `${B}/s/${clipStage}?lang=es`, seconds: split.seconds, warm: 200, dir }] }));
+    fs.writeFileSync(plan2, JSON.stringify({ width: 440, height: 720, scenes: [{ url: `${B}/s/${id}?lang=es`, seconds: split.seconds, warm: 200, dir }] }));
     const stageStartAt = Date.now();
-    await api('POST', `/api/stages/${clipStage}/start`);
+    await api('POST', `/api/stages/${id}/start`);
     console.log('[video] recording the split screen (clip room live, phone in Spanish)…');
     await run(electron, [path.resolve('scripts/record-scenes.cjs'), plan2]);
     const meta = JSON.parse(fs.readFileSync(path.join(dir, 'meta.json'), 'utf8')) as { frames: number; seconds: number; startedAt: number };
