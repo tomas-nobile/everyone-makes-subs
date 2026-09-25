@@ -124,11 +124,3 @@ export const STRINGS: Record<Lang, Strings> = {
     translating: 'traduzindo…',
   },
 };
-
-/** Tail of `t` cut at a word boundary, at most `n` characters (used by TV/overlay caption budgets). */
-export function tail(t: string, n: number): string {
-  if (t.length <= n) return t;
-  const cut = t.slice(t.length - n);
-  const i = cut.indexOf(' ');
-  return '…' + (i >= 0 ? cut.slice(i + 1) : cut);
-}

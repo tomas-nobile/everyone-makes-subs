@@ -6,7 +6,7 @@
 
 ## Stories
 
-### [ ] F07.1 · Scan and read
+### [x] F07.1 · Scan and read
 As an attendee, I want to scan the QR and see that stage's captions in my language without choosing anything.
 
 - `/s/:id` opens the SSE. The language comes from `?lang=` or else `navigator.language` (en/es/pt; if none match, the original).
@@ -17,7 +17,7 @@ As an attendee, I want to scan the QR and see that stage's captions in my langua
 
 **Verify:** at 390 px it looks like the prototype with `npm run dev:fake`.
 
-### [ ] F07.2 · Confirmed phrases and live line
+### [x] F07.2 · Confirmed phrases and live line
 As an attendee, I want to read the latest phrase large and know the system is alive.
 
 - Phrase list: the last 2 in white, earlier ones in gray. Newest at the bottom.
