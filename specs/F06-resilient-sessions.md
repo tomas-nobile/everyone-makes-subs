@@ -6,7 +6,7 @@
 
 ## Stories
 
-### [ ] F06.1 · Rotation on silence
+### [x] F06.1 · Rotation on silence
 As an attendee, I don't want to notice the system switching connections every 9 minutes.
 
 - At `SESSION_ROTATE_SEC − 5` the next session pre-connects.
@@ -17,7 +17,7 @@ As an attendee, I don't want to notice the system switching connections every 9 
 
 **Verify:** with `SESSION_ROTATE_SEC=60`, a 5-minute file has 4 rotations with no visible gaps.
 
-### [ ] F06.2 · Reconnection
+### [x] F06.2 · Reconnection
 As an operator, I want the system to recover on its own if Gemini drops the connection.
 
 - `GoAway`, unexpected `onclose` or an error → immediate reconnect with backoff (max 30 s), replaying the 30 s ring buffer.
@@ -26,7 +26,7 @@ As an operator, I want the system to recover on its own if Gemini drops the conn
 
 **Verify:** close the session by hand mid-file: it comes back on its own and no phrases are lost.
 
-### [ ] F06.3 · Rotation test
+### [x] F06.3 · Rotation test
 As the team, we want a repeatable check that rotation neither duplicates nor drops phrases.
 
 - A test (with the fake backend extended to simulate session closes) that compares the concatenated segments with the reference transcript: 0 duplicates, 0 gaps longer than 1 word.
