@@ -19,6 +19,8 @@ As a judge who doesn't speak Spanish, I want to understand the demo.
 
 **Verify:** the video is uploaded to YouTube/Devpost and the subtitles are readable.
 
+> Superseded by [F16](F16-pitch-video.md): the pitch video is rebuilt by judging criterion and shows English → Spanish.
+
 ### [ ] F15.3 · Cleanup and submit
 As the team, we want to submit with no surprises.
 

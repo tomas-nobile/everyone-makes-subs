@@ -27,6 +27,20 @@ F13.2 → F10.2 → F10.3 → F11.4 → F14.3 → F14.2 → F12.2 → F07.6 → 
 
 **Never cut:** the MVP, F06.1, F09.2, F15.
 
+## Pitch round (Sept 25, from 00:30 ART)
+
+The video is rebuilt around the judging criteria (F16) and shows **English → Spanish**. Order, two lanes:
+
+| Backend lane | Frontend / scripts lane |
+|---|---|
+| F17.1 (baseline) → F17.2 → F17.4 → F17.3 → F17.5 → F17.6 → F17.7 | F19.1 → F16.1 → F16.2 (English talk → Spanish clip) |
+| F18.1 → F19.2 → F19.3 | F18.2 → F16.3 (desktop capture, needs a human) → F16.4–F16.8 |
+| | F16.9 + F15.3 · **submit by 11:45** |
+
+**Cut order (from the top):** F18.3 → F17.5 → F19.2 (use the existing 2,000-viewer number) → F16.4 A/B lines (show vocabulary hits only) → F18.2 (show F18 via the CLI) → F19.3 measured row (use the list-price estimate, labeled as such).
+
+**Never cut:** F17.1, F17.2, F16.1–F16.3, F16.5, F16.9.
+
 ## Status
 
 | Feature | Priority | Stories |
@@ -46,3 +60,7 @@ F13.2 → F10.2 → F10.3 → F11.4 → F14.3 → F14.2 → F12.2 → F07.6 → 
 | [F13 · Export and summary](../specs/F13-export-summary.md) | P1/P2 | [x] .1 · [x] .2 |
 | [F14 · Packaging](../specs/F14-packaging.md) | P1/P2 | [x] .1 · [x] .2 · [x] .3 |
 | [F15 · Submission](../specs/F15-submission.md) | P0 | [x] .1 · [x] .2 · [ ] .3 |
+| [F16 · Pitch video by judging criterion](../specs/F16-pitch-video.md) | P0 | [ ] .1 · [ ] .2 · [ ] .3 · [ ] .4 · [ ] .5 · [ ] .6 · [ ] .7 · [ ] .8 · [ ] .9 |
+| [F17 · Latency to the max](../specs/F17-latency.md) | P0 | [ ] .1 · [ ] .2 · [ ] .3 · [ ] .4 · [ ] .5 · [ ] .6 · [ ] .7 |
+| [F18 · Subtitle a video](../specs/F18-subtitle-a-video.md) | P1 | [ ] .1 · [ ] .2 · [ ] .3 |
+| [F19 · Scale and cost evidence](../specs/F19-scale-cost-evidence.md) | P1 | [ ] .1 · [ ] .2 · [ ] .3 |
