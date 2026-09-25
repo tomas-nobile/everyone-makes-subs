@@ -5,10 +5,17 @@ directories:
   buildResources: app/icons
 extraMetadata:
   main: app/dist/main.cjs
+# No asar: ffmpeg-static's binary and the ESM server bundle load straight from disk.
+asar: false
 files:
   - app/dist/**
+  - app/icons/**
+  - server/dist/**
+  - dist/web/**
+  - samples/**
   - package.json
-  - "!node_modules/**"
+  - "!**/*.map"
+icon: app/icons/icon.png
 artifactName: "EveryoneMakesSubs-${version}-${os}-${arch}.${ext}"
 mac:
   target:

@@ -13,7 +13,7 @@ As a judge, I want to start it with one command.
 
 **Verify:** `git clone` into a clean folder + `docker compose up --build` → `/` shows 2 stages.
 
-### [ ] F14.2 · Desktop app
+### [x] F14.2 · Desktop app
 As an operator who isn't a developer, I want to install and open an app.
 
 - `app/main.ts`: `startServer({ dataDir: app.getPath('userData') })`, window on `/setup` or `/admin`, `powerSaveBlocker`, tray with "N stages live" and a confirmation on close.
