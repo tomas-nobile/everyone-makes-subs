@@ -36,6 +36,7 @@ export class Translator {
     private getTalk: () => Talk | null,
     private targetLangs: () => string[],
     private onError: (status: number) => void,
+    private onUsage?: (u: { model: string; input: number; output: number }) => void,
   ) {}
 
   translate(text: string, srcHint?: string, onPartial?: PartialHandler): Promise<TranslateResult> {
@@ -121,7 +122,7 @@ export class Translator {
     try {
       const { value } = await generateJsonWithFallback<Record<string, string> | { items: Array<Record<string, string>> }>(
         this.cfg.geminiApiKey, [this.cfg.translateModel, this.cfg.translateFallbackModel], prompt,
-        { schema, temperature: 0.2, maxWaitMs: QUOTA_WAIT_MS, onText }, (status) => { if (status === 429) this.onError(429); },
+        { schema, temperature: 0.2, maxWaitMs: QUOTA_WAIT_MS, onText, onUsage: this.onUsage }, (status) => { if (status === 429) this.onError(429); },
       );
       outs = many ? ((value as { items?: Array<Record<string, string>> }).items ?? []) : [value as Record<string, string>];
     } catch (err) {

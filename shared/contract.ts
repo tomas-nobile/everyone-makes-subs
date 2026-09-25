@@ -67,7 +67,7 @@ export interface Segment {
 /** `last` = the talk that ended most recently (downloads on the "talk ended" screen). */
 export type HelloEvent = { type: 'hello'; state: StageState; talk: Talk | null; next?: Talk | null; last?: Talk | null; lastSeq: number; recent?: Segment[] };
 export type LiveEvent = { type: 'live'; text: string };
-/** `lag` = seconds from the end of the spoken audio (t1) to publication; the phone shows it as "~1.4 s". */
+/** `lag` = seconds from the speaker's pause (the end of an utterance) to publication — only on phrases of an utterance closed by a pause (F17.6); the phone shows the last one as "~1.4 s". */
 /** BENCH=1 only (F17.1): `at` = server wall clock at publication, `heardAt` = first interim that reached the phrase's last word, `endAt` = end of speech (utterances closed by a pause). */
 export type SegmentEvent = { type: 'segment'; seq: number; src: string; text: string; t0: number; t1: number; kind: SegmentKind; lag?: number; u?: number; at?: number; heardAt?: number; endAt?: number };
 /** `tr` may carry a SUBSET of the languages (F17.4: `es` first, the rest in a later event); clients merge by seq. */
@@ -192,7 +192,9 @@ export interface StageMetrics {
   errorsPerMin: number;
   http429: number;
   audioMin: number;                                       // minutes of audio sent to the ASR
-  costPerHour: number;                                    // estimated US$/h
+  tokens: { in: number; out: number };                    // translation tokens (usageMetadata), F19.3
+  costPerHour: number;                                    // US$/h at list prices (audio minutes + tokens)
+  costSoFar: number;                                      // US$ since the stage started
   model: { transcribe: string; translate: string };
   vocab: VocabCount[];                                    // F10.4, current talk
 }

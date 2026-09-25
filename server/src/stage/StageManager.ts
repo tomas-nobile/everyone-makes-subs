@@ -223,11 +223,13 @@ export class StageManager {
       getTalk: () => this.talkOf(rt),
       nextSeq: () => ++rt.seq,
       onError: (status: number) => rt.stats.onError(status),
+      onUsage: (u: { input: number; output: number }) => rt.stats.onUsage(u),
     };
     // Replay instead of real audio: FAKE_BACKEND=1, or a sample file with a transcript when its audio
     // is missing or there is no key yet (DEMO=1 must show captions before the wizard gets a key).
+    // In fake mode a file's own transcript (e.g. demo/clip.transcript.json) beats the sample rotation.
     let transcript: string | undefined;
-    if (src.kind === 'file' && (!fs.existsSync(src.path) || !this.cfg.geminiApiKey)) {
+    if (src.kind === 'file' && (this.cfg.fakeBackend || !fs.existsSync(src.path) || !this.cfg.geminiApiKey)) {
       const t = src.path.replace(/\.[a-z0-9]+$/i, '.transcript.json');
       if (fs.existsSync(t)) transcript = t;
     }
@@ -489,7 +491,9 @@ export class StageManager {
         noAudioSec: rt.noSignalSince ? Math.round((Date.now() - rt.noSignalSince) / 1000) : 0,
         rotations: ws.rotations, maxGapMs: ws.maxGapMs, reconnects: ws.reconnects,
         errorsPerMin: rt.stats.errorsPerMin, http429: rt.stats.http429, audioMin: Math.round(ws.sentSec / 6) / 10,
+        tokens: { in: rt.stats.tokensIn, out: rt.stats.tokensOut },
         costPerHour: rt.running ? rt.stats.costPerHour(ws.sentSec) : 0,
+        costSoFar: Math.round(rt.stats.costSoFar(ws.sentSec) * 10000) / 10000,
         model: { transcribe: this.cfg.fakeBackend ? 'fake' : this.cfg.transcribeModel, translate: this.cfg.fakeBackend ? 'fake' : this.cfg.translateModel },
         vocab: rt.stats.vocabCounts(),
       };

@@ -321,12 +321,16 @@ export function StageDrawer({
                 </div>
               </div>
               <div className="dr-sec">
-                <h4>Estimated cost</h4>
+                <h4>Cost at list prices</h4>
                 <div className="kv">
                   <span>This stage, per hour</span>
                   <span>US${metrics.costPerHour.toFixed(2)}</span>
+                  <span>Since it started</span>
+                  <span>US${metrics.costSoFar.toFixed(3)}</span>
                   <span>Audio minutes sent</span>
                   <span>{metrics.audioMin.toFixed(1)}</span>
+                  <span>Translation tokens in / out</span>
+                  <span>{metrics.tokens.in.toLocaleString()} / {metrics.tokens.out.toLocaleString()}</span>
                 </div>
               </div>
             </>

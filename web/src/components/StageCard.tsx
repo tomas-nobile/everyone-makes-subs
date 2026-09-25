@@ -66,7 +66,7 @@ export function StageCard({ m, selected, onOpen, techVisible }: { m: StageMetric
         )}
       </div>
       <div className="tech">
-        p50/p95 {m.delay ? `${m.delay.p50.toFixed(1)}/${m.delay.p95.toFixed(1)} s` : '—'} · tr {m.delay ? `${m.delay.p50Tr.toFixed(1)}/${m.delay.p95Tr.toFixed(1)} s` : '—'} · lag {m.lag.toFixed(1)} s · rot #{m.rotations} · gap {m.maxGapMs} ms · reconn {m.reconnects} · {m.errorsPerMin} err/min · 429×{m.http429} · {m.model.transcribe}/{m.model.translate} · US${m.costPerHour.toFixed(2)}/h
+        p50/p95 {m.delay ? `${m.delay.p50.toFixed(1)}/${m.delay.p95.toFixed(1)} s` : '—'} · tr {m.delay ? `${m.delay.p50Tr.toFixed(1)}/${m.delay.p95Tr.toFixed(1)} s` : '—'} · lag {m.lag.toFixed(1)} s · rot #{m.rotations} · gap {m.maxGapMs} ms · reconn {m.reconnects} · {m.errorsPerMin} err/min · 429×{m.http429} · {m.model.transcribe}/{m.model.translate} · {m.audioMin.toFixed(1)} min · {(m.tokens.in / 1000).toFixed(1)}k/{(m.tokens.out / 1000).toFixed(1)}k tok · US${m.costPerHour.toFixed(2)}/h
       </div>
     </button>
   );

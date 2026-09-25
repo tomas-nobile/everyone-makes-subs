@@ -16,6 +16,7 @@ export interface WorkerDeps {
   getTalk: () => Talk | null;
   nextSeq: () => number;
   onError: (status: number) => void;
+  onUsage?: (u: { model: string; input: number; output: number }) => void;   // F19.3: translation tokens
   onSourceEnd?: () => void;          // a non-looping file finished (offline runs)
   speed?: number;                    // F18.1: feed a file at N× real time (video jobs)
 }
@@ -77,7 +78,7 @@ export class StageWorker implements Worker {
       replacements: () => deps.getTalk()?.glossary.replacements ?? {},
       onCommit: (c) => this.onCommit(c),
     });
-    this.translator = new Translator(stage.id, cfg, deps.getTalk, () => this.stage.targetLangs, deps.onError);
+    this.translator = new Translator(stage.id, cfg, deps.getTalk, () => this.stage.targetLangs, deps.onError, deps.onUsage);
 
     this.source.on('chunk', (chunk: Buffer) => {
       const clock = this.source.clock;
@@ -188,11 +189,13 @@ export class StageWorker implements Worker {
     this.lastCommitT1 = t1;
     const seq = this.deps.nextSeq();
     const talk = this.deps.getTalk();
-    const lag = Math.max(0, (Date.now() - this.wallAt(t1)) / 1000);
+    // F17.6: `lag` is pause → caption and only exists for phrases of an utterance closed by a pause (its t1 is the
+    // pause); a phrase cut mid-utterance has no honest end-of-speech, so it carries none (the phone keeps the last).
+    const lag = this.finalTimes ? Math.round(Math.max(0, (Date.now() - this.wallAt(t1)) / 1000) * 100) / 100 : undefined;
     const src = talk?.lang ?? '';
     const r = (x: number) => Math.round((x - this.talkOffset) * 100) / 100;
     const stamp = this.deps.cfg.bench ? this.benchStamps(c.text) : {};
-    this.deps.bus.publish({ type: 'segment', seq, src, text: c.text, t0: r(t0), t1: r(t1), kind: c.kind, lag: Math.round(lag * 100) / 100, u: this.utt, ...stamp });
+    this.deps.bus.publish({ type: 'segment', seq, src, text: c.text, t0: r(t0), t1: r(t1), kind: c.kind, ...(lag !== undefined ? { lag } : {}), u: this.utt, ...stamp });
     const trStamp = () => (this.deps.cfg.bench ? { at: Date.now() } : {});
     if (c.kind !== 'speech') {
       this.deps.bus.publish({ type: 'tr', seq, tr: Object.fromEntries(this.stage.targetLangs.map((l) => [l, c.text])), ms: 0, ...trStamp() });

@@ -289,7 +289,7 @@ export function Phone({ stageId }: { stageId: string }) {
             </div>
             <span
               className="lat"
-              title="Delay measured from when the speaker finishes the sentence"
+              title="Measured: from the speaker's last pause to that caption"
               style={{ visibility: attendeeState === 'live' || attendeeState === 'paused' ? 'visible' : 'hidden' }}
             >
               {prefs.stream ? `+${prefs.delay} s (stream)` : lag !== null ? `~${lag.toFixed(1)} s` : ''}

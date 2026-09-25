@@ -1,9 +1,11 @@
 import type { Segment, VocabCount } from '../../../shared/contract.js';
 import { norm } from '../seg/align.js';
 
-// Cost estimate (US$). Rough list prices; shown only inside "Technical details".
-export const ASR_USD_PER_MIN = 0.005;
-export const MT_USD_PER_SEGMENT = 0.00005;
+// Cost (US$) at list prices (docs/pricing.json, 2026-09-24): audio minutes sent to the ASR and the
+// translation tokens reported by `usageMetadata` (F19.3). Shown inside "Technical details".
+export const ASR_USD_PER_MIN = 0.009;             // gemini-3.5-transcribe-live, Google's blended rate
+export const MT_USD_PER_MTOKENS_IN = 0.3;         // gemini-3.5-flash-lite
+export const MT_USD_PER_MTOKENS_OUT = 2.5;
 
 /** Per-stage counters fed from the bus and the worker (docs/architecture.md → "Metrics"). */
 export class StageStats {
@@ -11,6 +13,8 @@ export class StageStats {
   lastLine = '';
   liveLine = '';
   http429 = 0;
+  tokensIn = 0;
+  tokensOut = 0;
   segmentsThisHour: number[] = [];
   noAudioSince: number | null = null;
   startedAt = Date.now();
@@ -19,10 +23,11 @@ export class StageStats {
   private vocab = new Map<string, number>();
   private vocabTerms: string[] = [];
 
+  /** `lag` (pause → caption) only exists for phrases of an utterance closed by a pause (F17.6): the delay samples are those. */
   onSegment(seq: number, text: string, lag: number | undefined): void {
     this.lastLine = text;
     this.liveLine = '';
-    this.delays.push({ seq, seg: lag ?? 0, tr: null });
+    if (lag !== undefined) this.delays.push({ seq, seg: lag, tr: null });
     if (this.delays.length > 50) this.delays.shift();
     const now = Date.now();
     this.segmentsThisHour.push(now);
@@ -43,6 +48,11 @@ export class StageStats {
   onError(status: number): void {
     if (status === 429) { this.http429++; return; }
     this.errors.push(Date.now());
+  }
+
+  onUsage(u: { input: number; output: number }): void {
+    this.tokensIn += u.input;
+    this.tokensOut += u.output;
   }
 
   get errorsPerMin(): number {
@@ -82,11 +92,14 @@ export class StageStats {
     }
   }
 
+  /** US$ spent so far at list prices: audio minutes + real translation tokens. */
+  costSoFar(sentSec: number): number {
+    return (sentSec / 60) * ASR_USD_PER_MIN + (this.tokensIn / 1e6) * MT_USD_PER_MTOKENS_IN + (this.tokensOut / 1e6) * MT_USD_PER_MTOKENS_OUT;
+  }
+
   costPerHour(sentSec: number): number {
     const elapsedH = Math.max(1 / 60, (Date.now() - this.startedAt) / 3_600_000);
-    const asrMinPerHour = sentSec / 60 / elapsedH;
-    const segPerHour = this.segmentsThisHour.length / Math.min(1, elapsedH);
-    return Math.round((asrMinPerHour * ASR_USD_PER_MIN + segPerHour * MT_USD_PER_SEGMENT) * 100) / 100;
+    return Math.round((this.costSoFar(sentSec) / elapsedH) * 100) / 100;
   }
 }
 
