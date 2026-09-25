@@ -16,8 +16,18 @@ const FRAME_MS = 100;   // ~10 fps is plenty for UI
 app.commandLine.appendSwitch('force-device-scale-factor', '1');
 app.commandLine.appendSwitch('disable-renderer-backgrounding');
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
+// software rendering: capturePage on a hidden/transparent window hit UnknownVizError (GPU compositor) under memory pressure
+app.disableHardwareAcceleration();
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/** capturePage with retries: a compositor hiccup must not hang the whole recording. */
+async function capture(win, label) {
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try { return await win.webContents.capturePage(); } catch (e) { console.log(`${label}: capture failed (${e.message}), retry ${attempt + 1}`); await sleep(300); }
+  }
+  throw new Error(`${label}: capturePage kept failing`);
+}
 
 // windows are created and destroyed one per scene: don't quit when the last one closes
 app.on('window-all-closed', () => {});
@@ -41,7 +51,7 @@ app.whenReady().then(async () => {
       await sleep(800);
     }
     if (png) {
-      const img = await win.webContents.capturePage();
+      const img = await capture(win, `panel ${i + 1}`);
       fs.mkdirSync(path.dirname(s.png), { recursive: true });
       fs.writeFileSync(s.png, img.toPNG());
       console.log(`panel ${i + 1}/${plan.scenes.length}: ${path.basename(s.png)}`);
@@ -57,7 +67,7 @@ app.whenReady().then(async () => {
     const t0 = Date.now();
     while (Date.now() - t0 < s.seconds * 1000) {
       const t = Date.now();
-      const img = await win.webContents.capturePage();
+      const img = await capture(win, `scene ${i + 1}`);
       fs.writeFileSync(path.join(s.dir, `${String(++n).padStart(5, '0')}.jpg`), img.resize({ width: w, height: h }).toJPEG(88));
       await sleep(Math.max(0, FRAME_MS - (Date.now() - t)));
     }
