@@ -7,11 +7,10 @@ import { tail } from '../lib/captionText';
 export function Overlay({ stageId }: { stageId: string }) {
   // The app shell paints an opaque dark background (styles.css); OBS needs this route see-through.
   useEffect(() => {
-    const prev = document.body.style.background;
-    document.body.style.background = 'transparent';
-    return () => {
-      document.body.style.background = prev;
-    };
+    const els = [document.documentElement, document.body];
+    const prev = els.map((el) => el.style.background);
+    for (const el of els) el.style.background = 'transparent';
+    return () => els.forEach((el, i) => { el.style.background = prev[i]; });
   }, []);
 
   const params = new URLSearchParams(location.search);

@@ -4,7 +4,7 @@
 
 ## Stories
 
-### [ ] F13.1 · Download captions
+### [x] F13.1 · Download captions
 As an organizer, I want each talk's transcript to upload to YouTube.
 
 - `GET /api/talks/:id/export.{srt,vtt,txt}?lang=` built from the talk's JSONL, using `t0`/`t1`.
@@ -13,7 +13,7 @@ As an organizer, I want each talk's transcript to upload to YouTube.
 
 **Verify:** vitest test for SRT/VTT formatting. The exported VTT plays correctly in a video player.
 
-### [ ] F13.2 · "What did I miss?"
+### [x] F13.2 · "What did I miss?"
 As an attendee who arrived late or got distracted, I want a summary of the last few minutes.
 
 - `Summarizer`: every 60 s, if there are new segments, 3–5 bullets covering the last 5 min in each language, via `AUX_MODEL`. Cached in memory.

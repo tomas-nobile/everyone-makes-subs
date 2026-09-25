@@ -2,7 +2,7 @@ import { useStageStream } from '../hooks/useStageStream';
 import { useEventInfo } from '../hooks/useEventInfo';
 import { Qr } from '../components/Qr';
 import { formatTime, maskLive, tail } from '../lib/captionText';
-import { isLang } from '../i18n';
+import { isLang, STRINGS } from '../i18n';
 
 const LINE_BUDGET = 60;
 
@@ -18,7 +18,8 @@ export function Tv({ stageId }: { stageId: string }) {
   const isOriginal = lang === talk?.lang;
 
   const base = event?.publicUrl || location.origin;
-  const isBreak = state === 'idle' && !!next;
+  const T = STRINGS[isLang(lang) ? lang : 'en'];
+  const isBreak = !!next && (state === 'idle' || !talk);
 
   const confirmed = segments.filter((s) => s.kind === 'speech' && (isOriginal || (isLang(lang) && s.tr[lang])));
   const textOf = (s: (typeof confirmed)[number]) => (isOriginal ? s.text : isLang(lang) ? (s.tr[lang] ?? s.text) : s.text);
@@ -55,7 +56,7 @@ export function Tv({ stageId }: { stageId: string }) {
 
         {isBreak && (
           <div className="tv-interval show">
-            <div className="k">Break · back at {formatTime(next?.startsAt)}</div>
+            <div className="k">{T.breakTitle(formatTime(next?.startsAt))}</div>
             <div className="t">{next?.title}</div>
             <div className="s">
               {next?.speaker} {next?.speaker ? '·' : ''} {stageName}
@@ -66,9 +67,9 @@ export function Tv({ stageId }: { stageId: string }) {
         {showQr && base && (
           <div className="tv-qr">
             <Qr className="qr" data={`${base}/s/${stageId}`} />
-            Captions in your language
+            {T.tvQrCaption}
             <br />
-            <b style={{ color: '#fff' }}>Scan</b>
+            <b style={{ color: '#fff' }}>{T.tvQrScan}</b>
           </div>
         )}
       </div>

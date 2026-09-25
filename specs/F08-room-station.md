@@ -16,7 +16,7 @@ As a room tech, I want to choose the audio input and see that sound is coming in
 
 **Verify:** on `localhost`, pick the microphone and see the meter move.
 
-### [ ] F08.2 · Send the audio
+### [x] F08.2 · Send the audio
 As a room tech, I want the audio to get through even if the network hiccups.
 
 - An `AudioWorklet` downsamples to 16 kHz, converts to Int16 and sends binary over `WS /api/stages/:id/ingest?key=`.

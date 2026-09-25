@@ -73,9 +73,11 @@ export function Dashboard() {
           <div className="spacer" />
           {metrics.publicUrl && (
             <div className="pub">
-              <span className={`badge ${metrics.reachable === false ? 'bad' : 'ok'}`} style={{ fontSize: 11, padding: '2px 8px' }}>
-                {metrics.reachable === false ? 'Unreachable' : 'Reachable'}
-              </span>
+              {metrics.reachable !== null && (
+                <span className={`badge ${metrics.reachable === false ? 'bad' : 'ok'}`} style={{ fontSize: 11, padding: '2px 8px' }}>
+                  {metrics.reachable === false ? 'Unreachable' : 'Reachable'}
+                </span>
+              )}
               <span style={{ color: 'var(--dim)' }}>Public address</span>
               <code>{metrics.publicUrl}</code>
               <button className="btn sm" onClick={copyPublicUrl}>

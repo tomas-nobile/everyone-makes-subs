@@ -8,6 +8,7 @@ export interface StageStreamState {
   state: StageState | null;
   talk: Talk | null;
   next: Talk | null;
+  last: Talk | null;
   /** Confirmed segments, sorted by seq, translations merged in as they arrive. */
   segments: Segment[];
   /** Current interim text of the original language (`live` event); cleared once the segment lands. */
@@ -31,6 +32,7 @@ export function useStageStream(stageId: string): StageStreamState {
   const [state, setState] = useState<StageState | null>(null);
   const [talk, setTalk] = useState<Talk | null>(null);
   const [next, setNext] = useState<Talk | null>(null);
+  const [last, setLast] = useState<Talk | null>(null);
   const [segments, setSegments] = useState<Segment[]>([]);
   const [live, setLive] = useState('');
   const [level, setLevel] = useState(0);
@@ -79,12 +81,14 @@ export function useStageStream(stageId: string): StageStreamState {
           setState(data.state);
           setTalk(data.talk);
           setNext(data.next ?? null);
+          setLast(data.last ?? null);
           if (data.recent) for (const s of data.recent) applySeg(s);
           break;
         case 'state':
           setState(data.state);
           if (data.talk !== undefined) setTalk(data.talk);
           if (data.next !== undefined) setNext(data.next ?? null);
+          if (data.last !== undefined) setLast(data.last ?? null);
           break;
         case 'live':
           setLive(data.text);
@@ -130,5 +134,5 @@ export function useStageStream(stageId: string): StageStreamState {
     }
   }, [stageId, hasOlder, loadingOlder, applySeg]);
 
-  return { connected, gotHello, state, talk, next, segments, live, level, lastLag, loadOlder, hasOlder, loadingOlder };
+  return { connected, gotHello, state, talk, next, last, segments, live, level, lastLag, loadOlder, hasOlder, loadingOlder };
 }

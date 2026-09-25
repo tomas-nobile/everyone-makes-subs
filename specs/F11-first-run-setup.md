@@ -6,7 +6,7 @@
 
 ## Stories
 
-### [ ] F11.1 · Connect Gemini
+### [x] F11.1 · Connect Gemini
 As an operator, I want to paste my API key and know right away if it works.
 
 - `/setup` shows while there's no valid key. If `GEMINI_API_KEY` comes from env, this step is skipped.
@@ -16,7 +16,7 @@ As an operator, I want to paste my API key and know right away if it works.
 
 **Verify:** an invalid key shows the error; a valid one enables "Next".
 
-### [ ] F11.2 · Dashboard password
+### [x] F11.2 · Dashboard password
 As an operator, I want to protect the dashboard.
 
 - Set and stored as a hash (scrypt). It's the one F09.1 uses.
@@ -24,7 +24,7 @@ As an operator, I want to protect the dashboard.
 
 **Verify:** after setup, `/admin` from another machine asks for the password.
 
-### [ ] F11.3 · Internet access with Tailscale
+### [x] F11.3 · Internet access with Tailscale
 As an operator, I want phones to get in from any network, with a secure, fixed address.
 
 - 4-item checklist (each unlocks when the previous one is ✓), as in the prototype:
@@ -37,7 +37,7 @@ As an operator, I want phones to get in from any network, with a secure, fixed a
 
 **Verify:** on the demo machine, a phone on mobile data opens `/s/auditorium`.
 
-### [ ] F11.4 · Cloudflare and other options
+### [x] F11.4 · Cloudflare and other options
 As the operator of a large event, I want to use my own domain.
 
 - Cloudflare: dashboard instructions, paste token and hostname → `cloudflared tunnel run --token` (binary downloaded on first use) + the same nonce test.

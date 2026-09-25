@@ -133,10 +133,10 @@ function StateCard({ attendeeState, lang, next, talk, onSummary }: { attendeeSta
         <div className="row">
           {talk && (
             <>
-              <a className="btn sm primary" href={`/api/talks/${talk.id}/export.txt`}>
+              <a className="btn sm primary" href={`/api/talks/${talk.id}/export.txt?lang=${lang}`}>
                 {T.downloadTxt}
               </a>
-              <a className="btn sm" href={`/api/talks/${talk.id}/export.srt`}>
+              <a className="btn sm" href={`/api/talks/${talk.id}/export.srt?lang=${lang}`}>
                 {T.downloadSrt}
               </a>
             </>
@@ -171,7 +171,7 @@ export function Phone({ stageId }: { stageId: string }) {
       return next;
     });
 
-  const { talk, next, state, connected, gotHello, segments, live, level, lastLag, loadOlder } = useStageStream(stageId);
+  const { talk, next, last, state, connected, gotHello, segments, live, level, lastLag, loadOlder } = useStageStream(stageId);
   const { summary, loading: summaryLoading } = useSummary(stageId, lang, sheet === 'sum');
   const { data: event } = useEventInfo();
   const stage = event?.stages.find((s) => s.id === stageId);
@@ -233,16 +233,19 @@ export function Phone({ stageId }: { stageId: string }) {
     }
   }, [visibleSegments, live, atBottom]);
 
+  // Only a real gesture pauses autoscroll: layout changes (new lines, older history) also fire scroll.
+  const gestureAt = useRef(0);
+  const onGesture = () => { gestureAt.current = Date.now(); };
   const onScroll = () => {
     const el = bodyRef.current;
     if (!el) return;
+    const byUser = Date.now() - gestureAt.current < 1000;
     const fromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
-    setAtBottom((was) => {
-      const nowBottom = fromBottom < 40;
-      if (nowBottom) setUnread(0);
-      return nowBottom;
-    });
-    if (el.scrollTop < 20) loadOlder();
+    if (fromBottom < 40) {
+      setAtBottom(true);
+      setUnread(0);
+    } else if (byUser) setAtBottom(false);
+    if (byUser && el.scrollTop < 20) loadOlder();
   };
 
   const jumpToLive = () => {
@@ -263,7 +266,7 @@ export function Phone({ stageId }: { stageId: string }) {
   const attendeeState: AttendeeState = !connected && gotHello ? 'reconnecting'
     : state === 'no_signal' ? 'no_signal'
     : state === 'paused' ? 'paused'
-    : state === 'idle' ? (next ? 'break' : 'ended')
+    : state === 'idle' || (gotHello && !talk) ? (next ? 'break' : 'ended')
     : 'live';
   const statusWord = { live: T.live, paused: T.paused, no_signal: T.noAudio, break: T.break, ended: T.ended, reconnecting: T.reconnecting }[attendeeState];
 
@@ -313,7 +316,8 @@ export function Phone({ stageId }: { stageId: string }) {
           {T.reconnectingBanner}
         </div>
 
-        <div className="ph-body" id="phBody" style={{ fontSize: prefs.size }} ref={bodyRef} onScroll={onScroll}>
+        <div className="ph-body" id="phBody" style={{ fontSize: prefs.size }} ref={bodyRef} onScroll={onScroll}
+          onWheel={onGesture} onTouchMove={onGesture} onKeyDown={onGesture} onPointerDown={onGesture}>
           <div aria-live="polite" aria-relevant="additions">
             {visibleSegments.slice(-30).map((s, idx, list) => (
               <Caption
@@ -327,13 +331,13 @@ export function Phone({ stageId }: { stageId: string }) {
               />
             ))}
           </div>
-          <StateCard attendeeState={attendeeState} lang={lang} next={next} talk={talk} onSummary={() => setSheet('sum')} />
+          <StateCard attendeeState={attendeeState} lang={lang} next={next} talk={talk ?? last} onSummary={() => setSheet('sum')} />
           {attendeeState === 'live' && !prefs.stream && <LiveLine lang={lang} isOriginal={isOriginal} live={live} level={level} showLiveOrig={prefs.liveOrig} />}
         </div>
 
         <button className={`jump${!atBottom ? ' show' : ''}`} onClick={jumpToLive}>
           {T.jumpToLive}
-          {unread > 0 ? ` · ${unread} new` : ''}
+          {unread > 0 ? ` · ${unread} ${T.newLines}` : ''}
         </button>
 
         {showToast && (

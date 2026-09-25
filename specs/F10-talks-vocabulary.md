@@ -6,7 +6,7 @@
 
 ## Stories
 
-### [ ] F10.1 · Automatic vocabulary per talk
+### [x] F10.1 · Automatic vocabulary per talk
 As an operator, I want to load a talk's title and abstract and have the system build its vocabulary.
 
 - `POST /api/stages/:id/talk` with `{ title, speaker, abstract, lang?, slidesText? }` → one `AUX_MODEL` call with JSON `Glossary` output (up to 100 ASR terms, `doNotTranslate`, `preferred`, `replacements`).
@@ -16,7 +16,7 @@ As an operator, I want to load a talk's title and abstract and have the system b
 
 **Verify:** with the prototype's OpenTelemetry talk, the glossary includes OpenTelemetry, OTLP and DaemonSet.
 
-### [ ] F10.2 · Paste the schedule
+### [x] F10.2 · Paste the schedule
 As an operator, I want to paste the schedule as it appears on the website and get stages and talks.
 
 - `POST /api/agenda/parse` with free text → `{ rooms, talks[] }` (via `AUX_MODEL`). An editable table is shown for confirmation.
@@ -24,7 +24,7 @@ As an operator, I want to paste the schedule as it appears on the website and ge
 
 **Verify:** paste the sample text from the prototype (setup step 4) and get 2 stages and 4 talks.
 
-### [ ] F10.3 · Talk switch by schedule
+### [x] F10.3 · Talk switch by schedule
 As an operator, I don't want to watch the clock for 10 stages.
 
 - At the next talk's `startsAt`: alert "Room X · 15:30 · Move to the next talk?" with "Switch now" and "Wait 5 min".
@@ -33,7 +33,7 @@ As an operator, I don't want to watch the clock for 10 stages.
 
 **Verify:** set a talk starting in 1 minute and see the alert and the switch.
 
-### [ ] F10.4 · Vocabulary visibly working
+### [x] F10.4 · Vocabulary visibly working
 As an operator (and as a judge), I want to see the vocabulary being used.
 
 - Count occurrences of each `asrVocabulary` term in the current talk's segments (case- and accent-insensitive).

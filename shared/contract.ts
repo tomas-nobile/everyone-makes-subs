@@ -63,12 +63,13 @@ export interface Segment {
 // ── SSE events: one stream per stage carrying every language ──
 
 /** `recent` = the last 10 segments of the current talk (with translations) so the phone has text at once. */
-export type HelloEvent = { type: 'hello'; state: StageState; talk: Talk | null; next?: Talk | null; lastSeq: number; recent?: Segment[] };
+/** `last` = the talk that ended most recently (downloads on the "talk ended" screen). */
+export type HelloEvent = { type: 'hello'; state: StageState; talk: Talk | null; next?: Talk | null; last?: Talk | null; lastSeq: number; recent?: Segment[] };
 export type LiveEvent = { type: 'live'; text: string };
 /** `lag` = seconds from the end of the spoken audio (t1) to publication; the phone shows it as "~1.4 s". */
 export type SegmentEvent = { type: 'segment'; seq: number; src: string; text: string; t0: number; t1: number; kind: SegmentKind; lag?: number };
 export type TrEvent = { type: 'tr'; seq: number; tr: Record<string, string | null>; ms: number };
-export type StateEvent = { type: 'state'; state: StageState; talk?: Talk | null; next?: Talk | null };
+export type StateEvent = { type: 'state'; state: StageState; talk?: Talk | null; next?: Talk | null; last?: Talk | null };
 export type LevelEvent = { type: 'level'; v: number };
 
 export type StageEvent = HelloEvent | LiveEvent | SegmentEvent | TrEvent | StateEvent | LevelEvent;

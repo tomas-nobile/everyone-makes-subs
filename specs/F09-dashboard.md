@@ -6,7 +6,7 @@
 
 ## Stories
 
-### [ ] F09.1 · Password login
+### [x] F09.1 · Password login
 As an operator, I want only the production team to control the stages.
 
 - `/admin` asks for the password (set in F11.2 or via `ADMIN_PASSWORD`) and sets a signed `httpOnly` cookie.
@@ -14,7 +14,7 @@ As an operator, I want only the production team to control the stages.
 
 **Verify:** in an incognito window, `/admin` asks for the password and admin routes return 401.
 
-### [ ] F09.2 · One card per stage
+### [x] F09.2 · One card per stage
 As an operator, I want to see each stage's state and the last thing written.
 
 - Card grid: name, plain-language state with color (Live, No audio, Delayed, Break, Stopped, Error), mini VU meter, **last transcribed line** (live one in gray), current and next talk, "N reading" and delay.
@@ -24,7 +24,7 @@ As an operator, I want to see each stage's state and the last thing written.
 
 **Verify:** with 2 fake stages, the cards update live.
 
-### [ ] F09.3 · Alerts you can act on
+### [x] F09.3 · Alerts you can act on
 As an operator, I want problems to come with the button that fixes them.
 
 - Alert bar at the top: no audio > 30 s ("How to fix it" → Audio tab), p95 delay > 6 s, errors > 3/min, talk about to start (handled by F10.3) and public access down (F11).
@@ -44,7 +44,7 @@ As an operator, I want everything about a stage in one place.
 
 **Verify:** open the panel for each fake stage and go through the tabs.
 
-### [ ] F09.5 · Create and edit stages
+### [x] F09.5 · Create and edit stages
 As an operator, I want to add a stage and choose where the audio comes from, in plain language.
 
 - "Add stage": name + source, with plain-language options: "Room laptop (recommended)", "YouTube or stream link", "Audio file" (upload) and "Advanced: OBS or console via RTMP/SRT".

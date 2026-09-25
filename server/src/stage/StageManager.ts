@@ -26,6 +26,7 @@ export interface StageRuntime {
   seq: number;
   pending: Map<number, Segment>;
   forced?: StageState;
+  lastTalkId?: string;
   noSignalSince: number | null;
   snoozedUntil: number;
   summary: { at: number | null; bullets: Record<string, string[]>; seq: number; lastRun: number };
@@ -225,6 +226,10 @@ export class StageManager {
     return this.talks.find((t) => t.id === rt.stage.talkId && t.status === 'live') ?? null;
   }
 
+  lastOf(rt: StageRuntime): Talk | null {
+    return this.talks.find((t) => t.id === rt.lastTalkId) ?? null;
+  }
+
   nextOf(rt: StageRuntime): Talk | null {
     const queue = this.talks.filter((t) => t.stageId === rt.stage.id && t.status === 'next');
     queue.sort((a, b) => (a.startsAt ?? '￿').localeCompare(b.startsAt ?? '￿'));
@@ -257,7 +262,7 @@ export class StageManager {
   /** Makes `talk` current: closes the previous one and makes the ASR pick up the new vocabulary. */
   private switchTo(rt: StageRuntime, talk: Talk | null): void {
     const prev = this.talkOf(rt);
-    if (prev && prev !== talk) prev.status = 'done';
+    if (prev && prev !== talk) { prev.status = 'done'; rt.lastTalkId = prev.id; }
     if (talk) talk.status = 'live';
     rt.stage.talkId = talk?.id;
     for (const seq of [...rt.pending.keys()]) this.persist(rt, seq);
@@ -391,7 +396,7 @@ export class StageManager {
 
   /** `state` event with the current talk and the next one (also after a talk change). */
   private announce(rt: StageRuntime): void {
-    rt.bus.publish({ type: 'state', state: rt.stage.state, talk: this.talkOf(rt), next: this.nextOf(rt) });
+    rt.bus.publish({ type: 'state', state: rt.stage.state, talk: this.talkOf(rt), next: this.nextOf(rt), last: this.lastOf(rt) });
   }
 
   private tick(): void {

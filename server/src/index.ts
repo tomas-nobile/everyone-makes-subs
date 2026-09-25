@@ -62,7 +62,7 @@ export async function startServer(opts: { dataDir?: string; port?: number; host?
     const send = (id: number | null, ev: StageEvent) =>
       res.write(`${id !== null ? `id: ${id}\n` : ''}data: ${JSON.stringify(ev)}\n\n`);
 
-    send(null, { type: 'hello', state: rt.stage.state, talk: stages.talkOf(rt), next: stages.nextOf(rt), lastSeq: rt.bus.lastSeq, recent: stages.recent(rt) });
+    send(null, { type: 'hello', state: rt.stage.state, talk: stages.talkOf(rt), next: stages.nextOf(rt), last: stages.lastOf(rt), lastSeq: rt.bus.lastSeq, recent: stages.recent(rt) });
     const lastEventId = Number(req.headers['last-event-id']);
     if (lastEventId > 0) for (const e of rt.bus.since(lastEventId)) send(e.id, e.ev);
 
