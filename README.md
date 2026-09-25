@@ -23,7 +23,7 @@ Built for the **Nerdearla Vibeathon 2026**.
 | | |
 |---|---|
 | [`everyone-makes-subs/`](everyone-makes-subs/) | The whole project: server, web, desktop app, specs, docs, benchmarks. Every command below runs inside it. |
-| [`installers/`](installers/) | The Windows installer (Git LFS) and the links to the release assets, including the pitch video. |
+| [`installers/`](installers/) | The Windows installer (`EveryoneMakesSubs-1.0.0-win-x64.exe`, Git LFS). Unsigned: *More info → Run anyway*. The same file and the videos are on the [Release v1.0.0](https://github.com/tomas-nobile/everyone-makes-subs/releases/tag/v1.0.0). |
 | `README.md` | This file. |
 
 ## Try it in 1 minute (no key needed)
