@@ -40,6 +40,8 @@ export interface Transcript {
   events: TranscriptEvent[];
 }
 
+const BENCH = process.env.BENCH === '1' || process.env.BENCH === 'true';
+
 export function loadTranscript(file: string): Transcript {
   return JSON.parse(fs.readFileSync(file, 'utf8')) as Transcript;
 }
@@ -122,9 +124,10 @@ export class FakeBackend implements Worker {
           const seq = this.nextSeq();
           this.stats.sentSec = (Date.now() - this.startedAt) / 1000;
           const lag = Math.max(0.6, Math.round((ev.t - ev.t1 + 0.6) * 100) / 100);   // ≥ the ASR latency the live metric does not see
-          this.bus.publish({ type: 'segment', seq, src: ev.src, text: ev.text, t0: ev.t0 + offset, t1: ev.t1 + offset, kind: ev.kind, lag });
+          const stamp = () => (BENCH ? { at: Date.now() } : {});   // F17.1: delivery (publish → receive) is measurable in fake mode too
+          this.bus.publish({ type: 'segment', seq, src: ev.src, text: ev.text, t0: ev.t0 + offset, t1: ev.t1 + offset, kind: ev.kind, lag, ...stamp() });
           const mtMs = ev.mtMs ?? 600;
-          this.at(mtMs / 1000, () => this.bus.publish({ type: 'tr', seq, tr: ev.tr, ms: mtMs }));
+          this.at(mtMs / 1000, () => this.bus.publish({ type: 'tr', seq, tr: ev.tr, ms: mtMs, ...stamp() }));
         });
       }
     }

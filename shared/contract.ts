@@ -68,8 +68,9 @@ export interface Segment {
 export type HelloEvent = { type: 'hello'; state: StageState; talk: Talk | null; next?: Talk | null; last?: Talk | null; lastSeq: number; recent?: Segment[] };
 export type LiveEvent = { type: 'live'; text: string };
 /** `lag` = seconds from the end of the spoken audio (t1) to publication; the phone shows it as "~1.4 s". */
-export type SegmentEvent = { type: 'segment'; seq: number; src: string; text: string; t0: number; t1: number; kind: SegmentKind; lag?: number; u?: number };
-export type TrEvent = { type: 'tr'; seq: number; tr: Record<string, string | null>; ms: number };
+/** BENCH=1 only (F17.1): `at` = server wall clock at publication, `heardAt` = first interim that reached the phrase's last word, `endAt` = end of speech (utterances closed by a pause). */
+export type SegmentEvent = { type: 'segment'; seq: number; src: string; text: string; t0: number; t1: number; kind: SegmentKind; lag?: number; u?: number; at?: number; heardAt?: number; endAt?: number };
+export type TrEvent = { type: 'tr'; seq: number; tr: Record<string, string | null>; ms: number; at?: number };
 export type StateEvent = { type: 'state'; state: StageState; talk?: Talk | null; next?: Talk | null; last?: Talk | null };
 export type LevelEvent = { type: 'level'; v: number };
 

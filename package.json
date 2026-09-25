@@ -22,6 +22,7 @@
     "release": "tsx scripts/release.ts",
     "clip": "tsx scripts/subtitle-clip.ts",
     "load": "tsx scripts/load-sse.ts",
+    "bench:latency": "tsx scripts/bench-latency.ts",
     "demo-video": "tsx scripts/demo-video.ts"
   },
   "dependencies": {

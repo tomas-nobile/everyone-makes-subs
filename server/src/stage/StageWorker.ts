@@ -47,6 +47,10 @@ export class StageWorker implements Worker {
   private prevInterim: string[] = [];
   private utt = 1;                               // utterance number (phrases of one utterance share it)
   private label: string;
+  // BENCH=1 (F17.1): when each cumulative word count was first heard, and words published this utterance
+  private firstSeenAt = new Map<number, number>();
+  private uttWords = 0;
+  private finalAt = 0;
 
   constructor(private stage: Stage, private deps: WorkerDeps) {
     const { cfg, bus } = deps;
@@ -77,17 +81,24 @@ export class StageWorker implements Worker {
       this.transcriber.push(chunk, clock, this.meter.silentForMs);
     });
     this.transcriber.on('interim', (text: string) => {
+      if (cfg.bench) {
+        const n = words(text).length;
+        if (!this.firstSeenAt.has(n)) this.firstSeenAt.set(n, Date.now());
+      }
       this.segmenter.onInterim(text);
       // interims are the whole utterance (can last minutes): the live line is only the unpublished tail
       bus.publish({ type: 'live', text: this.mask(words(text).slice(this.segmenter.committedCount)) });
     });
     this.transcriber.on('final', (text: string, t0: number, t1: number) => {
+      this.finalAt = Date.now();
       this.finalTimes = { t0, t1 };
       this.segmenter.onFinal(text);
       this.utt++;
       this.finalTimes = null;
       this.lastCommitT1 = null;
       this.prevInterim = [];
+      this.firstSeenAt.clear();
+      this.uttWords = 0;
       bus.publish({ type: 'live', text: '' });
     });
     this.transcriber.on('asr-error', () => deps.onError(0));
@@ -147,6 +158,20 @@ export class StageWorker implements Worker {
     return this.wall[0]?.[1] ?? Date.now();
   }
 
+  /**
+   * F17.1 benchmark stamps. `heardAt` = wall time of the first interim whose cumulative word count reached
+   * this phrase's last word (interims are cumulative and 98% extend the previous one); for a phrase cut out of
+   * a final that no interim reached, the final's arrival. `endAt` = end of speech, only for phrases of an
+   * utterance closed by a pause (the final's t1 mapped to wall time).
+   */
+  private benchStamps(text: string): { at: number; heardAt: number; endAt?: number } {
+    this.uttWords += words(text).length;
+    let heardAt: number | undefined;
+    for (const [n, t] of [...this.firstSeenAt].sort((a, b) => a[0] - b[0])) if (n >= this.uttWords) { heardAt = t; break; }
+    if (heardAt === undefined) heardAt = this.finalTimes ? this.finalAt : Date.now();
+    return { at: Date.now(), heardAt, ...(this.finalTimes ? { endAt: this.wallAt(this.finalTimes.t1) } : {}) };
+  }
+
   private onCommit(c: Commit): void {
     const t = this.transcriber;
     const t1 = this.finalTimes?.t1 ?? t.lastSpeechClock;
@@ -157,15 +182,17 @@ export class StageWorker implements Worker {
     const lag = Math.max(0, (Date.now() - this.wallAt(t1)) / 1000);
     const src = talk?.lang ?? '';
     const r = (x: number) => Math.round((x - this.talkOffset) * 100) / 100;
-    this.deps.bus.publish({ type: 'segment', seq, src, text: c.text, t0: r(t0), t1: r(t1), kind: c.kind, lag: Math.round(lag * 100) / 100, u: this.utt });
+    const stamp = this.deps.cfg.bench ? this.benchStamps(c.text) : {};
+    this.deps.bus.publish({ type: 'segment', seq, src, text: c.text, t0: r(t0), t1: r(t1), kind: c.kind, lag: Math.round(lag * 100) / 100, u: this.utt, ...stamp });
+    const trStamp = () => (this.deps.cfg.bench ? { at: Date.now() } : {});
     if (c.kind !== 'speech') {
-      this.deps.bus.publish({ type: 'tr', seq, tr: Object.fromEntries(this.stage.targetLangs.map((l) => [l, c.text])), ms: 0 });
+      this.deps.bus.publish({ type: 'tr', seq, tr: Object.fromEntries(this.stage.targetLangs.map((l) => [l, c.text])), ms: 0, ...trStamp() });
       return;
     }
     this.translator.translate(c.text, talk?.lang).then(
       (res) => {
         console.log(`[${this.label}] #${seq} mt ${res.ms} ms · ${c.text.slice(0, 60)}`);
-        this.deps.bus.publish({ type: 'tr', seq, tr: res.tr, ms: res.ms });
+        this.deps.bus.publish({ type: 'tr', seq, tr: res.tr, ms: res.ms, ...trStamp() });
       },
       (err) => console.log(`[${this.label}] translate crashed: ${(err as Error).message}`),
     );

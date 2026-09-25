@@ -21,6 +21,7 @@ export interface Config {
   demo: boolean;
   demoStages: number;
   fakeBackend: boolean;
+  bench: boolean;                 // BENCH=1: stamp segment/tr events with wall-clock times (F17.1)
   // only in config.json (written by the setup wizard)
   adminPasswordHash?: string;
   cookieSecret?: string;
@@ -48,6 +49,7 @@ const DEFAULTS: EnvConfig = {
   demo: false,
   demoStages: 2,
   fakeBackend: false,
+  bench: false,
 };
 
 const ENV_KEYS: Record<keyof typeof DEFAULTS, string> = {
@@ -67,6 +69,7 @@ const ENV_KEYS: Record<keyof typeof DEFAULTS, string> = {
   demo: 'DEMO',
   demoStages: 'DEMO_STAGES',
   fakeBackend: 'FAKE_BACKEND',
+  bench: 'BENCH',
 };
 
 function parseEnv(key: keyof typeof DEFAULTS, raw: string): unknown {
