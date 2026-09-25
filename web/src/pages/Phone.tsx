@@ -5,6 +5,7 @@ import { detectLang, isLang, LANG_META, STRINGS, SUPPORTED_LANGS, subLabel, type
 import { formatTime, maskLive } from '../lib/captionText';
 import { readPref, writePref } from '../lib/prefs';
 import { useWakeLock } from '../hooks/useWakeLock';
+import { useSummary } from '../hooks/useSummary';
 import type { Segment, Talk } from '../../../shared/contract';
 
 type AttendeeState = 'live' | 'paused' | 'no_signal' | 'break' | 'ended' | 'reconnecting';
@@ -171,6 +172,7 @@ export function Phone({ stageId }: { stageId: string }) {
     });
 
   const { talk, next, state, connected, gotHello, segments, live, level, lastLag, loadOlder } = useStageStream(stageId);
+  const { summary, loading: summaryLoading } = useSummary(stageId, lang, sheet === 'sum');
   const { data: event } = useEventInfo();
   const stage = event?.stages.find((s) => s.id === stageId);
   const stageName = stage?.name ?? stageId;
@@ -439,7 +441,16 @@ export function Phone({ stageId }: { stageId: string }) {
         <div className={`sheet${sheet === 'sum' ? ' show' : ''}`} role="dialog" aria-label={T.summaryTitle}>
           <div className="grab" />
           <h3>{T.summaryTitle}</h3>
-          <p className="help">{T.summaryEmpty}</p>
+          {summaryLoading && !summary && <p className="help">…</p>}
+          {summary && summary.bullets.length > 0 && (
+            <ul className="summary">
+              {summary.bullets.map((b, i) => (
+                <li key={i}>{b}</li>
+              ))}
+            </ul>
+          )}
+          {!summaryLoading && (!summary || summary.bullets.length === 0) && <p className="help">{T.summaryEmpty}</p>}
+          <p className="help">{T.summaryHelp}</p>
           <button className="btn" style={{ width: '100%' }} onClick={() => setSheet(null)}>
             {T.summaryClose}
           </button>
