@@ -61,13 +61,17 @@ export class StageWorker implements Worker {
       label: stage.id,
       rotateSec: cfg.sessionRotateSec,
       hardCutSec: cfg.sessionHardCutSec,
+      vadEndMs: cfg.vadEndMs,
       factory: () => {
         const talk = deps.getTalk();
-        return new LiveSession({ apiKey: cfg.geminiApiKey, model: cfg.transcribeModel, lang: talk?.lang, vocabulary: talk?.glossary.asrVocabulary ?? [], label: stage.id });
+        return new LiveSession({ apiKey: cfg.geminiApiKey, model: cfg.transcribeModel, lang: talk?.lang, vocabulary: talk?.glossary.asrVocabulary ?? [], label: stage.id, silenceMs: cfg.asrSilenceMs });
       },
     });
     this.segmenter = new Segmenter({
       forceCommitMs: cfg.forceCommitMs,
+      sentenceMinWords: cfg.sentenceMinWords,
+      commaMinWords: cfg.commaMinWords,
+      maxPhraseWords: cfg.maxPhraseWords,
       replacements: () => deps.getTalk()?.glossary.replacements ?? {},
       onCommit: (c) => this.onCommit(c),
     });
@@ -189,7 +193,9 @@ export class StageWorker implements Worker {
       this.deps.bus.publish({ type: 'tr', seq, tr: Object.fromEntries(this.stage.targetLangs.map((l) => [l, c.text])), ms: 0, ...trStamp() });
       return;
     }
-    this.translator.translate(c.text, talk?.lang).then(
+    // F17.4: `es` goes out as soon as it closes in the streamed JSON; the full set follows (clients merge by seq)
+    const onPartial = (p: { tr: Record<string, string>; ms: number }) => this.deps.bus.publish({ type: 'tr', seq, tr: p.tr, ms: p.ms, ...trStamp() });
+    this.translator.translate(c.text, talk?.lang, onPartial).then(
       (res) => {
         console.log(`[${this.label}] #${seq} mt ${res.ms} ms · ${c.text.slice(0, 60)}`);
         this.deps.bus.publish({ type: 'tr', seq, tr: res.tr, ms: res.ms, ...trStamp() });

@@ -18,6 +18,12 @@ export interface Config {
   sessionRotateSec: number;
   sessionHardCutSec: number;
   forceCommitMs: number;
+  // F17.2 / F17.3 latency knobs (env VAD_END_MS, ASR_SILENCE_MS, SENTENCE_MIN_WORDS, COMMA_MIN_WORDS, MAX_PHRASE_WORDS)
+  vadEndMs: number;               // hybrid VAD: audioStreamEnd after this much silence (0 = off)
+  asrSilenceMs: number;           // server-side VAD silenceDurationMs (0 = model default)
+  sentenceMinWords: number;
+  commaMinWords: number;
+  maxPhraseWords: number;
   demo: boolean;
   demoStages: number;
   fakeBackend: boolean;
@@ -46,6 +52,11 @@ const DEFAULTS: EnvConfig = {
   sessionRotateSec: 510,
   sessionHardCutSec: 580,
   forceCommitMs: 4500,
+  vadEndMs: 500,
+  asrSilenceMs: 0,
+  sentenceMinWords: 5,
+  commaMinWords: 8,
+  maxPhraseWords: 18,
   demo: false,
   demoStages: 2,
   fakeBackend: false,
@@ -66,6 +77,11 @@ const ENV_KEYS: Record<keyof typeof DEFAULTS, string> = {
   sessionRotateSec: 'SESSION_ROTATE_SEC',
   sessionHardCutSec: 'SESSION_HARD_CUT_SEC',
   forceCommitMs: 'FORCE_COMMIT_MS',
+  vadEndMs: 'VAD_END_MS',
+  asrSilenceMs: 'ASR_SILENCE_MS',
+  sentenceMinWords: 'SENTENCE_MIN_WORDS',
+  commaMinWords: 'COMMA_MIN_WORDS',
+  maxPhraseWords: 'MAX_PHRASE_WORDS',
   demo: 'DEMO',
   demoStages: 'DEMO_STAGES',
   fakeBackend: 'FAKE_BACKEND',

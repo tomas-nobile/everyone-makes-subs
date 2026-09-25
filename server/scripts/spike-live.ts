@@ -4,10 +4,13 @@
 //   3. does the session accept audio after audioStreamEnd?
 // Usage: npx tsx server/scripts/spike-live.ts [samples/es.mp3|url] [--lang=es] [--end-at=20] [--seconds=60] [--quiet] [--log]
 //   --end-at=N: sends audioStreamEnd at N s of audio, pauses 3 s, then resumes (question 3; default 30)
+//   --vad-end=MS: F17.2 spike — hybrid VAD: sends audioStreamEnd at every ≥ MS ms pause (meter) while the
+//                 audio keeps flowing; reports ends sent, finals, and lost/duplicated words vs --ref=<transcript.json>
 //   --log: appends the answers to docs/decisions.md as LIVE-API: lines
 import fs from 'node:fs';
 import { Modality, type LiveServerMessage } from '@google/genai';
 import type { SourceSpec } from '../../shared/contract.js';
+import { Meter } from '../src/audio/meter.js';
 import { AudioSource } from '../src/audio/sources.js';
 import { loadConfig } from '../src/config.js';
 import { genai } from '../src/gemini.js';
@@ -19,8 +22,10 @@ const args = process.argv.slice(2);
 const arg = args.find((a) => !a.startsWith('--')) ?? 'samples/es.mp3';
 const opt = (n: string) => args.find((a) => a.startsWith(`--${n}=`))?.split('=')[1];
 const lang = opt('lang');
-const endAt = Number(opt('end-at') ?? 30);
+const vadEnd = Number(opt('vad-end') ?? 0);
+const endAt = Number(opt('end-at') ?? (vadEnd ? 0 : 30));
 const maxSec = Number(opt('seconds') ?? 0);
+const ref = opt('ref');
 const quiet = args.includes('--quiet');
 const spec: SourceSpec = /^https?:\/\//.test(arg) ? { kind: 'url', url: arg } : { kind: 'file', path: arg };
 
@@ -74,7 +79,22 @@ const session = await genai(cfg.geminiApiKey).live.connect({
 });
 
 let paused = false;
+const meter = new Meter();
+let endsSent = 0;
+let spokeSinceEnd = false;
+let vadEndSent = false;
 src.on('chunk', (chunk: Buffer) => {
+  if (vadEnd) {
+    meter.push(chunk);
+    if (meter.silentForMs === 0) { spokeSinceEnd = true; vadEndSent = false; }
+    else if (meter.silentForMs >= vadEnd && spokeSinceEnd && !vadEndSent) {
+      vadEndSent = true;
+      spokeSinceEnd = false;
+      endsSent++;
+      if (!quiet) console.log(`${ts()} >>> audioStreamEnd #${endsSent} (pause of ${meter.silentForMs} ms at clock ${src.clock.toFixed(2)})`);
+      session.sendRealtimeInput({ audioStreamEnd: true });
+    }
+  }
   if (endAt && !endSentAt && src.clock >= endAt) {
     endSentAt = now();
     paused = true;
@@ -130,6 +150,19 @@ function report(): void {
   console.log(`2. finals: ${q2}`);
   console.log(`3. audio after audioStreamEnd: ${q3}`);
   console.log(`fields seen: ${tfields.join(', ') || '(none)'}`);
+  if (vadEnd) {
+    // F17.2: one final per pause? and the transcript is intact (LCS word diff against the recorded pipeline output)
+    const norm = (t: string) => t.toLowerCase().normalize('NFD').replace(/\p{M}/gu, '').replace(/[^\p{L}\p{N}\s]/gu, '').split(/\s+/).filter(Boolean);
+    const got = norm(finals.map((f) => f.text).join(' '));
+    console.log(`\n=== F17.2 hybrid VAD (audioStreamEnd at every ≥ ${vadEnd} ms pause)`);
+    console.log(`ends sent: ${endsSent} · finals: ${finals.length} · words in finals: ${got.length} · session ${closed ? `closed (${closed})` : 'still open'}`);
+    if (ref) {
+      const t = JSON.parse(fs.readFileSync(ref, 'utf8')) as { events: Array<{ type: string; text: string }> };
+      const want = norm(t.events.filter((e) => e.type === 'final').map((e) => e.text).join(' '));
+      const lcs = lcsLength(want, got);
+      console.log(`vs ${ref}: ${want.length} words · ${got.length - lcs} extra (duplicated) · ${want.length - lcs} missing (lost)`);
+    }
+  }
   if (args.includes('--log')) {
     const day = new Date().toISOString().slice(0, 10);
     const lines = [
@@ -144,4 +177,14 @@ function report(): void {
     console.log('logged in docs/decisions.md');
   }
   process.exit(interims.length || finals.length ? 0 : 1);
+}
+
+function lcsLength(a: string[], b: string[]): number {
+  let prev = new Array<number>(b.length + 1).fill(0);
+  for (let i = 1; i <= a.length; i++) {
+    const cur = new Array<number>(b.length + 1).fill(0);
+    for (let j = 1; j <= b.length; j++) cur[j] = a[i - 1] === b[j - 1] ? prev[j - 1] + 1 : Math.max(prev[j], cur[j - 1]);
+    prev = cur;
+  }
+  return prev[b.length];
 }

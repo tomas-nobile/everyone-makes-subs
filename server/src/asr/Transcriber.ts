@@ -20,6 +20,8 @@ export interface TranscriberOptions {
   factory: () => AsrSession;
   rotateSec: number;
   hardCutSec: number;
+  /** F17.2 hybrid VAD: send audioStreamEnd after this much silence (0 = only the ASR's own endpointing). */
+  vadEndMs?: number;
   now?: () => number;
 }
 
@@ -54,6 +56,12 @@ export class Transcriber extends EventEmitter {
   private uttStart: number | null = null;
   private lastSpeech = 0;
   private lastFinalT1 = 0;
+
+  // hybrid VAD (F17.2): audioStreamEnd at each pause, once per pause, only after speech was sent
+  vadEnds = 0;
+  private speechSent = false;
+  private endSent = false;
+  private vadEndClock: number | null = null;
 
   // overlap trimming after a hard cut / reconnect
   private trimRef: string | null = null;
@@ -114,7 +122,25 @@ export class Transcriber extends EventEmitter {
     if (this.stopped || !this.cur) return;
     this.maybeRotate(silentForMs);
     this.flush();
+    this.maybeEndTurn(silentForMs);
     if (this.holdNew && this.now() - this.swapAt > PREV_GRACE_MS) this.finishPrev('');
+  }
+
+  /**
+   * Hybrid VAD (F17.2): once the meter has seen `vadEndMs` of silence after speech, tell the session the
+   * turn is over so it emits the final now instead of waiting for its own endpointing. Sent after flush()
+   * so every speech chunk is already in; never twice for one pause; not while a swap holds the new session.
+   * The clock of the last speech chunk becomes the utterance's t1 (exact end of speech for the benchmark).
+   */
+  private maybeEndTurn(silentForMs: number): void {
+    if (silentForMs === 0) { this.endSent = false; return; }
+    const ms = this.opts.vadEndMs ?? 0;
+    if (!ms || silentForMs < ms || this.endSent || !this.speechSent || this.holdNew || !this.cur?.ready) return;
+    this.endSent = true;
+    this.speechSent = false;
+    this.vadEndClock = this.lastSpeech;
+    this.vadEnds++;
+    this.cur.s.end();
   }
 
   // ── sessions ──
@@ -249,6 +275,7 @@ export class Transcriber extends EventEmitter {
   private sendOne(s: AsrSession, e: Entry): void {
     s.send(e.chunk);
     this.sentSec += e.chunk.length / 32_000;
+    if (e.silentForMs === 0) this.speechSent = true;
   }
 
   // ── text ──
@@ -278,7 +305,12 @@ export class Transcriber extends EventEmitter {
   }
 
   private emitFinal(text: string): void {
-    const t1 = Math.max(this.lastSpeech, this.lastFinalT1);
+    // the pause that closed this utterance (hybrid VAD) is its exact end; a stale one from before the
+    // current utterance started is ignored (the ASR closed that pause on its own before we did)
+    const vadEnd = this.vadEndClock;
+    this.vadEndClock = null;
+    const closedByUs = vadEnd !== null && vadEnd > this.lastFinalT1 && (this.uttStart === null || vadEnd >= this.uttStart);
+    const t1 = closedByUs ? vadEnd : Math.max(this.lastSpeech, this.lastFinalT1);
     const t0 = Math.min(this.uttStart ?? this.lastFinalT1, t1);
     this.lastFinalT1 = t1;
     // if the speaker is still talking, the next utterance starts right here

@@ -17,7 +17,8 @@ export interface AsrSession extends EventEmitter {
   close(): void;
 }
 
-export interface AsrOptions { apiKey: string; model: string; lang?: string; vocabulary: string[]; label: string }
+/** `silenceMs`: server-side VAD `silenceDurationMs` (ASR_SILENCE_MS; unset = the model's default). */
+export interface AsrOptions { apiKey: string; model: string; lang?: string; vocabulary: string[]; label: string; silenceMs?: number }
 
 let nextId = 1;
 const DEBUG = !!process.env.DEBUG_ASR;
@@ -52,6 +53,7 @@ export class LiveSession extends EventEmitter implements AsrSession {
             customVocabulary: this.opts.vocabulary.slice(0, 100),
             mode: 'VERBATIM' as never,
           },
+          ...(this.opts.silenceMs ? { realtimeInputConfig: { automaticActivityDetection: { silenceDurationMs: this.opts.silenceMs } } } : {}),
         },
         callbacks: {
           onmessage: (m) => this.onMessage(m),
