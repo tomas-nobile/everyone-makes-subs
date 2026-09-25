@@ -55,7 +55,7 @@ const DEFAULTS: EnvConfig = {
   sessionRotateSec: 510,
   sessionHardCutSec: 580,
   forceCommitMs: 4500,
-  vadEndMs: 500,
+  vadEndMs: 0,                    // hybrid VAD OFF by default: measured to stall the session (docs/decisions.md, F17.2)
   asrSilenceMs: 0,
   sentenceMinWords: 5,
   commaMinWords: 8,

@@ -29,7 +29,9 @@ As the team, we want one command that measures real end-to-end latency, so each 
 
 **Verify:** two consecutive 3-run benchmarks agree within ~15% on both p50s.
 
-### [ ] F17.2 · Hybrid VAD: close the phrase on the pause
+### [x] F17.2 · Hybrid VAD: close the phrase on the pause
+
+> **Result (2026-09-25):** implemented (`VAD_END_MS`) and measured — it stalls the session (12 phrases in 122 s vs 39 in 96 s), so it ships **off by default**. The server-side `ASR_SILENCE_MS` knob was measured next; see `docs/decisions.md`.
 As an attendee, I want the caption as soon as the speaker pauses, not when the ASR decides.
 
 - **Spike first (10 min):** F03.1 verified *one* `audioStreamEnd` followed by more audio; this story sends dozens per session. Run `spike-live.ts` sending `audioStreamEnd` at every ≥ 500 ms pause of `samples/en.mp3` and count finals, duplicated words and lost words. If the session degrades, fall back to `end()` + swap to the pre-connected `next` session (the rotation path) and log it.
