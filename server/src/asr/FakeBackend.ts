@@ -121,7 +121,7 @@ export class FakeBackend implements Worker {
         this.at(ev.t, () => {
           const seq = this.nextSeq();
           this.stats.sentSec = (Date.now() - this.startedAt) / 1000;
-          const lag = Math.round((ev.t - ev.t1 + 0.4) * 100) / 100;
+          const lag = Math.max(0.6, Math.round((ev.t - ev.t1 + 0.6) * 100) / 100);   // ≥ the ASR latency the live metric does not see
           this.bus.publish({ type: 'segment', seq, src: ev.src, text: ev.text, t0: ev.t0 + offset, t1: ev.t1 + offset, kind: ev.kind, lag });
           const mtMs = ev.mtMs ?? 600;
           this.at(mtMs / 1000, () => this.bus.publish({ type: 'tr', seq, tr: ev.tr, ms: mtMs }));

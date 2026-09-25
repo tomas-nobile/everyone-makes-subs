@@ -45,6 +45,7 @@ export class StageWorker implements Worker {
   private lastCommitT1: number | null = null;
   private finalTimes: { t0: number; t1: number } | null = null;
   private prevInterim: string[] = [];
+  private utt = 1;                               // utterance number (phrases of one utterance share it)
   private label: string;
 
   constructor(private stage: Stage, private deps: WorkerDeps) {
@@ -83,6 +84,7 @@ export class StageWorker implements Worker {
     this.transcriber.on('final', (text: string, t0: number, t1: number) => {
       this.finalTimes = { t0, t1 };
       this.segmenter.onFinal(text);
+      this.utt++;
       this.finalTimes = null;
       this.lastCommitT1 = null;
       this.prevInterim = [];
@@ -155,7 +157,7 @@ export class StageWorker implements Worker {
     const lag = Math.max(0, (Date.now() - this.wallAt(t1)) / 1000);
     const src = talk?.lang ?? '';
     const r = (x: number) => Math.round((x - this.talkOffset) * 100) / 100;
-    this.deps.bus.publish({ type: 'segment', seq, src, text: c.text, t0: r(t0), t1: r(t1), kind: c.kind, lag: Math.round(lag * 100) / 100 });
+    this.deps.bus.publish({ type: 'segment', seq, src, text: c.text, t0: r(t0), t1: r(t1), kind: c.kind, lag: Math.round(lag * 100) / 100, u: this.utt });
     if (c.kind !== 'speech') {
       this.deps.bus.publish({ type: 'tr', seq, tr: Object.fromEntries(this.stage.targetLangs.map((l) => [l, c.text])), ms: 0 });
       return;

@@ -32,6 +32,21 @@ describe('export', () => {
     for (let i = 1; i < cues.length; i++) expect(cues[i].start).toBeGreaterThanOrEqual(cues[i - 1].end);
   });
 
+  it('re-times the phrases of one utterance over its audio span, by length', () => {
+    // a lagging ASR: 3 phrases committed late, the last two all at the end of the file
+    const u = [
+      { ...seg(1, 0.4, 26.8, 'pero sí que es una'), u: 1 },
+      { ...seg(2, 26.8, 90, 'que esos contenedores van a tener una parte que es el volumen persistente'), u: 1 },
+      { ...seg(3, 90, 90, 'y los PVCs'), u: 1 },
+    ];
+    const cues = toCues(u);
+    expect(cues[0].start).toBeCloseTo(0.4, 2);
+    expect(cues.at(-1)!.end).toBeCloseTo(90, 1);
+    // the first (short) phrase no longer lasts 26 s
+    expect(cues[0].end - cues[0].start).toBeLessThan(20);
+    for (let i = 1; i < cues.length; i++) expect(cues[i].start).toBeGreaterThanOrEqual(cues[i - 1].end - 0.001);
+  });
+
   it('falls back to the original when the translation is null', () => {
     expect(toSrt([segs[1]], 'en')).toContain('La mayoría');
   });

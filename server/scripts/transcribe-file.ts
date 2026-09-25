@@ -98,6 +98,9 @@ process.exit(ok ? 0 : 1);
  */
 function toReplay(events: typeof results[number]['r']['events'], meta: { lang: string; title: string; speaker?: string }) {
   const shift = Math.max(0, (events[0]?.t ?? 1) - 1);
-  const out = events.map((e) => ({ ...e, t: Math.round((e.t - shift) * 100) / 100, ...(e.type === 'final' && e.mtMs ? { mtMs: Math.min(e.mtMs, 2500) } : {}) }));
+  const r2 = (x: number) => Math.max(0, Math.round((x - shift) * 100) / 100);
+  const out = events.map((e) => (e.type === 'final'
+    ? { ...e, t: r2(e.t), t0: r2(e.t0), t1: r2(e.t1), ...(e.mtMs ? { mtMs: Math.min(e.mtMs, 2500) } : {}) }
+    : { ...e, t: r2(e.t) }));
   return { ...meta, durationSec: Math.ceil((out.at(-1)?.t ?? 0) + 3), events: out };
 }

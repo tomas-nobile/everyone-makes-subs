@@ -2,7 +2,9 @@
 // Boots the server with DEMO=1 (real pipelines on samples/ with a key; replays without one),
 // records every view with Electron, and joins title cards + the subtitled clip of a real talk
 // (from `npm run clip`) + the scenes into one mp4 with ffmpeg.
-// Usage: npm run demo-video [-- --clip=demo/clip.en.mp4 --out=demo/demo.mp4 --warm=40]
+// Usage: npm run demo-video [-- --clip=demo/clip.en.mp4 --clip-max=35 --out=demo/demo.mp4 --warm=40 --replay]
+//   --replay: the rooms replay samples/*.transcript.json (real pipeline output recorded by
+//             `npm run samples`) instead of running live — no quota involved while recording.
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
@@ -15,6 +17,8 @@ const opt = (n: string, d: string) => process.argv.find((a) => a.startsWith(`--$
 const OUT = path.resolve(opt('out', 'demo/demo.mp4'));
 const CLIP = path.resolve(opt('clip', 'demo/clip.en.mp4'));
 const WARM = Number(opt('warm', '40'));
+const CLIP_MAX = Number(opt('clip-max', '35'));
+const REPLAY = process.argv.includes('--replay');
 const PORT = 18400;
 const B = `http://127.0.0.1:${PORT}`;
 const work = fs.mkdtempSync(path.join(os.tmpdir(), 'ems-video-'));
@@ -63,7 +67,7 @@ if (fs.existsSync(CLIP)) {
   console.log(`[video] no ${path.relative('.', CLIP)} yet: run \`npm run clip -- <youtube-url> --from=… --to=…\` to include the subtitled talk`);
 }
 scenes.push(
-  { url: card('Two rooms, live, in parallel', 'The operator sees every room in plain language: live, no audio, delayed — plus the last line written.', 'Dashboard'), seconds: 3.5 },
+  { url: card('Two rooms, live, in parallel', `The operator sees every room in plain language: live, no audio, delayed — plus the last line written.${REPLAY ? '<br><span style="font-size:20px;color:#6f757d">These rooms replay a recorded run of the real pipeline over two Nerdearla talks.</span>' : ''}`, 'Dashboard'), seconds: 3.5 },
   { url: `${B}/admin`, seconds: 9, warm: 3000 },
   { url: card('Vocabulary per talk, visibly working', 'Gemini builds each talk\'s vocabulary from its title and abstract; the dashboard counts every hit.', 'Dashboard · Talk'), seconds: 3.5 },
   { url: `${B}/admin`, seconds: 8, warm: 3000, js: "document.querySelector('button.card')?.click()" },
@@ -77,9 +81,9 @@ scenes.push(
 );
 
 // ── 1. the system, running ──
-console.log(`[video] starting the server (DEMO=1) and letting captions build up for ${WARM} s…`);
+console.log(`[video] starting the server (DEMO=1${REPLAY ? ', replaying the recorded samples' : ', live'}) and letting captions build up for ${WARM} s…`);
 const server = spawn(process.execPath, ['--import', 'tsx', 'server/src/index.ts'], {
-  env: { ...process.env, DEMO: '1', PORT: String(PORT), DATA_DIR: path.join(work, 'data'), EVENT_NAME: 'Nerdearla 2026' },
+  env: { ...process.env, DEMO: '1', PORT: String(PORT), DATA_DIR: path.join(work, 'data'), EVENT_NAME: 'Nerdearla 2026', ...(REPLAY ? { FAKE_BACKEND: '1' } : {}) },
   stdio: ['ignore', 'ignore', 'inherit'],
 });
 try {
@@ -107,7 +111,7 @@ try {
   for (const [i, s] of recorded.entries()) {
     const part = path.join(work, `part-${String(i).padStart(2, '0')}.mp4`);
     if ('video' in s) {
-      await ff(['-i', s.video, '-vf', vf, ...enc, part]);
+      await ff(['-i', s.video, ...(CLIP_MAX ? ['-t', String(CLIP_MAX)] : []), '-vf', `${vf},fade=t=out:st=${Math.max(0, CLIP_MAX - 0.6)}:d=0.6`, '-af', `afade=t=out:st=${Math.max(0, CLIP_MAX - 0.6)}:d=0.6`, ...enc, part]);
     } else {
       const meta = JSON.parse(fs.readFileSync(path.join(s.dir!, 'meta.json'), 'utf8')) as { frames: number; seconds: number };
       const fps = (meta.frames / meta.seconds).toFixed(3);

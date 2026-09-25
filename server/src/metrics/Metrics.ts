@@ -35,9 +35,13 @@ export class StageStats {
     if (d) d.tr = d.seg + ms / 1000;
   }
 
+  /**
+   * A 429 that another model absorbed is quota, not a failure: it only counts in "Technical details".
+   * Errors (the alert) are what reached the audience: a session drop or a translation left null.
+   */
   onError(status: number): void {
+    if (status === 429) { this.http429++; return; }
     this.errors.push(Date.now());
-    if (status === 429) this.http429++;
   }
 
   get errorsPerMin(): number {

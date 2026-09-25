@@ -55,7 +55,7 @@ export function runFile(opts: FileRunOptions): Promise<FileRunResult> {
       interims++;
       events.push({ t: since(), type: 'interim', text: ev.text });
     } else if (ev.type === 'segment') {
-      segments.set(ev.seq, { seq: ev.seq, talkId: talk.id, src: ev.src, text: ev.text, tr: {}, t0: ev.t0, t1: ev.t1, kind: ev.kind, ms: { asr: Math.round((ev.lag ?? 0) * 1000) } });
+      segments.set(ev.seq, { seq: ev.seq, talkId: talk.id, src: ev.src, text: ev.text, tr: {}, t0: ev.t0, t1: ev.t1, kind: ev.kind, ms: { asr: Math.round((ev.lag ?? 0) * 1000) }, ...(ev.u ? { u: ev.u } : {}) });
       publishedAt.set(ev.seq, since());
       if (ev.lag !== undefined) lagSec.push(ev.lag);
       log(`[${label}] ${ev.t0.toFixed(2)}–${ev.t1.toFixed(2)} s · lag ${ev.lag?.toFixed(2) ?? '?'} s · ${ev.kind === 'speech' ? '' : `(${ev.kind}) `}${ev.text}`);
@@ -82,8 +82,14 @@ export function runFile(opts: FileRunOptions): Promise<FileRunResult> {
     finishing = true;
     log(`[${label}] ${why}: closing the last utterance and waiting for translations…`);
     worker.endInput();
-    // the last final + its translation need a few seconds after the end of the audio
-    setTimeout(() => {
+    // the last final needs a few seconds after the end of the audio, and every phrase its
+    // translation (on the free tier they can queue behind the quota): wait for both, 60 s max
+    const endedAt = Date.now();
+    const waiting = setInterval(() => {
+      const pending = [...segments.values()].filter((s) => Object.keys(s.tr).length === 0).length;
+      if ((Date.now() - endedAt < 5000 || pending > 0) && Date.now() - endedAt < 60_000) return;
+      clearInterval(waiting);
+      if (pending) log(`[${label}] ${pending} translation(s) still missing after 60 s`);
       const stats = worker.stats;
       worker.stop();
       clearInterval(timer);
@@ -96,7 +102,7 @@ export function runFile(opts: FileRunOptions): Promise<FileRunResult> {
       }
       events.sort((a, b) => a.t - b.t);
       done({ segments: segs, events, durationSec: since(), interims, mtMs, lagSec, sentSec: stats.sentSec, rotations: stats.rotations, errors });
-    }, 8000);
+    }, 250);
   }
 
   const timer = setInterval(() => {

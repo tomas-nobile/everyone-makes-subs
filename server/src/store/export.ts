@@ -21,10 +21,38 @@ export function segText(s: Segment, lang?: string): string {
   return (lang ? s.tr?.[lang] : null) ?? s.text;
 }
 
+/**
+ * Live timing is when a phrase was committed, which trails the speech by the ASR's latency (and a
+ * speaker who never pauses ends in one long final). For subtitles, the phrases of one utterance are
+ * spread over the utterance's real audio span in proportion to their length.
+ */
+export function retime(segments: Segment[]): Segment[] {
+  const sorted = [...segments].sort((a, b) => a.seq - b.seq);
+  const out: Segment[] = [];
+  for (let i = 0; i < sorted.length;) {
+    let j = i + 1;
+    if (sorted[i].u !== undefined) while (j < sorted.length && sorted[j].u === sorted[i].u) j++;
+    const group = sorted.slice(i, j);
+    if (group.length > 1) {
+      const start = Math.min(...group.map((s) => s.t0));
+      const end = Math.max(...group.map((s) => s.t1));
+      const total = group.reduce((n, s) => n + s.text.length + 1, 0);
+      let t = start;
+      for (const s of group) {
+        const d = ((end - start) * (s.text.length + 1)) / total;
+        out.push({ ...s, t0: Math.round(t * 100) / 100, t1: Math.round((t + d) * 100) / 100 });
+        t += d;
+      }
+    } else out.push(...group);
+    i = j;
+  }
+  return out;
+}
+
 /** Cues of at most 2 lines × 42 chars; long segments are split with time proportional to length. */
 export function toCues(segments: Segment[], lang?: string): Cue[] {
   const cues: Cue[] = [];
-  for (const s of [...segments].sort((a, b) => a.seq - b.seq)) {
+  for (const s of retime(segments)) {
     const lines = wrap(segText(s, lang));
     if (!lines.length) continue;
     const groups: string[][] = [];

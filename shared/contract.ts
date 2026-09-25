@@ -58,6 +58,7 @@ export interface Segment {
   t1: number;
   kind: SegmentKind;
   ms: { asr: number; mt?: number };
+  u?: number;                                             // utterance number: exports re-time phrases within it
 }
 
 // ── SSE events: one stream per stage carrying every language ──
@@ -67,7 +68,7 @@ export interface Segment {
 export type HelloEvent = { type: 'hello'; state: StageState; talk: Talk | null; next?: Talk | null; last?: Talk | null; lastSeq: number; recent?: Segment[] };
 export type LiveEvent = { type: 'live'; text: string };
 /** `lag` = seconds from the end of the spoken audio (t1) to publication; the phone shows it as "~1.4 s". */
-export type SegmentEvent = { type: 'segment'; seq: number; src: string; text: string; t0: number; t1: number; kind: SegmentKind; lag?: number };
+export type SegmentEvent = { type: 'segment'; seq: number; src: string; text: string; t0: number; t1: number; kind: SegmentKind; lag?: number; u?: number };
 export type TrEvent = { type: 'tr'; seq: number; tr: Record<string, string | null>; ms: number };
 export type StateEvent = { type: 'state'; state: StageState; talk?: Talk | null; next?: Talk | null; last?: Talk | null };
 export type LevelEvent = { type: 'level'; v: number };

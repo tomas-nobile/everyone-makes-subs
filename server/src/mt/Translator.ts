@@ -5,7 +5,7 @@ import { errorStatus, generateJsonWithFallback } from '../gemini.js';
 
 const LANG_NAMES: Record<string, string> = { es: 'Spanish', en: 'English', pt: 'Portuguese', fr: 'French', de: 'German', it: 'Italian' };
 const CONCURRENCY = 2;
-const MAX_BATCH = 4;
+const MAX_BATCH = 6;
 const QUOTA_WAIT_MS = 10_000;
 
 export interface TranslateResult { src: string; tr: Record<string, string | null>; ms: number }
@@ -15,7 +15,7 @@ interface Job { text: string; srcHint?: string; context: string[]; enqueued: num
 /**
  * One TRANSLATE_MODEL call per committed segment, JSON with every target language
  * (docs/architecture.md → "5. Translator"). Concurrency 2 per stage. When segments pile up behind
- * busy calls (fast speaker, free-tier quota), the next call takes up to 4 of them at once.
+ * busy calls (fast speaker, free-tier quota), the next call takes up to 6 of them at once.
  * 5xx → backoff 1-2-4 s; 429 → TRANSLATE_FALLBACK_MODEL (waiting ≤ 10 s if both are out of quota)
  * → null for the languages that could not be translated.
  */
@@ -97,11 +97,12 @@ export class Translator {
     try {
       const { value } = await generateJsonWithFallback<Record<string, string> | { items: Array<Record<string, string>> }>(
         this.cfg.geminiApiKey, [this.cfg.translateModel, this.cfg.translateFallbackModel], prompt,
-        { schema, temperature: 0.2, maxWaitMs: QUOTA_WAIT_MS }, this.onError,
+        { schema, temperature: 0.2, maxWaitMs: QUOTA_WAIT_MS }, (status) => { if (status === 429) this.onError(429); },
       );
       outs = many ? ((value as { items?: Array<Record<string, string>> }).items ?? []) : [value as Record<string, string>];
     } catch (err) {
       console.log(`[${this.label}] translation failed on every model (${errorStatus(err) || (err as Error).message.slice(0, 80)}); publishing null`);
+      this.onError(0);   // the audience sees the original instead of a translation: a real error
     }
     batch.forEach((j, i) => {
       const out = outs[i];

@@ -98,7 +98,7 @@ export class StageManager {
     rt.stats.resetVocab(cur?.glossary.asrVocabulary ?? [], cur ? this.store.list(stage.id, cur.id) : []);
     rt.bus.subscribe(({ ev }) => {
       if (ev.type === 'segment') {
-        const seg: Segment = { seq: ev.seq, talkId: rt.stage.talkId ?? 'no-talk', src: ev.src, text: ev.text, tr: {}, t0: ev.t0, t1: ev.t1, kind: ev.kind, ms: { asr: Math.round((ev.lag ?? 0) * 1000) } };
+        const seg: Segment = { seq: ev.seq, talkId: rt.stage.talkId ?? 'no-talk', src: ev.src, text: ev.text, tr: {}, t0: ev.t0, t1: ev.t1, kind: ev.kind, ms: { asr: Math.round((ev.lag ?? 0) * 1000) }, ...(ev.u ? { u: ev.u } : {}) };
         rt.pending.set(ev.seq, seg);
         rt.stats.onSegment(ev.seq, ev.text, ev.lag);
         setTimeout(() => this.persist(rt, ev.seq), 20_000).unref?.();

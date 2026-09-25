@@ -60,7 +60,7 @@ const session = await genai(cfg.geminiApiKey).live.connect({
   model: cfg.transcribeModel,
   config: {
     responseModalities: [Modality.TEXT],
-    inputAudioTranscription: { languageCodes: lang ? [lang] : [], mode: 'VERBATIM' as never },
+    inputAudioTranscription: { languageCodes: lang ? [lang] : [], mode: 'VERBATIM' as never, ...(args.includes('--words') ? { wordTimestamp: true } : {}) },
   },
   callbacks: {
     onopen: () => console.log(`${ts()} OPEN`),
