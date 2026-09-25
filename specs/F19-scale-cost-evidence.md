@@ -6,7 +6,7 @@ The Scalability and Price chapters of the video (F16.6, F16.8) only show numbers
 
 ## Stories
 
-### [ ] F19.1 · N rooms in the demo
+### [x] F19.1 · N rooms in the demo
 As the team, we want the dashboard to look like a whole conference.
 
 - `DEMO_STAGES=N` (default 2) creates N rooms ("Auditorium", "Room 2" … "Room N"), cycling the samples (`en`, `es`, `mixed`), each with a current and a next talk. Replay without a key, real pipeline with one. "Try with sample data" keeps 2.

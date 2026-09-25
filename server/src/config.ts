@@ -19,6 +19,7 @@ export interface Config {
   sessionHardCutSec: number;
   forceCommitMs: number;
   demo: boolean;
+  demoStages: number;
   fakeBackend: boolean;
   // only in config.json (written by the setup wizard)
   adminPasswordHash?: string;
@@ -45,6 +46,7 @@ const DEFAULTS: EnvConfig = {
   sessionHardCutSec: 580,
   forceCommitMs: 4500,
   demo: false,
+  demoStages: 2,
   fakeBackend: false,
 };
 
@@ -63,6 +65,7 @@ const ENV_KEYS: Record<keyof typeof DEFAULTS, string> = {
   sessionHardCutSec: 'SESSION_HARD_CUT_SEC',
   forceCommitMs: 'FORCE_COMMIT_MS',
   demo: 'DEMO',
+  demoStages: 'DEMO_STAGES',
   fakeBackend: 'FAKE_BACKEND',
 };
 

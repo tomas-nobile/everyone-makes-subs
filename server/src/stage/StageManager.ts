@@ -35,6 +35,14 @@ export interface StageRuntime {
 const SUMMARY_EVERY_MS = 60_000;
 const AUTO_SWITCH_AFTER_MS = 5 * 60_000;
 
+// Demo rooms (F19.1): the English talk first, so /s/auditorium?lang=es is the reference pair.
+const DEMO_SAMPLES = ['en', 'es', 'mixed'];
+const DEMO_NEXT: TalkInput[] = [
+  { title: 'Rust for Go developers', speaker: 'Sofía Paz', lang: 'en' },
+  { title: 'WebAssembly fuera del navegador: lo que nadie te cuenta', speaker: 'Martín Ibarra', lang: 'es' },
+  { title: 'Observability on a budget: OpenTelemetry end to end', speaker: 'Priya Raman', lang: 'en' },
+];
+
 /** Every stage translates into Spanish (English talk → Spanish captions), whatever the form or TARGET_LANGS say. */
 export function withSpanish(langs: string[]): string[] {
   return ['es', ...langs.filter((l) => l !== 'es')];
@@ -491,24 +499,26 @@ export class StageManager {
 
   // ── demo ──
 
-  /** DEMO=1 / FAKE_BACKEND=1 / "Try with sample data": Auditorium (es) and Room 2 (en) on the samples. */
-  async createDemoStages(samplesDir: string): Promise<StageRuntime[]> {
-    const demo = [
-      { name: 'Auditorium', file: 'es', next: { title: 'WebAssembly fuera del navegador: lo que nadie te cuenta', speaker: 'Martín Ibarra', lang: 'es' } },
-      { name: 'Room 2', file: 'en', next: { title: 'Rust para devs de Go', speaker: 'Sofía Paz', lang: 'es' } },
-    ];
+  /**
+   * DEMO=1 / FAKE_BACKEND=1 / "Try with sample data": `count` rooms ("Auditorium", "Room 2"…) cycling the
+   * samples en → es → mixed (F19.1), each with a current talk and a next one. Replay without a key.
+   */
+  async createDemoStages(samplesDir: string, count = 2): Promise<StageRuntime[]> {
     const out: StageRuntime[] = [];
-    for (const d of demo) {
-      if (this.list().some((rt) => rt.stage.name === d.name)) continue;
-      const transcript = loadTranscript(path.join(samplesDir, `${d.file}.transcript.json`));
-      const rt = this.create({ name: d.name, source: { kind: 'file', path: path.join(samplesDir, `${d.file}.mp3`), loop: true } });
-      const input: TalkInput = { title: transcript.title, speaker: transcript.speaker, lang: transcript.lang, abstract: transcript.events.filter((e) => e.type === 'final').map((e) => e.text).join(' ').slice(0, 600) };
+    for (let i = 0; i < Math.max(1, count); i++) {
+      const name = i === 0 ? 'Auditorium' : `Room ${i + 1}`;
+      if (this.list().some((rt) => rt.stage.name === name)) continue;
+      const file = DEMO_SAMPLES[i % DEMO_SAMPLES.length];
+      const nextTalk = DEMO_NEXT[i % DEMO_NEXT.length];
+      const transcript = loadTranscript(path.join(samplesDir, `${file}.transcript.json`));
+      const rt = this.create({ name, source: { kind: 'file', path: path.join(samplesDir, `${file}.mp3`), loop: true } });
+      const input: TalkInput = { title: transcript.title, speaker: transcript.speaker, lang: transcript.lang || undefined, abstract: transcript.events.filter((e) => e.type === 'final').map((e) => e.text).join(' ').slice(0, 600) };
       // with a key, Gemini builds the vocabulary (so the dashboard shows real hits); offline otherwise
       const real = this.cfg.geminiApiKey && !this.cfg.fakeBackend;
       await this.addTalk(rt.stage.id, input, real ? undefined : fakeGlossary(input));
-      const at = new Date(Date.now() + 30 * 60_000);
+      const at = new Date(Date.now() + (30 + 15 * (i % 3)) * 60_000);
       at.setMinutes(Math.ceil(at.getMinutes() / 15) * 15, 0, 0);
-      await this.addTalk(rt.stage.id, { ...d.next, startsAt: at.toISOString(), queue: true }, fakeGlossary(d.next));
+      await this.addTalk(rt.stage.id, { ...nextTalk, startsAt: at.toISOString(), queue: true }, fakeGlossary(nextTalk));
       this.start(rt.stage.id);
       out.push(rt);
     }

@@ -63,4 +63,4 @@ The video is rebuilt around the judging criteria (F16) and shows **English → S
 | [F16 · Pitch video by judging criterion](../specs/F16-pitch-video.md) | P0 | [ ] .1 · [ ] .2 · [ ] .3 · [ ] .4 · [ ] .5 · [ ] .6 · [ ] .7 · [ ] .8 · [ ] .9 |
 | [F17 · Latency to the max](../specs/F17-latency.md) | P0 | [ ] .1 · [ ] .2 · [ ] .3 · [ ] .4 · [ ] .5 · [ ] .6 · [ ] .7 |
 | [F18 · Subtitle a video](../specs/F18-subtitle-a-video.md) | P1 | [ ] .1 · [ ] .2 · [ ] .3 |
-| [F19 · Scale and cost evidence](../specs/F19-scale-cost-evidence.md) | P1 | [ ] .1 · [ ] .2 · [ ] .3 |
+| [F19 · Scale and cost evidence](../specs/F19-scale-cost-evidence.md) | P1 | [x] .1 · [ ] .2 · [ ] .3 |
