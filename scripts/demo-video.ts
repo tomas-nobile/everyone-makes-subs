@@ -17,7 +17,7 @@ import ffmpegPath from 'ffmpeg-static';
 
 const opt = (n: string, d: string) => process.argv.find((a) => a.startsWith(`--${n}=`))?.split('=').slice(1).join('=') ?? d;
 const OUT = path.resolve(opt('out', 'demo/demo.mp4'));
-const CLIP = path.resolve(opt('clip', 'demo/clip.es.mp4'));           // burned-in Spanish subtitles (F16.2)
+const CLIP = path.resolve(opt('clip', 'demo/talk.es.mp4'));           // burned-in Spanish subtitles (F16.2: npm run clip … --out=demo/talk)
 const RAW_CLIP = CLIP.replace(/\.[a-z]{2}\.mp4$/, '.mp4');            // the same cut without subtitles (the stage's source)
 const DEPLOY = path.resolve(opt('deploy', 'demo/deploy.mp4'));        // human desktop capture (F16.3)
 const WARM = Number(opt('warm', '40'));
@@ -59,7 +59,11 @@ const pricing: Pricing | null = fs.existsSync('docs/pricing.json') ? JSON.parse(
 const ab: Ab | null = fs.existsSync('demo/ab/ab.json') ? JSON.parse(fs.readFileSync('demo/ab/ab.json', 'utf8')) : null;
 const deploy: { seconds: number; secondsInVideo?: number; fast?: { from: number; to: number; factor: number } | null } | null = fs.existsSync('demo/deploy.json') ? JSON.parse(fs.readFileSync('demo/deploy.json', 'utf8')) : null;
 const col = (name: string) => bench?.summary.columns.find((c) => c.name === name);
-const pauseEs = col('pause → Spanish');
+// pause → caption exists only for utterances the ASR closed on a pause (few on this speaker): quote it only
+// with a real sample, else the pipeline's own heard → caption number, and say which one it is
+const pauseCol = col('pause → Spanish');
+const heardCol = col('heard → Spanish');
+const pauseEs = pauseCol && pauseCol.n >= 10 ? { ...pauseCol, label: 'End of a sentence → Spanish caption on the phone' } : heardCol ? { ...heardCol, label: 'Last word heard by the recognizer → Spanish caption on the phone' } : undefined;
 const ttfc = bench ? bench.summary.timeToFirstCaptionMs.filter((x): x is number => x !== null).sort((a, b) => a - b) : [];
 const ttfcMed = ttfc.length ? ttfc[Math.floor(ttfc.length / 2)] : null;
 const missing: string[] = [];
@@ -164,7 +168,7 @@ try {
     hits: { style: 'lower', kicker: 'Quality', title: 'Every term counted live in the dashboard: “Kubernetes ✓ 9”.', hold: 99 } as Panel,
     ab: ab && ab.lines.length ? ({ style: 'side', kicker: 'Quality · A/B, same clip', title: 'Without the glossary → with it', rows: ab.lines.slice(0, 3).map((l) => [l.term, l.without, l.with]), note: 'Both lines are the pipeline’s own output (demo/ab/).', hold: 7 } as Panel)
       : ab ? ({ style: 'side', kicker: 'Quality · A/B, same clip', title: 'Same words with and without the glossary', body: `Vocabulary hits: ${ab.hitsWithout} without it, ${ab.hitsWith} with it.`, hold: 6 } as Panel) : undefined,
-    latency: { style: 'side', kicker: 'Latency', title: 'Watch it translate.', body: pauseEs ? `End of a sentence → Spanish caption on the phone: p50 ${s1(pauseEs.p50)}, p95 ${s1(pauseEs.p95)} over ${pauseEs.n} phrases. Left and right run on the same clock.` : 'Latency numbers come from <code>npm run bench:latency</code> (not run yet).', note: ttfcMed !== null ? `Time to first caption after pressing Start: ${s1(ttfcMed)}. LAN numbers; a tunnel adds its own hop.` : undefined, hold: 6 } as Panel,
+    latency: { style: 'side', kicker: 'Latency', title: 'Watch it translate.', body: pauseEs ? `${pauseEs.label}: p50 ${s1(pauseEs.p50)}, p95 ${s1(pauseEs.p95)} over ${pauseEs.n} phrases. Left and right run on the same clock.` : 'Latency numbers come from <code>npm run bench:latency</code> (not run yet).', note: ttfcMed !== null ? `Time to first caption after pressing Start: ${s1(ttfcMed)}. Measured on the LAN with a free-tier key; a tunnel adds its own hop.` : undefined, hold: 6 } as Panel,
     scale1: { style: 'side', kicker: 'Scalability', title: 'One process, every room, any audience.', body: 'One speech session per room — not per language, not per viewer. Viewers add zero AI cost.', hold: 5 } as Panel,
     scale2: { style: 'lower', kicker: 'Scalability', title: scale ? `${scale.stages} rooms × ${Math.round(scale.viewers / scale.stages)} viewers on one laptop: every phrase to every viewer within ${scale.spreadP95Ms} ms (p95).` : 'Load numbers come from npm run load (not run yet).', hold: 99 } as Panel,
     scale3: { style: 'lower', kicker: 'Scalability', title: scale ? `${scale.stages} rooms in one process: ${scale.cpuAvgPct}% of one core, ${scale.rssMb} MB. More viewers: web replicas behind a CDN, same image.` : 'More viewers: web replicas behind a CDN, same image.', hold: 99 } as Panel,
@@ -194,7 +198,9 @@ try {
   // 2. quality
   if (hasClip) parts.push({ kind: 'video', file: CLIP, from: 12, seconds: 9, panel: P.quality });
   else parts.push({ kind: 'frames', url: phonesPage('auditorium'), seconds: 7, warm: 4000, panel: P.quality });
-  parts.push({ kind: 'frames', url: `${B}/admin`, seconds: 8, warm: 3000, js: clickCard(0), panel: P.hits });
+  // the operation chapter is over: clear the forced "no audio" and switch Room 3 to its due talk, so the later dashboards are clean
+  const clearAlerts = "fetch('/api/dev/state?stage=room-2&state=');fetch('/api/stages/room-3/next-talk',{method:'POST'});";
+  parts.push({ kind: 'frames', url: `${B}/admin`, seconds: 8, warm: 3000, js: `${clearAlerts}${clickCard(0)}`, panel: P.hits });
   if (P.ab) parts.push(hasClip ? { kind: 'video', file: CLIP, from: 21, seconds: 8, panel: P.ab } : { kind: 'frames', url: phonesPage('auditorium'), seconds: 8, warm: 4000, panel: P.ab });
   // 3. latency: split screen, same clock
   if (clipStage) parts.push({ kind: 'split', seconds: 24, panel: P.latency });

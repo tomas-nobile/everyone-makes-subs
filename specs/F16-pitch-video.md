@@ -34,6 +34,8 @@ As a judge, I want to see a real talk subtitled by the system from English into 
 **Verify:** `demo/clip.es.mp4` and `demo/clip.es.vtt` exist, and the subtitles are the pipeline's Spanish output (not hand-edited).
 
 ### [ ] F16.3 · Deploy & operation: from the .exe to captions
+
+> **Script ready, capture pending a human** (`npm run rec:desktop`, see the TODO in `docs/decisions.md`). The operation half (alert with its button, talk switch) is in the video already; the Deploy chapter falls back to the wizard recorded by Electron until `demo/deploy.mp4` exists.
 As a judge, I want to see that installing and running it is a double click and two pastes.
 
 - The real thing on Windows: double-click the installer `.exe` → the app opens the setup wizard → paste the Gemini API key → "Test" ✓ → dashboard password → rooms live → first Spanish caption on the phone view.
