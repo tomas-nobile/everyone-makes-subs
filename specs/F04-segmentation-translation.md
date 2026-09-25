@@ -6,7 +6,7 @@
 
 ## Stories
 
-### [ ] F04.1 · Phrase cuts
+### [x] F04.1 · Phrase cuts
 As an attendee, I want text confirmed in short phrases, so I don't wait for the end of a long paragraph.
 
 - `Segmenter.onInterim`: common word prefix of the last 2 interims (LocalAgreement-2) = stable text.
@@ -16,7 +16,7 @@ As an attendee, I want text confirmed in short phrases, so I don't wait for the 
 
 **Verify:** vitest tests with interim sequences (with pause, without pause, with punctuation).
 
-### [ ] F04.2 · No duplicates
+### [x] F04.2 · No duplicates
 As an attendee, I don't want to read the same phrase twice when the final arrives after an early commit.
 
 - `align.stripCommitted(committed, final)`: normalizes (lowercase, no punctuation or accents) and finds the cut with a word edit distance up to 20%. Returns only the new part.
@@ -35,7 +35,7 @@ As an attendee who doesn't speak the talk's language, I want each phrase transla
 
 **Verify:** with a key, `samples/en.mp3` produces `tr` in es and pt, with p50 under 1.5 s from commit (measured in the log).
 
-### [ ] F04.4 · When translation fails
+### [x] F04.4 · When translation fails
 As an attendee, I'd rather see the original than nothing.
 
 - 429/5xx: backoff 1-2-4 s, 3 attempts, then `TRANSLATE_FALLBACK_MODEL`. If that fails, `tr` is `null` for that language.
