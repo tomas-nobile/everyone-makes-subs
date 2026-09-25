@@ -41,7 +41,7 @@ The video is rebuilt around the judging criteria (F16) and shows **English → S
 
 **Never cut:** F17.1, F17.2, F16.1–F16.3, F16.5, F16.9.
 
-**Where it stands (2026-09-25 01:50 ART):** F17.1–F17.3, F17.6, F18.1–F18.3, F19.1–F19.2 and F16.1 are done and measured; the free-tier daily quota (500 requests per model) ran out at 01:20, so F16.2 (clip), F16.4 (A/B), F19.3 (measured cost), the F18.1 speed test and the final benchmark for F17.4/F17.5/F17.7 run after the reset at 04:00 ART, then the final `npm run demo-video -- --replay` and F16.9. F16.3's desktop capture needs a human (`npm run rec:desktop`).
+**Where it stands (2026-09-25 09:50 ART):** everything in F16–F19 is done and measured except F16.3's desktop capture (needs a human: `npm run rec:desktop`, then `npm run demo-video -- --replay` picks it up) and F17.7's README section, which has the numbers but is worth a last read. The pitch video is in Release v1.0.0. Next: F15.3 (submit).
 
 ## Status
 
@@ -62,7 +62,7 @@ The video is rebuilt around the judging criteria (F16) and shows **English → S
 | [F13 · Export and summary](../specs/F13-export-summary.md) | P1/P2 | [x] .1 · [x] .2 |
 | [F14 · Packaging](../specs/F14-packaging.md) | P1/P2 | [x] .1 · [x] .2 · [x] .3 |
 | [F15 · Submission](../specs/F15-submission.md) | P0 | [x] .1 · [x] .2 · [ ] .3 |
-| [F16 · Pitch video by judging criterion](../specs/F16-pitch-video.md) | P0 | [x] .1 · [x] .2 · [ ] .3 · [ ] .4 · [ ] .5 · [ ] .6 · [ ] .7 · [ ] .8 · [ ] .9 |
+| [F16 · Pitch video by judging criterion](../specs/F16-pitch-video.md) | P0 | [x] .1 · [x] .2 · [ ] .3 · [x] .4 · [x] .5 · [x] .6 · [x] .7 · [x] .8 · [x] .9 |
 | [F17 · Latency to the max](../specs/F17-latency.md) | P0 | [x] .1 · [x] .2 · [x] .3 · [x] .4 · [x] .5 · [x] .6 · [ ] .7 |
 | [F18 · Subtitle a video](../specs/F18-subtitle-a-video.md) | P1 | [x] .1 · [x] .2 · [x] .3 |
 | [F19 · Scale and cost evidence](../specs/F19-scale-cost-evidence.md) | P1 | [x] .1 · [x] .2 · [x] .3 |

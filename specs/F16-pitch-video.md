@@ -59,7 +59,9 @@ As a judge, I want proof that technical terms come out right.
 
 **Verify:** the A/B lines on screen exist verbatim in the two runs' outputs.
 
-### [ ] F16.5 · Latency: watch it translate
+### [x] F16.5 · Latency: watch it translate
+
+> **Done:** split screen built by `demo-video` — the clip (audio) on the left, the phone in Spanish on the right, the clip's room started on the same clock (audio offset measured, 0.45 s); in `--replay` the room replays `demo/talk.transcript.json` with the recorded timing. Panel numbers from `bench/latency-2026-09-25T11-19-19.json`.
 As a judge, I want to see how long a Spanish caption takes after the speaker says it.
 
 - Live split screen: left, the English talk playing with its audio; right, the phone in Spanish (original live line visible), both started on the same clock so the delay on screen is the real one. The talk's audio is muxed at the same offset as the stage's start.
@@ -67,7 +69,9 @@ As a judge, I want to see how long a Spanish caption takes after the speaker say
 
 **Verify:** stepping through frames, each caption appears on the right within the benchmark's p95 after the phrase ends on the left.
 
-### [ ] F16.6 · Scalability: many rooms, one process
+### [x] F16.6 · Scalability: many rooms, one process
+
+> **Done:** 8 rooms live on the dashboard; the two lower thirds read `bench/scale-2026-09-25T04-20-25.json` (11 ms p95, 44 % of one core, 157 MB), all in `docs/scale.md` / README.
 As a judge, I want to believe it runs a whole conference.
 
 - Footage: dashboard with the F19.1 rooms live (≥ 6), cards updating, total viewers.
@@ -76,7 +80,9 @@ As a judge, I want to believe it runs a whole conference.
 
 **Verify:** every number on the panel appears in `docs/scale.md` or the README.
 
-### [ ] F16.7 · Innovation: what else it does
+### [x] F16.7 · Innovation: what else it does
+
+> **Done:** montage of 7 items, each recorded working (job card with the subtitled clip, OBS overlay, "what did I miss?" sheet, agenda-driven talks, room station, TV mode with QR, stream-delay sheet).
 As a judge, I want the extras that go beyond captions.
 
 Montage, 3–4 s per item, each with a one-line label, each shown working:
@@ -89,7 +95,9 @@ Montage, 3–4 s per item, each with a one-line label, each shown working:
 
 **Verify:** every item appears working, not only named.
 
-### [ ] F16.8 · Price: compared with the market
+### [x] F16.8 · Price: compared with the market
+
+> **Done:** the panel is generated from `docs/pricing.json` (same figures as `docs/pricing.md`): estimate, measured lower bound, Live Translate, OpenAI, the Nerdearla day, the audience line and the footnote with the date.
 As a judge, I want to know what it costs next to the alternatives.
 
 - Slide: cost per room-hour with Spanish + Portuguese — Everyone Makes Subs (measured, F19.3) vs Gemini Live Translate and OpenAI realtime translate (list price × 2 languages); commercial captioning or human interpreters only with a public, cited price. Plus the "Nerdearla day" row (10 rooms × 9 h).
@@ -98,7 +106,9 @@ As a judge, I want to know what it costs next to the alternatives.
 
 **Verify:** each figure matches `docs/pricing.md`.
 
-### [ ] F16.9 · Publish
+### [x] F16.9 · Publish
+
+> **Done 2026-09-25 09:50 ART:** `EveryoneMakesSubs-pitch.mp4` (2:38) and `fosdem-2025-kubernetes-emissions-clip.es.vtt` uploaded to Release v1.0.0; README and `docs/devpost.md` link to them; the old demo video stays as the fallback.
 As the team, we want the new video to be the one judges find.
 
 - Upload the mp4 and the clip's Spanish VTT to the Release; update the README video link and Devpost. Keep the old video only as a fallback.
