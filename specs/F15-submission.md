@@ -4,14 +4,14 @@
 
 ## Stories
 
-### [ ] F15.1 · README
+### [x] F15.1 · README
 As a judge, I want to understand what it is, try it and see how it scales, in 2 minutes of reading.
 
 - What it is (with the tagline), GIF or screenshot, install (installer, `docker compose up` and no-key mode), first-run setup, audio sources, architecture (diagram from `docs/architecture.md`), how to scale, costs, limitations, free-tier data usage, how it was built (vibe coding, `CLAUDE.md`) and the video link.
 
 **Verify:** `/ship`.
 
-### [ ] F15.2 · Demo video
+### [x] F15.2 · Demo video
 As a judge who doesn't speak Spanish, I want to understand the demo.
 
 - 1–2 min: a real Nerdearla talk from YouTube, 2+ stages on the dashboard, the phone switching languages, the vocabulary working ("Kubernetes ✓"), the TV and the overlay.

@@ -21,7 +21,7 @@ As an operator who isn't a developer, I want to install and open an app.
 
 **Verify:** the installer for your OS opens the app and reaches the setup wizard.
 
-### [ ] F14.3 · Publish the installers
+### [x] F14.3 · Publish the installers
 As the team, we want downloadable installers for the judges.
 
 - No GitHub Actions: build with `npm run app:dist` on each available OS and upload the files from `app/release/` to a GitHub Release by hand (`gh release create v1.0.0 app/release/*.exe …`). The README links to the latest Release assets and explains the "unsigned app" warning (Mac: right-click > Open; Windows: More info > Run anyway).
