@@ -91,6 +91,23 @@ Source ─► AudioSource ─PCM16 16k 100ms─► Meter/VAD ─► Transcriber 
 
 Stack: Node 22 + TypeScript + Fastify · `@google/genai` · ffmpeg-static + yt-dlp · Vite + React · JSON/JSONL files · Electron. Details in [`docs/architecture.md`](docs/architecture.md).
 
+## Latency, measured
+
+`npm run bench:latency` boots the real server with one file-source room (`samples/en.mp3`, an English talk, Spanish captions), connects one SSE client and times every phrase. Two honest numbers, never averaged together:
+
+- **Heard → caption:** from the first ASR interim that contained the phrase's last word to the caption on the client. This is the pipeline's own delay (segmenter → translation → delivery).
+- **Pause → caption:** from the speaker's pause that closed an utterance to the caption. It only exists for phrases the ASR closed on a pause — and on this speaker the Live API closes almost none (2 of 85 phrases), so it is not the number to quote. The phone's "~1.4 s" badge shows exactly this value when it exists, nothing else.
+
+| `samples/en.mp3`, 3 runs, free-tier key, LAN | p50 | p95 |
+|---|---|---|
+| Heard → original caption | **0.56 s** | 3.2 s |
+| Heard → Spanish caption | 3.35 s | 21.8 s |
+| Translation call (Spanish) | 2.28 s | 16.4 s |
+| Delivery, server → client | 1 ms | 2 ms |
+| Time to first caption after Start | 3.2 s · 3.4 s · 15.0 s | |
+
+Read the p95s as what the free tier does, not what the pipeline does: at 15 translation requests/minute per model, any 3-run benchmark spends the quota and the queue waits are the tail. On a billed project the fast segmenter set in `.env.example` takes heard → original to p50 0.52 s / p95 1.5 s (measured, 29 phrases/min), and the Spanish value is the translation call plus ~1 ms. The numbers above are on the LAN; attendees on phones go through Tailscale Funnel or a named Cloudflare tunnel, which adds its own hop. Machine: AMD Ryzen 5 3600, Windows, Node 25. Raw data: `bench/latency-*.json`; the method and every rejected idea (hybrid VAD, server-side VAD) are in `docs/decisions.md`.
+
 ## How to scale
 
 1. **Up to ~10–15 rooms:** one laptop running the app, or a 2 vCPU container. The work is I/O-bound.

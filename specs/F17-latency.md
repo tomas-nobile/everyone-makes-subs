@@ -41,7 +41,9 @@ As an attendee, I want the caption as soon as the speaker pauses, not when the A
 
 **Verify:** pause → caption p50 improves on the baseline; the transcript has no duplicated or lost words (diff against the baseline text).
 
-### [ ] F17.3 · Commit sooner
+### [x] F17.3 · Commit sooner
+
+> **Measured 2026-09-25:** the fast set (3 / 6 / 2.5 s / 12) takes heard → original from p50 0.56 s, p95 3.2 s to p50 0.52 s, p95 1.5 s at 28.9 phrases/min (was 17.5). Defaults stay conservative for the free-tier demo; the fast set is in `.env.example` for a billed project. Details in `docs/decisions.md`.
 As an attendee, I want shorter waits on long sentences.
 
 - Move the thresholds out of `cutPoint` into `SegmenterOptions` (`sentenceMinWords`, `commaMinWords`, `forceCommitMs`, `maxPhraseWords`) with env overrides, so the benchmark sweeps them without code edits.
