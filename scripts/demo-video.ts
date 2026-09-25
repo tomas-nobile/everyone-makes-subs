@@ -142,7 +142,8 @@ try {
   // viewers so the dashboard does not say "0 reading"; a video job so the Innovation chapter shows one done
   const viewers = [0, 1, 2, 3, 4].map((i) => fetch(`${B}/api/stages/${i % 2 ? 'room-2' : 'auditorium'}/stream`).catch(() => null));
   if (fs.existsSync(RAW_CLIP)) {
-    await fetch(`${B}/api/jobs?${new URLSearchParams({ name: path.basename(RAW_CLIP), lang: 'es', srcLang: 'en', title: 'A talk from last year, in Spanish' })}`, { method: 'POST', headers: { 'Content-Type': 'application/octet-stream' }, body: fs.readFileSync(RAW_CLIP) }).catch(() => null);
+    // in --replay the job burns the clip's own recorded run (demo/talk.transcript.json), not the sample's
+    await fetch(`${B}/api/jobs?${new URLSearchParams({ name: path.basename(RAW_CLIP), lang: 'es', srcLang: 'en', title: 'A talk from last year, in Spanish', transcript: RAW_CLIP.replace(/\.mp4$/, '.transcript.json') })}`, { method: 'POST', headers: { 'Content-Type': 'application/octet-stream' }, body: fs.readFileSync(RAW_CLIP) }).catch(() => null);
   }
   const stages = await api<Array<{ id: string; stationKey: string }>>('GET', '/api/stages');
   const stationKey = stages[0]?.stationKey ?? '';

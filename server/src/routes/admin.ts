@@ -174,13 +174,15 @@ export async function adminRoutes(app: FastifyInstance, cfg: Config, stages: Sta
   const jobNotFound = (reply: FastifyReply, id: string) => reply.code(404).send({ error: 'JOB_NOT_FOUND', message: `Job ${id} does not exist` });
   const validLangs = (i: JobInput) => [i.lang, i.srcLang].every((l) => !l || LANG.test(l));
 
-  app.post<{ Querystring: JobInput & { name?: string }; Body: unknown }>('/api/jobs', { preHandler: guard, bodyLimit: 1024 * 1024 * 1024 }, async (req, reply) => {
+  app.post<{ Querystring: JobInput & { name?: string; transcript?: string }; Body: unknown }>('/api/jobs', { preHandler: guard, bodyLimit: 1024 * 1024 * 1024 }, async (req, reply) => {
     if (Buffer.isBuffer(req.body)) {
       const q = req.query;
       const meta: JobInput = { lang: q.lang, srcLang: q.srcLang, title: q.title, speaker: q.speaker, abstract: q.abstract };
       if (req.body.length === 0) return bad(reply, 'The file is empty');
       if (!validLangs(meta)) return bad(reply, 'Languages must be 2-letter codes');
-      return reply.code(201).send(jobs.createFromUpload((q.name ?? 'video.mp4').replace(/[^\w.-]+/g, '_').slice(-80), req.body, meta));
+      // `transcript` (fake mode only): a recorded run of this video, so the offline replay burns its real subtitles
+      const transcript = cfg.fakeBackend && q.transcript ? path.resolve(q.transcript) : undefined;
+      return reply.code(201).send(jobs.createFromUpload((q.name ?? 'video.mp4').replace(/[^\w.-]+/g, '_').slice(-80), req.body, meta, transcript));
     }
     const b = (req.body ?? {}) as JobInput & { url?: string };
     if (typeof b.url !== 'string' || !/^https?:\/\//.test(b.url)) return bad(reply, 'Paste a video link or upload a file');

@@ -75,10 +75,12 @@ export class Jobs {
     return true;
   }
 
-  createFromUpload(name: string, body: Buffer, input: JobInput): Job {
+  /** `transcript`: a recorded run of this very video (fake mode only), so the replay burns its real subtitles. */
+  createFromUpload(name: string, body: Buffer, input: JobInput, transcript?: string): Job {
     const ext = (/\.([a-z0-9]{2,4})$/i.exec(name)?.[1] ?? 'mp4').toLowerCase();
     const job = this.make({ kind: 'file', name }, input);
     fs.writeFileSync(path.join(this.folder(job.id), `source.${ext}`), body);
+    if (transcript && fs.existsSync(transcript)) fs.copyFileSync(transcript, path.join(this.folder(job.id), 'replay.transcript.json'));
     this.pump();
     return job;
   }
@@ -175,13 +177,17 @@ export class Jobs {
     return r.segments;
   }
 
-  /** Fake mode / no key: the sample transcript's phrases, spread over the video's duration, so F18.2 works offline. */
+  /**
+   * Fake mode / no key: the video's own recorded run if one was attached (`replay.transcript.json`, real timing),
+   * else the sample transcript's phrases spread over the video's duration, so F18.2 works offline.
+   */
   private async fakeSegments(job: Job): Promise<Segment[]> {
+    const own = path.join(this.folder(job.id), 'replay.transcript.json');
     const sample = job.srcLang === 'es' ? 'es' : 'en';
-    const t = loadTranscript(path.join(this.samplesDir, `${sample}.transcript.json`));
+    const t = loadTranscript(fs.existsSync(own) ? own : path.join(this.samplesDir, `${sample}.transcript.json`));
     const finals = t.events.filter((e) => e.type === 'final');
     const duration = job.durationSec ?? 60;
-    const scale = duration / Math.max(1, finals.at(-1)?.t ?? duration);
+    const scale = fs.existsSync(own) ? 1 : duration / Math.max(1, finals.at(-1)?.t ?? duration);
     await new Promise((r) => setTimeout(r, Math.min(8000, duration * 100)));
     return finals.map((e, i) => ({
       seq: i + 1, talkId: 'fake', src: e.type === 'final' ? e.src : t.lang, text: e.text,
