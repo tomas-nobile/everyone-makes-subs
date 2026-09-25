@@ -6,7 +6,7 @@ const RING_SEC = 30;
 const SILENCE_GATE_MS = 2000;     // stop sending after 2 s of silence
 const PREROLL_CHUNKS = 3;         // 300 ms of pre-roll when speech resumes
 const SWAP_SILENCE_MS = 400;
-const PREV_GRACE_MS = 3000;       // finals from the old session keep flowing this long
+const PREV_GRACE_MS = 3000;       // the old session is closed this long after a swap
 const OVERLAP_SEC = 2;
 const RECONNECT_OVERLAP_SEC = 1;
 const MAX_BACKLOG_SEC = 10;
@@ -58,7 +58,9 @@ export class Transcriber extends EventEmitter {
   // overlap trimming after a hard cut / reconnect
   private trimRef: string | null = null;
   private prevText = '';            // latest text seen from the session being replaced
-  private holdNew = false;          // hold the new session's output until the old one is done
+  private openText = '';            // current session's utterance in progress (last interim)
+  private prevOpen = '';            // the old session's utterance in progress at the swap
+  private holdNew = false;          // new session's output waits for the old session's final
   private held: Array<['interim' | 'final', string]> = [];
   private swapAt = 0;
 
@@ -112,7 +114,7 @@ export class Transcriber extends EventEmitter {
     if (this.stopped || !this.cur) return;
     this.maybeRotate(silentForMs);
     this.flush();
-    if (this.holdNew && this.now() - this.swapAt > PREV_GRACE_MS) this.releaseHeld();
+    if (this.holdNew && this.now() - this.swapAt > PREV_GRACE_MS) this.finishPrev('');
   }
 
   // ── sessions ──
@@ -137,14 +139,20 @@ export class Transcriber extends EventEmitter {
     else if (e >= this.opts.hardCutSec) this.swap(OVERLAP_SEC);
   }
 
+  /**
+   * Make-before-break. The old session gets audioStreamEnd and answers with its final (the full,
+   * corrected utterance) within about a second; a fresh session may take many seconds to produce
+   * its first interim. So the new session's output is held until the old final arrives (or 3 s,
+   * then the old session's last interim is used), published after it, and from then on the old
+   * session is ignored — a late final would land in the middle of the next utterance.
+   */
   private swap(overlapSec: number): void {
     const t = this.now();
     const old = this.cur!;
-    old.s.end();
     this.prev?.close();
+    this.prevOpen = this.openText;
+    this.openText = '';
     this.prev = old.s;
-    const prevToClose = old.s;
-    setTimeout(() => { prevToClose.close(); if (this.prev === prevToClose) this.releaseHeld(); }, PREV_GRACE_MS).unref?.();
     this.cur = this.next!;
     this.next = undefined;
     this.rotateRequested = false;
@@ -152,15 +160,35 @@ export class Transcriber extends EventEmitter {
     this.holdNew = true;
     this.held = [];
     this.swapAt = t;
-    if (overlapSec) {
-      this.trimRef = this.prevText;     // updated again if the old session's final arrives later
-      this.sentClock = Math.max(-1, this.sentClock - overlapSec);
-    }
+    this.trimRef = this.prevOpen || this.prevText;
+    if (overlapSec) this.sentClock = Math.max(-1, this.sentClock - overlapSec);
     this.pendingTrim = overlapSec > 0;
+    const prevToClose = old.s;
+    setTimeout(() => prevToClose.close(), PREV_GRACE_MS + 2000).unref?.();
+    old.s.end();
     const gap = this.now() - t;
     this.maxGapMs = Math.max(this.maxGapMs, gap);
     console.log(`[${this.opts.label}] asr rotation #${this.rotations}${overlapSec ? ' (hard cut, 2 s overlap)' : ' (at silence)'}`);
     this.emit('rotation', gap);
+  }
+
+  /** The old session is done (its final, or the timeout): publish its utterance, then the held output. */
+  private finishPrev(finalText: string): void {
+    if (!this.holdNew) return;
+    this.holdNew = false;
+    const text = finalText || this.prevOpen;
+    this.prevOpen = '';
+    if (text) {
+      this.trimRef = text;
+      this.emitFinal(text);
+    }
+    const held = this.held;
+    this.held = [];
+    for (let i = 0; i < held.length; i++) {
+      const [type, t] = held[i];
+      if (type === 'interim' && held[i + 1]?.[0] === 'interim') continue;   // only the latest interim
+      this.deliver(type, t);
+    }
   }
 
   private pendingTrim = false;
@@ -174,7 +202,7 @@ export class Transcriber extends EventEmitter {
   }
 
   private onClose(s: AsrSession, reason: string, unexpected: boolean): void {
-    if (s === this.prev) { this.prev = undefined; this.releaseHeld(); return; }
+    if (s === this.prev) { this.finishPrev(''); this.prev = undefined; return; }
     if (s === this.next?.s) { this.next = undefined; return; }
     if (s !== this.cur?.s || this.stopped || !unexpected) return;
     // Unexpected close of the current session → reconnect with backoff, resend what it missed.
@@ -190,6 +218,7 @@ export class Transcriber extends EventEmitter {
       this.sentClock = Math.max(-1, this.sentClock - RECONNECT_OVERLAP_SEC);
       this.pendingTrim = true;
       this.trimRef = this.prevText;
+      this.openText = '';
       this.emit('reconnect');
       this.flush();
     }, delay);
@@ -226,28 +255,16 @@ export class Transcriber extends EventEmitter {
 
   private onText(s: AsrSession, type: 'interim' | 'final', text: string): void {
     if (s === this.prev) {
-      // old session after a swap: its final still counts and is the reference for the overlap trim
-      this.trimRef = text;
-      if (type === 'final') this.emitFinal(text);
+      if (!this.holdNew) return;            // already handed over: ignore late messages
+      if (type === 'final') this.finishPrev(text);
+      else this.prevOpen = text;
       return;
     }
     if (s !== this.cur?.s) return;
     this.prevText = text;
+    this.openText = type === 'interim' ? text : '';
     if (this.holdNew) { this.held.push([type, text]); return; }
     this.deliver(type, text);
-  }
-
-  private releaseHeld(): void {
-    if (!this.holdNew) return;
-    this.holdNew = false;
-    const held = this.held;
-    this.held = [];
-    // keep only the latest interim before each final
-    for (let i = 0; i < held.length; i++) {
-      const [type, text] = held[i];
-      if (type === 'interim' && held[i + 1]?.[0] === 'interim') continue;
-      this.deliver(type, text);
-    }
   }
 
   private deliver(type: 'interim' | 'final', raw: string): void {

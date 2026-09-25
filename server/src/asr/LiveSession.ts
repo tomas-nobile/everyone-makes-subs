@@ -20,6 +20,7 @@ export interface AsrSession extends EventEmitter {
 export interface AsrOptions { apiKey: string; model: string; lang?: string; vocabulary: string[]; label: string }
 
 let nextId = 1;
+const DEBUG = !!process.env.DEBUG_ASR;
 
 /**
  * Gemini Live transcription session. Interims arrive in `interimInputTranscription` (cumulative);
@@ -76,6 +77,10 @@ export class LiveSession extends EventEmitter implements AsrSession {
     const sc = m.serverContent;
     if (activity === 'ACTIVITY_START') this.flushFinal();   // never merge two utterances
     const interim = sc?.interimInputTranscription?.text;
+    if (DEBUG && (interim || sc?.inputTranscription || activity || sc?.generationComplete)) {
+      const tail = (x?: string) => (x && x.length > 70 ? `…${x.slice(-70)}` : x);
+      console.log(`[${this.opts.label}] asr#${this.id} ${activity ?? ''}${sc?.generationComplete ? ' genComplete' : ''}${interim ? ` interim(${interim.split(' ').length}w) ${tail(interim)}` : ''}${sc?.inputTranscription?.text ? ` FINAL ${tail(sc.inputTranscription.text)}` : ''}`);
+    }
     if (interim) {
       this.utterance = interim;   // cumulative: each interim is the whole utterance so far
       this.emit('interim', this.utterance);
