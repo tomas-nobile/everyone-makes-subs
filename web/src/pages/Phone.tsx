@@ -4,7 +4,16 @@ import { useEventInfo } from '../hooks/useEventInfo';
 import { detectLang, isLang, LANG_META, STRINGS, SUPPORTED_LANGS, subLabel, type Lang } from '../i18n';
 import { maskLive } from '../lib/captionText';
 import { readPref, writePref } from '../lib/prefs';
-import type { Segment } from '../../../shared/contract';
+import type { Segment, Talk } from '../../../shared/contract';
+
+type AttendeeState = 'live' | 'paused' | 'no_signal' | 'break' | 'ended' | 'reconnecting';
+
+function formatTime(iso: string | undefined): string {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
 
 interface PhonePrefs {
   size: number;
@@ -95,6 +104,58 @@ function Caption({ seg, lang, isOriginal, recent, bilingual, sound }: { seg: Seg
   );
 }
 
+function StateCard({ attendeeState, lang, next, talk, onSummary }: { attendeeState: AttendeeState; lang: Lang; next: Talk | null; talk: Talk | null; onSummary: () => void }) {
+  const T = STRINGS[lang];
+  if (attendeeState === 'paused') {
+    return <div className="speaking" style={{ fontSize: 14, margin: '0 0 8px' }}>⏸ {T.pausedTitle}</div>;
+  }
+  if (attendeeState === 'no_signal') {
+    return (
+      <div className="state-card" role="status">
+        <h4>{T.noSignalTitle}</h4>
+        <p>{T.noSignalBody}</p>
+      </div>
+    );
+  }
+  if (attendeeState === 'break') {
+    return (
+      <div className="state-card" role="status">
+        <h4>{T.breakTitle(formatTime(next?.startsAt))}</h4>
+        {next && <p>{T.breakBody(next.title, next.speaker ?? '')}</p>}
+        <div className="row">
+          <button className="btn sm" onClick={onSummary}>
+            {T.seeSummary}
+          </button>
+        </div>
+      </div>
+    );
+  }
+  if (attendeeState === 'ended') {
+    return (
+      <div className="state-card" role="status">
+        <h4>{T.endedTitle}</h4>
+        <p>{T.endedBody}</p>
+        <div className="row">
+          {talk && (
+            <>
+              <a className="btn sm primary" href={`/api/talks/${talk.id}/export.txt`}>
+                {T.downloadTxt}
+              </a>
+              <a className="btn sm" href={`/api/talks/${talk.id}/export.srt`}>
+                {T.downloadSrt}
+              </a>
+            </>
+          )}
+          <button className="btn sm" onClick={onSummary}>
+            {T.seeSummary}
+          </button>
+        </div>
+      </div>
+    );
+  }
+  return null;
+}
+
 function useWakeLock(enabled: boolean) {
   useEffect(() => {
     if (!enabled || !('wakeLock' in navigator)) return;
@@ -140,7 +201,7 @@ export function Phone({ stageId }: { stageId: string }) {
       return next;
     });
 
-  const { talk, state, segments, live, level, lastLag, loadOlder } = useStageStream(stageId);
+  const { talk, next, state, connected, gotHello, segments, live, level, lastLag, loadOlder } = useStageStream(stageId);
   const { data: event } = useEventInfo();
   const stage = event?.stages.find((s) => s.id === stageId);
   const stageName = stage?.name ?? stageId;
@@ -200,7 +261,12 @@ export function Phone({ stageId }: { stageId: string }) {
   const langOptions = langsAvailable.length ? langsAvailable : SUPPORTED_LANGS;
   const srcLangName = (srcLang && isLang(srcLang) ? LANG_META[srcLang].name : srcLang) ?? '—';
 
-  const statusWord = state === 'no_signal' ? T.noAudio : state === 'paused' ? T.paused : state === 'idle' ? T.ended : T.live;
+  const attendeeState: AttendeeState = !connected && gotHello ? 'reconnecting'
+    : state === 'no_signal' ? 'no_signal'
+    : state === 'paused' ? 'paused'
+    : state === 'idle' ? (next ? 'break' : 'ended')
+    : 'live';
+  const statusWord = { live: T.live, paused: T.paused, no_signal: T.noAudio, break: T.break, ended: T.ended, reconnecting: T.reconnecting }[attendeeState];
 
   return (
     <div className="stage">
@@ -208,12 +274,22 @@ export function Phone({ stageId }: { stageId: string }) {
         <div className="ph-top">
           <div className="ph-row">
             <div className="ph-room">
-              <span className="dot" style={{ animationPlayState: state === 'live' ? 'running' : 'paused' }} />
+              <span
+                className="dot"
+                style={{
+                  background: attendeeState === 'live' || attendeeState === 'paused' ? 'var(--bad)' : 'var(--dim)',
+                  animationPlayState: attendeeState === 'live' ? 'running' : 'paused',
+                }}
+              />
               <span>
                 {stageName} · {statusWord}
               </span>
             </div>
-            <span className="lat" title="Delay measured from when the speaker finishes the sentence">
+            <span
+              className="lat"
+              title="Delay measured from when the speaker finishes the sentence"
+              style={{ visibility: attendeeState === 'live' || attendeeState === 'paused' ? 'visible' : 'hidden' }}
+            >
               {lag !== null ? `~${lag.toFixed(1)} s` : ''}
             </span>
           </div>
@@ -233,6 +309,11 @@ export function Phone({ stageId }: { stageId: string }) {
           </div>
         </div>
 
+        <div className={`banner${attendeeState === 'reconnecting' ? ' show' : ''}`} role="status">
+          <span className="spinner" />
+          {T.reconnectingBanner}
+        </div>
+
         <div className="ph-body" id="phBody" style={{ fontSize: prefs.size }} ref={bodyRef} onScroll={onScroll}>
           <div aria-live="polite" aria-relevant="additions">
             {segments.slice(-30).map((s, idx, list) => (
@@ -247,7 +328,8 @@ export function Phone({ stageId }: { stageId: string }) {
               />
             ))}
           </div>
-          {state === 'live' && <LiveLine lang={lang} isOriginal={isOriginal} live={live} level={level} showLiveOrig={prefs.liveOrig} />}
+          <StateCard attendeeState={attendeeState} lang={lang} next={next} talk={talk} onSummary={() => setSheet('sum')} />
+          {attendeeState === 'live' && <LiveLine lang={lang} isOriginal={isOriginal} live={live} level={level} showLiveOrig={prefs.liveOrig} />}
         </div>
 
         <button className={`jump${!atBottom ? ' show' : ''}`} onClick={jumpToLive}>

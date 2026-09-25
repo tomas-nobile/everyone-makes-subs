@@ -46,7 +46,7 @@ As an attendee, I want to re-read something without the screen yanking it away.
 
 **Verify:** scroll for 20 s with the fake and come back.
 
-### [ ] F07.5 · States
+### [x] F07.5 · States
 As an attendee, I want to understand what's going on when there are no captions, without seeing errors.
 
 - `paused` → "⏸ The speaker paused". `no_signal` → card "Waiting for audio from the room. Captions will come back on their own". Break (no talk running, a next one scheduled) → "Break · back at HH:MM" with the next talk. Talk ended → TXT/SRT downloads + summary. SSE down → "Reconnecting…" banner.
