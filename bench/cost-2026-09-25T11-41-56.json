@@ -1,0 +1,23 @@
+{
+ "at": "2026-09-25T11:41:56.557Z",
+ "rooms": 1,
+ "minutes": 5,
+ "targetLangs": [
+  "es",
+  "pt"
+ ],
+ "http429": 0,
+ "perRoomHour": {
+  "audioMin": 59.97940707023922,
+  "tokensIn": 95811.10485400012,
+  "tokensOut": 33984.33204599754,
+  "usdEsOnly": 0.611,
+  "usdAllTargets": 0.654
+ },
+ "prices": {
+  "asrUsdPerMin": 0.009,
+  "inUsdPerMTokens": 0.3,
+  "outUsdPerMTokens": 2.5
+ },
+ "note": "output tokens are shared by 2 target language(s) in one call; the es-only figure assumes 1/2 of them"
+}

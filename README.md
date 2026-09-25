@@ -98,15 +98,16 @@ Stack: Node 22 + TypeScript + Fastify · `@google/genai` · ffmpeg-static + yt-d
 - **Heard → caption:** from the first ASR interim that contained the phrase's last word to the caption on the client. This is the pipeline's own delay (segmenter → translation → delivery).
 - **Pause → caption:** from the speaker's pause that closed an utterance to the caption. It only exists for phrases the ASR closed on a pause — and on this speaker the Live API closes almost none (2 of 85 phrases), so it is not the number to quote. The phone's "~1.4 s" badge shows exactly this value when it exists, nothing else.
 
-| `samples/en.mp3`, 3 runs, free-tier key, LAN | p50 | p95 |
+| `samples/en.mp3`, free-tier key, LAN | Before (baseline, 3 runs) | Shipped (2 runs) |
 |---|---|---|
-| Heard → original caption | **0.56 s** | 3.2 s |
-| Heard → Spanish caption | 3.35 s | 21.8 s |
-| Translation call (Spanish) | 2.28 s | 16.4 s |
-| Delivery, server → client | 1 ms | 2 ms |
-| Time to first caption after Start | 3.2 s · 3.4 s · 15.0 s | |
+| Heard → original caption, p50 | 0.56 s | 0.78 s |
+| Heard → Spanish caption, p50 | 3.35 s | **2.59 s** |
+| Translation call, Spanish, p50 | 2.28 s | **1.33 s** |
+| Delivery, server → client, p50 / p95 | 1 ms / 2 ms | 0 ms / 2 ms |
+| Time to first caption after Start | 3.2 · 3.4 · 15.0 s | 19.8 · 6.5 s |
+| Phrases left untranslated | 18 of 85 | 0 of 72 |
 
-Read the p95s as what the free tier does, not what the pipeline does: at 15 translation requests/minute per model, any 3-run benchmark spends the quota and the queue waits are the tail. On a billed project the fast segmenter set in `.env.example` takes heard → original to p50 0.52 s / p95 1.5 s (measured, 29 phrases/min), and the Spanish value is the translation call plus ~1 ms. The numbers above are on the LAN; attendees on phones go through Tailscale Funnel or a named Cloudflare tunnel, which adds its own hop. Machine: AMD Ryzen 5 3600, Windows, Node 25. Raw data: `bench/latency-*.json`; the method and every rejected idea (hybrid VAD, server-side VAD) are in `docs/decisions.md`.
+What moved the Spanish number: the translation is one streamed call with `es` first in the schema, published the moment its value closes (F17.4), over a kept-alive HTTPS connection (F17.5: first call after a pause 1.8 s → 1.1 s max in `bench-mt`). What did not: closing utterances on the speaker's pause — both the hybrid `audioStreamEnd` and the server-side `silenceDurationMs` were measured and rejected (`docs/decisions.md`). The p95s (up to 40 s) are the free tier: at 15 translation requests/minute per model the queue waits are the tail, and a fresh Live session can take 15–20 s to say its first word (run 1 of the shipped benchmark). On a billed project the fast segmenter set in `.env.example` takes heard → original to p50 0.52 s / p95 1.5 s (measured, 29 phrases/min). LAN numbers; attendees on phones go through Tailscale Funnel or a named Cloudflare tunnel, which adds its own hop. Machine: AMD Ryzen 5 3600, Windows 11, Node 25. Raw data: `bench/latency-*.json`; method and every rejected idea in `docs/decisions.md`.
 
 ## How to scale
 

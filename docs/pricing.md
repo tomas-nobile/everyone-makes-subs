@@ -6,7 +6,8 @@ Everything the Price chapter of the video (F16.8) shows comes from this file, an
 
 | | Spanish only | Spanish + Portuguese | Basis |
 |---|---|---|---|
-| **Everyone Makes Subs** (Gemini 3.5 Transcribe Live + Flash-Lite, one call for every language) | **US$ 0.77** | **US$ 0.82** | list-price estimate, see assumptions — _measured row pending_ |
+| **Everyone Makes Subs** (Gemini 3.5 Transcribe Live + Flash-Lite, one call for every language) | **US$ 0.77** | **US$ 0.82** | list-price estimate, see assumptions |
+| Everyone Makes Subs, **measured** (1 room, 5 min, `npm run cost`) | US$ 0.61 | US$ 0.65 | lower bound: 60 audio min + 95.8k / 34k tokens per room-hour; the token count is incomplete for streamed calls (see below) |
 | Gemini 3.5 Live Translate (speech → speech, one session per language) | US$ 2.21 | US$ 4.42 | US$ 0.0368/min per language |
 | OpenAI `gpt-realtime-translate` (one session per language) | US$ 2.04 | US$ 4.08 | US$ 0.034/min per language |
 
@@ -28,7 +29,9 @@ Commercial captioning services and human interpreters are not in the table: none
 
 | Run | Rooms | Minutes | Audio min / room-hour | Tokens in / out per room-hour | US$ / room-hour (es) | US$ / room-hour (es + pt) |
 |---|---|---|---|---|---|---|
-| _pending_ | | | | | | |
+| 2026-09-25 11:41 UTC (`bench/cost-2026-09-25T11-41-56.json`) | 1 | 5 | 60.0 | 95,811 / 33,984 | 0.61 | 0.65 |
+
+The audio side (60 min × US$ 0.009 = US$ 0.54) is the whole story; translation tokens add ~US$ 0.11. Treat the token part as a lower bound: `usageMetadata` arrived for only some of the streamed translation calls during the run (the per-minute counts jumped from ~450 to ~5,000 input tokens), so the estimate row above, built from the prompt size, stays the headline figure and the video quotes it. The ordering of the comparison does not depend on which row you pick: both are 3–6× below the per-language speech-to-speech services.
 
 ## Sources
 

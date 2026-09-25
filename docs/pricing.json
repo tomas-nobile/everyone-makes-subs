@@ -12,7 +12,8 @@
   },
   "estimateAssumptions": "60 min of audio per room-hour; ~720 translation calls per hour (one every ~5 s) with ~800 input tokens (prompt, glossary, context) and ~30 output tokens per language; every language in the same call, so the input is paid once",
   "perRoomHour": {
-    "ems": { "label": "Everyone Makes Subs (this pipeline)", "es": 0.77, "esPt": 0.82, "measured": false },
+    "ems": { "label": "Everyone Makes Subs (this pipeline, list-price estimate)", "es": 0.77, "esPt": 0.82, "measured": false },
+    "emsMeasured": { "label": "Everyone Makes Subs, measured 5 min (lower bound)", "es": 0.61, "esPt": 0.65, "measured": true, "source": "bench/cost-2026-09-25T11-41-56.json" },
     "liveTranslate": { "label": "Gemini Live Translate", "es": 2.21, "esPt": 4.42 },
     "openai": { "label": "OpenAI gpt-realtime-translate", "es": 2.04, "esPt": 4.08 }
   },

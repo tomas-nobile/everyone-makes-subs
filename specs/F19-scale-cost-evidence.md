@@ -21,7 +21,9 @@ As a judge, I want to know what one machine holds.
 
 **Verify:** the `docs/scale.md` table comes from a real run on the demo machine.
 
-### [ ] F19.3 · Measured cost and market comparison
+### [x] F19.3 · Measured cost and market comparison
+
+> **Done 2026-09-25** with a caveat: 1 room × 5 min (the free tier's daily quota, not 10 min × K rooms); US$ 0.61 / 0.65 per room-hour measured (lower bound, streamed calls under-report tokens), list-price estimate US$ 0.77 / 0.82 as the headline. `docs/pricing.md`.
 As a judge, I want the price claim to be real and comparable.
 
 - Run K rooms live with a real key for 10 minutes (samples looping) and count audio minutes sent plus translation tokens (from `usageMetadata`; add the counter if it is not tracked) → US$ per room-hour for Spanish only and Spanish + Portuguese.

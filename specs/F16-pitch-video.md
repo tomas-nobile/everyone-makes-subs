@@ -48,7 +48,9 @@ As a judge, I want to see that installing and running it is a double click and t
 
 **Verify:** the chapter shows the real installer and wizard; the stopwatch value matches the capture.
 
-### [ ] F16.4 · Quality: context from the talk title
+### [x] F16.4 · Quality: context from the talk title
+
+> **Done 2026-09-25:** `npm run ab` on a technical stretch of the FOSDEM talk → one real line where the glossary changes the Spanish caption ("K8s" → "Kepler"), shown verbatim on the panel; outputs in `demo/ab/`. Details in `docs/decisions.md`.
 As a judge, I want proof that technical terms come out right.
 
 - Panel: "We give it context: from the talk's title and abstract, Gemini builds the vocabulary it listens for and the glossary it translates with."

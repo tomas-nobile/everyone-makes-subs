@@ -36,22 +36,28 @@ for (const [name, r] of [['without', a], ['with', b]] as const) {
   fs.writeFileSync(path.join(dir, `${name}.${lang}.vtt`), toVtt(r.segments, lang));
 }
 
-// lines where a term appears in B and not in the overlapping line of A (original text), plus total hits
+// lines where a term appears in B and not in the overlapping line of A — in the original (ASR vocabulary)
+// or in the translation (do-not-translate / preferred terms) — plus total hits
 const norm = (s: string) => s.toLowerCase();
+const terms = [...new Set([...glossary.asrVocabulary, ...glossary.doNotTranslate])];
 const hits = (segs: Segment[]) => glossary.asrVocabulary.reduce((n, t) => n + segs.filter((s) => norm(s.text).includes(norm(t))).length, 0);
 const overlap = (x: Segment, y: Segment) => Math.min(x.t1, y.t1) - Math.max(x.t0, y.t0);
-const lines: Array<{ term: string; without: string; with: string; withoutEs?: string | null; withEs?: string | null }> = [];
-for (const term of glossary.asrVocabulary) {
-  for (const sb of b.segments.filter((s) => norm(s.text).includes(norm(term)))) {
+const lines: Array<{ term: string; where: 'original' | 'translation'; without: string; with: string; withoutEs?: string | null; withEs?: string | null }> = [];
+for (const term of terms) {
+  for (const sb of b.segments) {
+    const inB = norm(sb.text).includes(norm(term));
+    const inBEs = norm(sb.tr[lang] ?? '').includes(norm(term));
+    if (!inB && !inBEs) continue;
     const sa = [...a.segments].sort((x, y) => overlap(y, sb) - overlap(x, sb))[0];
-    if (!sa || overlap(sa, sb) <= 0 || norm(sa.text).includes(norm(term))) continue;
-    if (lines.some((l) => l.with === sb.text)) continue;
-    lines.push({ term, without: sa.text, with: sb.text, withoutEs: sa.tr[lang], withEs: sb.tr[lang] });
+    if (!sa || overlap(sa, sb) <= 0) continue;
+    const where: 'original' | 'translation' | null = inB && !norm(sa.text).includes(norm(term)) ? 'original' : inBEs && !norm(sa.tr[lang] ?? '').includes(norm(term)) ? 'translation' : null;
+    if (!where || lines.some((l) => l.with === sb.text && l.where === where)) continue;
+    lines.push({ term, where, without: sa.text, with: sb.text, withoutEs: sa.tr[lang], withEs: sb.tr[lang] });
   }
 }
 const out = { clip: path.relative('.', clip), title: talk.title, terms: glossary.asrVocabulary, hitsWithout: hits(a.segments), hitsWith: hits(b.segments), lines };
 fs.writeFileSync(path.join(dir, 'ab.json'), JSON.stringify(out, null, 1));
 console.log(`[ab] vocabulary hits: ${out.hitsWithout} without → ${out.hitsWith} with · ${lines.length} line(s) where a term differs`);
-for (const l of lines.slice(0, 5)) console.log(`  ${l.term}: "${l.without}" → "${l.with}"`);
+for (const l of lines.slice(0, 5)) console.log(`  ${l.term} (${l.where}): "${l.where === 'original' ? l.without : l.withoutEs}" → "${l.where === 'original' ? l.with : l.withEs}"`);
 if (!lines.length) console.log('[ab] no line differs: the video shows the hit counts instead (log it in docs/decisions.md)');
 process.exit(0);

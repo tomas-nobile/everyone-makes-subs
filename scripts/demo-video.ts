@@ -52,7 +52,8 @@ function latestJson<T>(dir: string, prefix: string, ok: (x: T) => boolean = () =
 interface Bench { fake: boolean; summary: { columns: Array<{ name: string; p50: number; p95: number; n: number }>; timeToFirstCaptionMs: Array<number | null>; phrasesPerMin: number } }
 interface Scale { stages: number; viewers: number; spreadP95Ms: number; spreadP50Ms: number; cpuAvgPct: number; cpuMaxPct: number; rssIdleMb: number; rssMb: number; machine: string }
 interface Pricing { asOf: string; perRoomHour: Record<string, { es: number; esPt: number; measured?: boolean; label: string }>; nerdearlaDay: { roomHours: number }; audienceLine: string }
-interface Ab { lines: Array<{ term: string; without: string; with: string }>; hitsWithout: number; hitsWith: number }
+interface Ab { lines: Array<{ term: string; where?: 'original' | 'translation'; without: string; with: string; withoutEs?: string | null; withEs?: string | null }>; hitsWithout: number; hitsWith: number }
+const short = (s: string | null | undefined, n = 72) => { const t = (s ?? '').trim(); return t.length > n ? `${t.slice(0, n - 1).replace(/\s+\S*$/, '')}…` : t; };
 const bench = latestJson<Bench>('bench', 'latency-', (b) => !b.fake);
 const scale = latestJson<Scale>('bench', 'scale-');
 const pricing: Pricing | null = fs.existsSync('docs/pricing.json') ? JSON.parse(fs.readFileSync('docs/pricing.json', 'utf8')) : null;
@@ -167,7 +168,7 @@ try {
     schedule: { style: 'lower', kicker: 'Operation', title: 'The agenda drives the day: “Move to the next talk?” at the scheduled time.', hold: 99 } as Panel,
     quality: { style: 'side', kicker: 'Quality', title: 'It knows the vocabulary before the talk starts.', body: 'From the title and abstract, Gemini builds the terms to listen for and the glossary to translate with.', hold: 5 } as Panel,
     hits: { style: 'lower', kicker: 'Quality', title: 'Every term counted live in the dashboard: “Kubernetes ✓ 9”.', hold: 99 } as Panel,
-    ab: ab && ab.lines.length ? ({ style: 'side', kicker: 'Quality · A/B, same clip', title: 'Without the glossary → with it', rows: ab.lines.slice(0, 3).map((l) => [l.term, l.without, l.with]), note: 'Both lines are the pipeline’s own output (demo/ab/).', hold: 7 } as Panel)
+    ab: ab && ab.lines.length ? ({ style: 'side', kicker: 'Quality · A/B, same clip', title: 'Without the glossary → with it', rows: ab.lines.slice(0, 3).flatMap((l) => [[`★ ${l.term}`, l.where === 'translation' ? 'in the Spanish caption' : 'in the transcript'], ['without', short(l.where === 'translation' ? l.withoutEs : l.without)], ['with', short(l.where === 'translation' ? l.withEs : l.with)]]), note: `Both lines are the pipeline’s own output (demo/ab/). Vocabulary hits: ${ab.hitsWithout} without, ${ab.hitsWith} with.`, hold: 8 } as Panel)
       : ab ? ({ style: 'side', kicker: 'Quality · A/B, same clip', title: 'Same words with and without the glossary', body: `Vocabulary hits: ${ab.hitsWithout} without it, ${ab.hitsWith} with it.`, hold: 6 } as Panel) : undefined,
     latency: { style: 'side', kicker: 'Latency', title: 'Watch it translate.', body: pauseEs ? `${pauseEs.label}: p50 ${s1(pauseEs.p50)}, p95 ${s1(pauseEs.p95)} over ${pauseEs.n} phrases. Left and right run on the same clock.` : 'Latency numbers come from <code>npm run bench:latency</code> (not run yet).', note: ttfcMed !== null ? `Time to first caption after pressing Start: ${s1(ttfcMed)}. Measured on the LAN with a free-tier key; a tunnel adds its own hop.` : undefined, hold: 6 } as Panel,
     scale1: { style: 'side', kicker: 'Scalability', title: 'One process, every room, any audience.', body: 'One speech session per room — not per language, not per viewer. Viewers add zero AI cost.', hold: 5 } as Panel,
