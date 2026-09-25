@@ -7,7 +7,7 @@ The judges score **Quality, Latency, Scalability, Deployment & operation and Inn
 Rules for every story:
 
 - Total 2:30–3:00; each chapter 20–30 s.
-- Slide copy in **Spanish** (the video shows English → Spanish, so its audience reads Spanish): title ≤ 12 words, body ≤ 25 words, at most one number per slide.
+- Slide copy in **English** (the captions shown are Spanish; the slides explain them): title ≤ 12 words, body ≤ 25 words, at most one number per slide.
 - A slide is never a static card: it is a side panel / lower third **over footage of the app recorded for that chapter**.
 - Every number comes from a measured run (F17/F19 output files) or a cited list price (`docs/pricing.md`). No invented numbers.
 - Attendee views use `?lang=es` on an English talk; the dashboard shows real rooms.
@@ -19,8 +19,8 @@ Rules for every story:
 As the team, we want every chapter to share one look, so the video reads like a pitch and not like a screen recording.
 
 - `scripts/demo-video.ts` gets a `chapter({ kicker, title, body, footage })` scene: the explanation panel (prototype tokens: `#0B0C0E` ground, `#FFD24A` kicker) over the chapter's footage for ~4 s, then the footage full screen.
-- Kickers = the criteria in Spanish: "Despliegue y operación", "Calidad", "Latencia", "Escalabilidad", "Innovación", "Precio".
-- Opening (≤ 4 s): name, one-liner, "Nerdearla Vibeathon 2026". Closing (≤ 5 s): repo URL, "MIT", "una sola API key de Gemini".
+- Kickers = the criteria as the judges name them: "Deployment & operation", "Quality", "Latency", "Scalability", "Innovation", plus "Price".
+- Opening (≤ 4 s): name, one-liner, "Nerdearla Vibeathon 2026". Closing (≤ 5 s): repo URL, "MIT", "one Gemini API key".
 - The old F15.2 scene list is replaced. `--replay` stays (no quota while recording).
 
 **Verify:** `npm run demo-video -- --replay` produces an mp4 with the chapters in the order above, each panel over moving footage.
@@ -38,7 +38,7 @@ As a judge, I want to see that installing and running it is a double click and t
 
 - The real thing on Windows: double-click the installer `.exe` → the app opens the setup wizard → paste the Gemini API key → "Test" ✓ → dashboard password → rooms live → first Spanish caption on the phone view.
 - `npm run rec:desktop -- --seconds=90 --out=demo/deploy.mp4`: ffmpeg `gdigrab` desktop capture (ffmpeg-static supports it on Windows) while a human does the clicks. The script trims dead time and speeds up the installer progress (×4, with a visible "×4" badge).
-- On-screen stopwatch: "De doble clic a subtítulos: N s", N measured from the capture.
+- On-screen stopwatch: "From double-click to captions: N s", N measured from the capture.
 - Panel copy: no terminal, no server, the key stays on your machine, or `docker compose up`.
 - Second half, operation: the dashboard during an event — an alert in plain language with the button that fixes it (force one with `/api/dev/state?stage=…&state=no_signal` in fake mode), the talk switch at the scheduled time.
 
@@ -47,7 +47,7 @@ As a judge, I want to see that installing and running it is a double click and t
 ### [ ] F16.4 · Quality: context from the talk title
 As a judge, I want proof that technical terms come out right.
 
-- Panel: "Le damos contexto: con el título y el abstract de la charla, Gemini arma el vocabulario para reconocer y el glosario para traducir."
+- Panel: "We give it context: from the talk's title and abstract, Gemini builds the vocabulary it listens for and the glossary it translates with."
 - Footage: paste the agenda → talks with their vocabulary; the Talk tab counting hits live ("Kubernetes ✓ 9"); the phone in Spanish with technical terms kept (do-not-translate list).
 - A/B proof: the F16.2 clip run twice — empty glossary vs generated glossary — and a slide with 2–3 real lines where a term differs. Outputs kept in `demo/ab/`. If no line differs, show the hit counts instead and log it in `docs/decisions.md`.
 
@@ -77,7 +77,7 @@ Montage, 3–4 s per item, each with a one-line label, each shown working:
 
 - Subtitle a video: upload it, get it back with Spanish subtitles burned in (F18).
 - OBS overlay over a stream (F12.2); a YouTube or stream link as the audio source (F02.2).
-- "¿Qué me perdí?": summary of the last 5 minutes (F13.2).
+- "What did I miss?": summary of the last 5 minutes (F13.2).
 - Paste the agenda → rooms, talks, vocabulary and the "move to the next talk?" alert (F10).
 - Room-laptop microphone as a source (F08), TV mode with QR (F12.1), stream-delay mode (F07.6), SRT/VTT/TXT downloads (F13.1), demo mode without a key (F01).
 
@@ -87,8 +87,8 @@ Montage, 3–4 s per item, each with a one-line label, each shown working:
 As a judge, I want to know what it costs next to the alternatives.
 
 - Slide: cost per room-hour with Spanish + Portuguese — Everyone Makes Subs (measured, F19.3) vs Gemini Live Translate and OpenAI realtime translate (list price × 2 languages); commercial captioning or human interpreters only with a public, cited price. Plus the "Nerdearla day" row (10 rooms × 9 h).
-- "La audiencia no suma costo: 10 o 10.000 personas pagan lo mismo."
-- Small footnote on the slide: "Precios de lista al <date>, ver docs/pricing.md".
+- "The audience adds no cost: 10 or 10,000 viewers cost the same."
+- Small footnote on the slide: "List prices as of <date>, see docs/pricing.md".
 
 **Verify:** each figure matches `docs/pricing.md`.
 
